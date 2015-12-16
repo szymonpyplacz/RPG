@@ -10,6 +10,7 @@
 #include <cstring>
 #include "SavingThrows.h"
 #include "Weapon.h"
+#include "WeaponCollection.h"
 
 using namespace std;
 using namespace sf;
@@ -27,8 +28,8 @@ public:
 	string printClassName();
 	string printRaseName();
 	sf::Sprite printAvatar();
-
-
+	sf::Sprite printWeapIcon();
+	
 	int printSTFor();
 	int printSTRef();
 	int printSTWl();
@@ -40,6 +41,8 @@ public:
 	int printExp();
 	int printExpToLv();
 	void modAtrFromRase();
+	void setMainWeapon(Weapon weap);
+	void printAllWeapon();
 
 	int printHpMax();
 	int printHpNow();
@@ -49,6 +52,11 @@ public:
 	int printDistanceAttack();
 	int setSpeed();
 
+	sf::String printWeapon();
+	int printWeaponDmg();
+	int printCr();
+	std::string printCrRg();
+	sf::Sprite printSprite();
 
 	enum playerClass {
 		fighter = 0,
@@ -63,7 +71,6 @@ public:
 		dwarf
 	};
 
-	Weapon mainWeapon; // to zosta³o do zmiany!!
 
 	Player(playerClass plCl, rase plRase, Ability str, Ability dex, Ability con, Ability itl, Ability wis, Ability cha, Level lvl, Armor ac, bool male, char* name);
 
@@ -87,8 +94,8 @@ private:
 	int basicAttack = 0;
 	int init = 0;
 	bool male;
-//	Weapon mainWeapon;
 	sf::Sprite avatarSprite;
 	sf::Texture avatar;
+	Weapon mainWeapon;
 
 };

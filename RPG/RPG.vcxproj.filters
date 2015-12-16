@@ -80,5 +80,8 @@
     <ClInclude Include="WeaponCollection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="printText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

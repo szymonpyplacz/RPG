@@ -8,12 +8,9 @@ Player::Player(playerClass plcl, rase plRase, Ability s, Ability d, Ability c, A
 	this->name = new char(strlen(name) + 1);
 	strncpy(this->name, name, (strlen(name) + 1));
 	
-	this->modAtrFromRase();
-	
+	this->modAtrFromRase();	
 	this->setBasicAttack();
-
 	this->setSpeed(); 
-
 	this->hp = this->classHP() + this->constitution.printMod();
 	this->setST();
 	this->setArmor();
@@ -206,10 +203,33 @@ int Player::printSpeed(){
 	return this->speed;
 }
 
-//Weapon Player::mainWeapon{
-//	return this->mainWeapon;
-//}
-
 sf::Sprite Player::printAvatar(){
 	return(this->avatarSprite);
+}
+
+void Player::setMainWeapon(Weapon weap){
+	this->mainWeapon = weap;
+}
+
+sf::Sprite Player::printWeapIcon(){
+	return(this->mainWeapon.printSprite());
+}
+sf::String Player::printWeapon(){
+	return(this->mainWeapon.printWeapon());
+}
+
+int Player::printWeaponDmg(){
+	return(this->mainWeapon.printWeaponDmg());
+}
+
+int Player::printCr(){
+	return(this->mainWeapon.printCr());
+}
+
+std::string Player::printCrRg(){
+	return(this->mainWeapon.printCrRg());
+}
+
+sf::Sprite Player::printSprite(){
+	return(this->mainWeapon.printSprite());
 }

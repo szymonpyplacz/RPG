@@ -5,30 +5,32 @@
 #include <string>
 #include "player.h"
 #include "WeaponCollection.h"
+#include "printText.h"
 
 //24 punkty do budowy postaci
 
-Game::Game(void)
+Game::Game(void) : window(VideoMode(1280, 720, 32), "", Style::None)
 {
-		state = END;
+	window.setPosition(Vector2i(300, 100));
+	window.setKeyRepeatEnabled(true);
+	state = GameState::END;
+
 	if ((!background.loadFromFile("bg3.jpg")) || (!background2.loadFromFile("bg2.jpg")) || (!background3.loadFromFile("bg.gif")))
 		return;
 
-
-
-	state = MENU;
+	state = GameState::MENU;
 
 	if (!font.loadFromFile("font_one.ttf"))	{
 		MessageBox(NULL, "Font not found", "ERROR", NULL);
 		return;
 	}
-	state = MENU;
+	state = GameState::MENU;
 };
 
 
 void Game::runGame()
 {
-	while (state != END)
+	while (state != GameState::END)
 	{
 		Music muzyka;
 		muzyka.openFromFile("arise.ogg");
@@ -59,41 +61,36 @@ void Game::runGame()
 
 void Game::menu()
 {
-
-
-	RenderWindow oknoAplikacji(sf::VideoMode(1280, 720, 32), "Silance of the night");
-	oknoAplikacji.setKeyRepeatEnabled(false);
-	background2.setSmooth(true);
 	bg.setTexture(background2);
-
-	
-	Text title(L"Witaj dzielny œmia³ku, \nOd Twojego zadania\n  Zale¿¹ losy\n  nas wszystkich", font, 48);
-	title.setPosition((1280 / 2 - title.getGlobalBounds().width / 2) - 70, 20);
-	title.setColor(Color::Black);
+	vector<printText> button;
+	button.emplace_back(L"Witaj dzielny œmia³ku, \nOd Twojego zadania\n  Zale¿¹ losy\n  nas wszystkich", font, 48, 380, 20, GameState::MENU);
+	//Text title(L"Witaj dzielny œmia³ku, \nOd Twojego zadania\n  Zale¿¹ losy\n  nas wszystkich", font, 48);
+	//title.setPosition((1280 / 2 - title.getGlobalBounds().width / 2) - 70, 20);
+	//title.setColor(Color::Black);
 	Text newGame(L"Nowa Gra", font, 36);
-	newGame.setPosition(100 + (1280 / 2 - title.getGlobalBounds().width / 2), 300);
+	newGame.setPosition(100 + (1280 / 2 - newGame.getGlobalBounds().width / 2), 300);
 	newGame.setColor(Color::Black);
 	Text cont(L"Graj dalej", font, 36);
-	cont.setPosition(100 + (1280 / 2 - title.getGlobalBounds().width / 2), 350);
+	cont.setPosition(100 + (1280 / 2 - newGame.getGlobalBounds().width / 2), 350);
 	cont.setColor(Color::Black);
 	Text end(L"WyjdŸ z gry", font, 36);
-	end.setPosition(350 + (1280 / 2 - title.getGlobalBounds().width / 2), 500);
+	end.setPosition(350 + (1280 / 2 - newGame.getGlobalBounds().width / 2), 500);
 	end.setColor(Color::Black);
 
 
-	while (state == MENU)
+	while (state == GameState::MENU)
 	{
-		Vector2f mouse(Mouse::getPosition(oknoAplikacji));
+		Vector2f mouse(Mouse::getPosition(window));
 		Event event;
-		while (oknoAplikacji.pollEvent(event))
+		while (window.pollEvent(event))
 		{
 			if (event.type == Event::KeyPressed && event.key.code == Keyboard::Escape)
-				state = END;
+				state = GameState::END;
 			if (end.getGlobalBounds().contains(mouse) && event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
-				state = END;
+				state = GameState::END;
 
 			if (newGame.getGlobalBounds().contains(mouse) && event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
-				state = MENU2;
+				state = GameState::MENU2;
 
 			if (newGame.getGlobalBounds().contains(mouse))
 				newGame.setStyle(Text::Underlined);
@@ -109,23 +106,24 @@ void Game::menu()
 				end.setStyle(Text::Underlined);
 			else
 				end.setStyle(Text::Regular);
-
 		}
-		oknoAplikacji.clear();
-		oknoAplikacji.draw(bg);
-		oknoAplikacji.draw(title);
-		oknoAplikacji.draw(newGame);
-		oknoAplikacji.draw(cont);
-		oknoAplikacji.draw(end);
-		oknoAplikacji.display();
+		window.clear();
+		window.draw(bg);
+		for (auto &button : button)
+		{
+			if (button.IsVisible())
+				window.draw(button.GetText());
+		}
+//		window.draw(title);
+		window.draw(newGame);
+		window.draw(cont);
+		window.draw(end);
+		window.display();
 	}
 }
 
 void Game::newPlayer(){
 
-	RenderWindow oknoAplikacji(sf::VideoMode(1280, 720, 32), "Silance of the night");
-	oknoAplikacji.setKeyRepeatEnabled(false);
-	background.setSmooth(true);
 	bg.setTexture(background);
 
 	Text title(L"Wybierz któregoœ z bohaterów", font, 48);
@@ -152,11 +150,11 @@ void Game::newPlayer(){
 	back.setPosition(1280 / 3 - back.getGlobalBounds().width, 600);
 	back.setColor(Color::Black);
 
-	while (state == MENU2)
+	while (state == GameState::MENU2)
 	{
-		Vector2f mouse(Mouse::getPosition(oknoAplikacji));
+		Vector2f mouse(Mouse::getPosition(window));
 		Event event;
-		while (oknoAplikacji.pollEvent(event))
+		while (window.pollEvent(event))
 		{
 			if (back.getGlobalBounds().contains(mouse))
 				back.setStyle(Text::Underlined);
@@ -179,36 +177,33 @@ void Game::newPlayer(){
 				Hunter.setStyle(Text::Regular);
 
 			if (Fighter.getGlobalBounds().contains(mouse) && event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
-				state = MENU2_a;
+				state = GameState::MENU2_a;
 
 			if (Wizard.getGlobalBounds().contains(mouse) && event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
-				state = MENU2_b;
+				state = GameState::MENU2_b;
 
 			if (Hunter.getGlobalBounds().contains(mouse) && event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
-				state = MENU2_c;
+				state = GameState::MENU2_c;
 		
 			if (back.getGlobalBounds().contains(mouse) && event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
-				state = MENU;
+				state = GameState::MENU;
 		}
 
-		oknoAplikacji.clear();
-		oknoAplikacji.draw(bg);
-		oknoAplikacji.draw(title);
-		oknoAplikacji.draw(Fighter);
-		oknoAplikacji.draw(Wizard);
-		oknoAplikacji.draw(Hunter);
-		//	oknoAplikacji.draw(Create);
-		oknoAplikacji.draw(back);
-		oknoAplikacji.display();
+		window.clear();
+		window.draw(bg);
+		window.draw(title);
+		window.draw(Fighter);
+		window.draw(Wizard);
+		window.draw(Hunter);
+		window.draw(back);
+		window.display();
 	}
 }
 
 ///// the first played character - dwarf /////
 
 void::Game::khelgar() {
-	RenderWindow oknoAplikacji(sf::VideoMode(1280, 720, 32), "Silance of the night");
-	oknoAplikacji.setKeyRepeatEnabled(false);
-	background3.setSmooth(true);
+
 	bg.setTexture(background3);
 
 	Texture wood;
@@ -227,9 +222,9 @@ void::Game::khelgar() {
 	dwarfPicture = Khelgar->printAvatar();
 	dwarfPicture.setPosition(45, 40);
 
-	Khelgar->mainWeapon = WeaponCollection::TwoHandedAxe;
+	Khelgar->setMainWeapon(WeaponCollection::TwoHandedAxe);
 	Sprite weap;
-	weap = Khelgar->mainWeapon.printSprite();
+	weap = Khelgar->printWeapIcon();
 	weap.setPosition(50, 360);
 
 
@@ -252,12 +247,10 @@ void::Game::khelgar() {
 	string hp = ("PW: " + to_string(Khelgar->printHpNow()) + "/" + to_string(Khelgar->printHpMax()));
 	string ac = ("KP: " + to_string(Khelgar->printAC()));
 
-
 	Text khelgar(name + "\n\n" + raseName + "\n" + className + "\n\nPoziom: " + to_string(Khelgar->printLvl()) + "\n\nPD: " + to_string(Khelgar->printExp()) + "/" + to_string(Khelgar->printExpToLv()), font, 28);
 	khelgar.setPosition(260, 50);
 	khelgar.setColor(gold);
 	khelgar.setStyle(2);
-
 
 	Text basicAtack(hp + "\n\n" + L"Premia do ataku: \n\nPrêdkoœæ \n\nWytrwa³oœæ: \n\nRefleks: \n\nWola: ", font, 22);
 	basicAtack.setPosition(490, 50);
@@ -279,45 +272,44 @@ void::Game::khelgar() {
 	artVal.setColor(gold);
 	artVal.setStyle(0);
 
-	Text weapText(Khelgar->mainWeapon.printWeapon() + "\n1k" + to_string(Khelgar->mainWeapon.printWeaponDmg()) + ", kryt. x" + to_string(Khelgar->mainWeapon.printCr()) + "/" + Khelgar->mainWeapon.printCrRg(), font, 24);
+	Text weapText(Khelgar->printWeapon() + "\n1k" + to_string(Khelgar->printWeaponDmg()) + ", kryt. x" + to_string(Khelgar->printCr()) + "/" + Khelgar->printCrRg(), font, 24);
 	weapText.setPosition(125, 370);
 	weapText.setColor(gold);
 	weapText.setStyle(2);
-
 
 	Text back(L"Powrót", font, 28);
 	back.setPosition(1280 / 3 - back.getGlobalBounds().width, 600);
 	back.setColor(gold);
 
-	while (state == MENU2_a)
+	while (state == GameState::MENU2_a)
 	{
 
-		Vector2f mouse(Mouse::getPosition(oknoAplikacji));
+		Vector2f mouse(Mouse::getPosition(window));
 		Event event;
-		while (oknoAplikacji.pollEvent(event)){
+		while (window.pollEvent(event)){
 		
 		if (back.getGlobalBounds().contains(mouse) && event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
-			state = MENU2;
+			state = GameState::MENU2;
 		
 		if (back.getGlobalBounds().contains(mouse))
 			back.setStyle(Text::Underlined);
 		else
 			back.setStyle(Text::Regular);
 
-		oknoAplikacji.clear();
-		oknoAplikacji.draw(bg);
-		oknoAplikacji.draw(khelgar);
-		oknoAplikacji.draw(artName);
-		oknoAplikacji.draw(artVal);
-		oknoAplikacji.draw(basicAtack);
-		oknoAplikacji.draw(basicAtackVal);
-		oknoAplikacji.draw(dwarfPicture);
-		oknoAplikacji.draw(weapText);
-		oknoAplikacji.draw(woodPct);
-		oknoAplikacji.draw(woodPct2);
-		oknoAplikacji.draw(weap);
-		oknoAplikacji.draw(back);
-		oknoAplikacji.display();
+		window.clear();
+		window.draw(bg);
+		window.draw(khelgar);
+		window.draw(artName);
+		window.draw(artVal);
+		window.draw(basicAtack);
+		window.draw(basicAtackVal);
+		window.draw(dwarfPicture);
+		window.draw(weapText);
+		window.draw(woodPct);
+		window.draw(woodPct2);
+		window.draw(weap);
+		window.draw(back);
+		window.display();
 
 		}
 	}
@@ -326,9 +318,6 @@ void::Game::khelgar() {
 ///// the second played character - elf /////
 
 void::Game::tharwen() {
-	RenderWindow oknoAplikacji(sf::VideoMode(1280, 720, 32), "Silance of the night");
-	oknoAplikacji.setKeyRepeatEnabled(false);
-	background3.setSmooth(true);
 	bg.setTexture(background3);
 	Texture wood;
 	wood.loadFromFile("belka.gif");
@@ -340,16 +329,14 @@ void::Game::tharwen() {
 	woodPct2.setTexture(wood);
 	woodPct2.setPosition(820, 35);
 
-
 	Player* Tharwen = new Player(Player::hunter, Player::elf, Ability(15), Ability(14), Ability(12), Ability(10), Ability(10), Ability(10), Level(0), Armor(), false, "Tharwen");
-
 	Sprite elfPicture;
 	elfPicture = Tharwen->printAvatar();
 	elfPicture.setPosition(45, 40);
 
-	Tharwen->mainWeapon = WeaponCollection::Longsword;
+	Tharwen->setMainWeapon(WeaponCollection::Longsword);
 	Sprite weap;
-	weap = Tharwen->mainWeapon.printSprite();
+	weap = Tharwen->printWeapIcon();
 	weap.setPosition(50, 360);
 
 	Color bl(66, 137, 255);
@@ -370,12 +357,10 @@ void::Game::tharwen() {
 	string hp = ("PW: " + to_string(Tharwen->printHpNow()) + "/" + to_string(Tharwen->printHpMax()));
 	string ac = ("KP: " + to_string(Tharwen->printAC()));
 
-
 	Text tharwen(name + "\n\n" + raseName + "\n" + className + "\n\nPoziom: " + to_string(Tharwen->printLvl()) + "\n\nPD: " + to_string(Tharwen->printExp()) + "/" + to_string(Tharwen->printExpToLv()), font, 28);
 	tharwen.setPosition(260, 50);
 	tharwen.setColor(gold);
 	tharwen.setStyle(2);
-
 
 	Text basicAtack(hp + "\n\n" + L"Premia do ataku: \n\nPrêdkoœæ \n\nWytrwa³oœæ: \n\nRefleks: \n\nWola: ", font, 22);
 	basicAtack.setPosition(490, 50);
@@ -397,7 +382,7 @@ void::Game::tharwen() {
 	artVal.setColor(gold);
 	artVal.setStyle(0);
 
-	Text weapText(Tharwen->mainWeapon.printWeapon() + "\n1k" + to_string(Tharwen->mainWeapon.printWeaponDmg()) + ", kryt. x" + to_string(Tharwen->mainWeapon.printCr()) + "/" + Tharwen->mainWeapon.printCrRg(), font, 24);
+	Text weapText(Tharwen->printWeapon() + "\n1k" + to_string(Tharwen->printWeaponDmg()) + ", kryt. x" + to_string(Tharwen->printCr()) + "/" + Tharwen->printCrRg(), font, 24);
 	weapText.setPosition(125, 370);
 	weapText.setColor(gold);
 	weapText.setStyle(2);
@@ -406,35 +391,35 @@ void::Game::tharwen() {
 	back.setPosition(1280 / 3 - back.getGlobalBounds().width, 600);
 	back.setColor(gold);
 
-	while (state == MENU2_c)
+	while (state == GameState::MENU2_c)
 	{
 
-		Vector2f mouse(Mouse::getPosition(oknoAplikacji));
+		Vector2f mouse(Mouse::getPosition(window));
 		Event event;
-		while (oknoAplikacji.pollEvent(event)){
+		while (window.pollEvent(event)){
 
 			if (back.getGlobalBounds().contains(mouse) && event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
-				state = MENU2;
+				state = GameState::MENU2;
 
 			if (back.getGlobalBounds().contains(mouse))
 				back.setStyle(Text::Underlined);
 			else
 				back.setStyle(Text::Regular);
 
-			oknoAplikacji.clear();
-			oknoAplikacji.draw(bg);
-			oknoAplikacji.draw(tharwen);
-			oknoAplikacji.draw(artName);
-			oknoAplikacji.draw(artVal);
-			oknoAplikacji.draw(basicAtack);
-			oknoAplikacji.draw(basicAtackVal);
-			oknoAplikacji.draw(elfPicture);
-			oknoAplikacji.draw(weap);
-			oknoAplikacji.draw(weapText);
-			oknoAplikacji.draw(woodPct);
-			oknoAplikacji.draw(woodPct2);
-			oknoAplikacji.draw(back);
-			oknoAplikacji.display();
+			window.clear();
+			window.draw(bg);
+			window.draw(tharwen);
+			window.draw(artName);
+			window.draw(artVal);
+			window.draw(basicAtack);
+			window.draw(basicAtackVal);
+			window.draw(elfPicture);
+			window.draw(weap);
+			window.draw(weapText);
+			window.draw(woodPct);
+			window.draw(woodPct2);
+			window.draw(back);
+			window.display();
 		}
 	}
 }
@@ -443,9 +428,6 @@ void::Game::tharwen() {
 //
 
 void::Game::rodger() {
-	RenderWindow oknoAplikacji(sf::VideoMode(1280, 720, 32), "Silance of the night");
-	oknoAplikacji.setKeyRepeatEnabled(false);
-	background3.setSmooth(true);
 	bg.setTexture(background3);
 	Texture wood;
 	wood.loadFromFile("belka.gif");
@@ -457,9 +439,6 @@ void::Game::rodger() {
 	woodPct2.setTexture(wood);
 	woodPct2.setPosition(820, 35);
 
-
-
-
 Player* Rodger = new Player(Player::wizard, Player::human, Ability(8), Ability(12), Ability(10), Ability(16), Ability(14), Ability(10), Level(0), Armor(), true, "Rodger");
 
 Sprite manPicture;
@@ -467,7 +446,7 @@ manPicture = Rodger->printAvatar();
 manPicture.setPosition(45, 40);
 
 Sprite weap;
-weap = Rodger->mainWeapon.printSprite();
+weap = Rodger->printWeapIcon();
 weap.setPosition(50, 360);
 
 
@@ -488,7 +467,6 @@ string raseName = Rodger->printRaseName();
 string name = Rodger->printName();
 string hp = ("PW: " + to_string(Rodger->printHpNow()) + "/" + to_string(Rodger->printHpMax()));
 string ac = ("KP: " + to_string(Rodger->printAC()));
-
 
 Text tharwen(name + "\n\n" + raseName + "\n" + className + "\n\nPoziom: " + to_string(Rodger->printLvl()) + "\n\nPD: " + to_string(Rodger->printExp()) + "/" + to_string(Rodger->printExpToLv()), font, 28);
 tharwen.setPosition(260, 50);
@@ -515,7 +493,7 @@ artVal.setPosition(1130, 50);
 artVal.setColor(gold);
 artVal.setStyle(0);
 
-Text weapText(Rodger->mainWeapon.printWeapon() + "\n1k" + to_string(Rodger->mainWeapon.printWeaponDmg()) + ", kryt. x" + to_string(Rodger->mainWeapon.printCr()) + "/" + Rodger->mainWeapon.printCrRg(), font, 24);
+Text weapText(Rodger->printWeapon() + "\n1k" + to_string(Rodger->printWeaponDmg()) + ", kryt. x" + to_string(Rodger->printCr()) + "/" + Rodger->printCrRg(), font, 24);
 weapText.setPosition(125, 370);
 weapText.setColor(gold);
 weapText.setStyle(2);
@@ -524,38 +502,37 @@ Text back(L"Powrót", font, 28);
 back.setPosition(1280 / 3 - back.getGlobalBounds().width, 600);
 back.setColor(gold);
 
-while (state == MENU2_b)
+while (state == GameState::MENU2_b)
 {
 
-	Vector2f mouse(Mouse::getPosition(oknoAplikacji));
+	Vector2f mouse(Mouse::getPosition(window));
 	Event event;
-	while (oknoAplikacji.pollEvent(event)){
+	while (window.pollEvent(event)){
 
 		if (back.getGlobalBounds().contains(mouse) && event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
-			state = MENU2;
+			state = GameState::MENU2;
 
 		if (back.getGlobalBounds().contains(mouse))
 			back.setStyle(Text::Underlined);
 		else
 			back.setStyle(Text::Regular);
 
-		oknoAplikacji.clear();
-		oknoAplikacji.draw(bg);
-		oknoAplikacji.draw(tharwen);
-		oknoAplikacji.draw(artName);
-		oknoAplikacji.draw(artVal);
-		oknoAplikacji.draw(basicAtack);
-		oknoAplikacji.draw(basicAtackVal);
-		oknoAplikacji.draw(manPicture);
-		oknoAplikacji.draw(weap);
-		oknoAplikacji.draw(weapText);
-		oknoAplikacji.draw(woodPct);
-		oknoAplikacji.draw(woodPct2);
-		oknoAplikacji.draw(back);
-		oknoAplikacji.display();
+		window.clear();
+		window.draw(bg);
+		window.draw(tharwen);
+		window.draw(artName);
+		window.draw(artVal);
+		window.draw(basicAtack);
+		window.draw(basicAtackVal);
+		window.draw(manPicture);
+		window.draw(weap);
+		window.draw(weapText);
+		window.draw(woodPct);
+		window.draw(woodPct2);
+		window.draw(back);
+		window.display();
 	}
 }
 }
-
 
 // wzorzec projektowy fabryka
