@@ -6,7 +6,7 @@
 using namespace std;
 using namespace sf;
 
-enum class GameState { MENU, MENU2, MENU2_a, MENU2_b, MENU2_c, GAME, GAME_OVER, END };
+enum class GameState { MENU, MENU2, MENU2_a, MENU2_b, MENU2_c, GAME, GAME_OVER, END, UNKNOWN };
 
 class Game
 {
@@ -18,7 +18,6 @@ public:
 	void khelgar();
 	void tharwen();
 	void rodger();
-
 
 protected:
 

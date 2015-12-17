@@ -101,11 +101,11 @@ string Player::printClassName(){
 	
 string Player::printRaseName(){
 	if (this->PlayerRase == 0)
-		return ("Cz³owiek");
+		return ("Ludzki");
 	else if(this->PlayerRase == 1)
-		return ("Elf");
+		return ("Elficki");
 	else 
-		return ("Krasnolud");
+		return ("Krasnoludzki");
 }
 
 void Player::setBasicAttack(){

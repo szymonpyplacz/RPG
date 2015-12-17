@@ -83,5 +83,8 @@
     <ClInclude Include="printText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="printSprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -97,6 +97,7 @@
     <ClInclude Include="Hp.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="printSprite.h" />
     <ClInclude Include="printText.h" />
     <ClInclude Include="SavingThrows.h" />
     <ClInclude Include="Weapon.h" />
