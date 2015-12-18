@@ -13,11 +13,7 @@
 class WeaponCollection
 {
 public:
-	//std::vector<Weapon> collection;
-	//WeaponCollection(){
-	//	collection.emplace_back()
-	//
-	//}
+
 	static Weapon Fist;
 	static Weapon Dagger;
 	static Weapon ShortSword;
@@ -26,6 +22,13 @@ public:
 	static Weapon Spear;
 	static Weapon TwoHandedSword;
 	static Weapon TwoHandedAxe;
+	static DistanceWeapon Bow;
+	static DistanceWeapon Crossbow;
+	static DistanceWeapon Longbow;
+	static DistanceWeapon Slingshot;
+
 };
+
+
 
 //

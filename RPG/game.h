@@ -25,6 +25,7 @@ protected:
 	Sprite bg;
 	Font font;
 	RenderWindow window;
+
 };
 
 

@@ -17,15 +17,15 @@ Player::Player(playerClass plcl, rase plRase, Ability s, Ability d, Ability c, A
 
 	this->init = this->dexterity.printMod();
 
-	if (this->PlayerRase == 2 && male == true){
+	if (this->PlayerRase == rase::dwarf && male == true){
 		avatar.loadFromFile("dwarf.jpg");
 		avatarSprite.setTexture(avatar);
 	}
-	if (this->PlayerRase == 1 && male == false){
+	if (this->PlayerRase == rase::elf && male == false){
 		avatar.loadFromFile("elf_female.png");		
 		avatarSprite.setTexture(avatar);
 }
-	if (this->PlayerRase == 0 && male == true){
+	if (this->PlayerRase == rase::human && male == true){
 		avatar.loadFromFile("human.png");		
 		avatarSprite.setTexture(avatar);
 }
@@ -89,44 +89,44 @@ void Player::setArmor(){
 }
 
 string Player::printClassName(){
-	if (this->PlayerCl == 0)
+	if (this->PlayerCl == playerClass::fighter)
 		return ("Wojownik");
-	else if(this->PlayerCl == 1)
+	else if (this->PlayerCl == playerClass::hunter)
 		return ("Tropiciel");
-	else if(this->PlayerCl == 2)
+	else if (this->PlayerCl == playerClass::priest)
 		return ("Kap³an");
 	else
 		return("Czarownik");
 }
 	
 string Player::printRaseName(){
-	if (this->PlayerRase == 0)
+	if (this->PlayerRase == rase::human)
 		return ("Ludzki");
-	else if(this->PlayerRase == 1)
+	else if(this->PlayerRase == rase::elf)
 		return ("Elficki");
 	else 
 		return ("Krasnoludzki");
 }
 
 void Player::setBasicAttack(){
-	if (this->PlayerCl == 0)
+	if (this->PlayerCl == playerClass::fighter)
 		this->basicAttack = 1;
 	else
 		this->basicAttack = 0;
 }
 
 void Player::setST(){
-	if (this->PlayerCl == 0){
+	if (this->PlayerCl == playerClass::fighter){
 		this->fortitude.setVal(this->level.printStHigh() + this->constitution.printMod());
 		this->reflex.setVal(this->level.printStLow() + this->dexterity.printMod());
 		this->will.setVal(this->level.printStLow() + this->wisdom.printMod());
 	}
-	else if (this->PlayerCl == 1){
+	else if (this->PlayerCl == playerClass::hunter){
 		this->fortitude.setVal(this->level.printStHigh() + this->constitution.printMod());
 		this->reflex.setVal(this->level.printStHigh()+ this->dexterity.printMod());
 		this->will.setVal(this->level.printStLow() + this->wisdom.printMod());
 	}
-	else if (this->PlayerCl == 2){
+	else if (this->PlayerCl == playerClass::priest){
 		this->fortitude.setVal(this->level.printStHigh() + this->constitution.printMod());
 		this->reflex.setVal(this->level.printStLow()+ this->dexterity.printMod());
 		this->will.setVal(this->level.printStHigh() + this->wisdom.printMod());
@@ -160,9 +160,9 @@ int Player::printDistanceAttack(){
 
 
 int Player::classHP(){
-	if (this->PlayerCl == 0)
+	if (this->PlayerCl == playerClass::fighter)
 		return (10);
-	else if (this->PlayerCl == 3)
+	else if (this->PlayerCl == playerClass::wizard)
 		return (4);
 	else
 		return(8);
@@ -182,18 +182,18 @@ int Player::printExpToLv(){
 
 void Player::modAtrFromRase(){
 
-	if (this->PlayerRase == 2){
+	if (this->PlayerRase == rase::dwarf){
 		this->constitution.setValue(this->constitution.printAb() + 2);
 		this->charisma.setValue(this->wisdom.printAb() - 2);
 	}
-	else if (this->PlayerRase == 1){
+	else if (this->PlayerRase == rase::elf){
 		this->dexterity.setValue(this->dexterity.printAb() + 2);
 		this->constitution.setValue(this->constitution.printAb() - 2);
 	}
 }
 
 int Player::setSpeed() {
-	if (this->PlayerRase == 2)
+	if (this->PlayerRase == rase::dwarf)
 		return this->speed = 4;
 	else
 		return this->speed = 6;
@@ -211,25 +211,19 @@ void Player::setMainWeapon(Weapon weap){
 	this->mainWeapon = weap;
 }
 
+void Player::setDistanceWeapon(DistanceWeapon weap){
+	this->secondWeapon = weap;
+}
+
+
 sf::Sprite Player::printWeapIcon(){
 	return(this->mainWeapon.printSprite());
 }
-sf::String Player::printWeapon(){
-	return(this->mainWeapon.printWeapon());
+
+Weapon Player::getMainWeapon(){
+	return this->mainWeapon;
 }
 
-int Player::printWeaponDmg(){
-	return(this->mainWeapon.printWeaponDmg());
-}
-
-int Player::printCr(){
-	return(this->mainWeapon.printCr());
-}
-
-std::string Player::printCrRg(){
-	return(this->mainWeapon.printCrRg());
-}
-
-sf::Sprite Player::printSprite(){
-	return(this->mainWeapon.printSprite());
+Weapon Player::getSecondWeapon(){
+	return this->secondWeapon;
 }

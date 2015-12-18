@@ -15,6 +15,9 @@
 using namespace std;
 using namespace sf;
 
+enum class playerClass {fighter,hunter,priest,wizard};
+enum class rase { human, elf, dwarf };
+
 class Player
 {
 public:
@@ -42,7 +45,7 @@ public:
 	int printExpToLv();
 	void modAtrFromRase();
 	void setMainWeapon(Weapon weap);
-	void printAllWeapon();
+	void setDistanceWeapon(DistanceWeapon weap);
 
 	int printHpMax();
 	int printHpNow();
@@ -52,25 +55,10 @@ public:
 	int printDistanceAttack();
 	int setSpeed();
 
-	sf::String printWeapon();
-	int printWeaponDmg();
-	int printCr();
-	std::string printCrRg();
-	sf::Sprite printSprite();
 
-	enum playerClass {
-		fighter = 0,
-		hunter,
-		priest,
-		wizard
-	};
-
-	enum rase {
-		human = 0,
-		elf,
-		dwarf
-	};
-
+	
+	Weapon getMainWeapon();
+	Weapon getSecondWeapon();
 
 	Player(playerClass plCl, rase plRase, Ability str, Ability dex, Ability con, Ability itl, Ability wis, Ability cha, Level lvl, Armor ac, bool male, char* name);
 
@@ -97,5 +85,6 @@ private:
 	sf::Sprite avatarSprite;
 	sf::Texture avatar;
 	Weapon mainWeapon;
+	DistanceWeapon secondWeapon;
 
 };
