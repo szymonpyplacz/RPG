@@ -6,12 +6,18 @@
 #include <cstring>
 #include "Weapon.h"
 #include "Dice.h"
+#include <vector>
 
 //int dmg, bool soldier, bool twoHanded, bool light, int crit, int crRange, 
 
 class WeaponCollection
 {
 public:
+	//std::vector<Weapon> collection;
+	//WeaponCollection(){
+	//	collection.emplace_back()
+	//
+	//}
 	static Weapon Fist;
 	static Weapon Dagger;
 	static Weapon ShortSword;
@@ -21,6 +27,5 @@ public:
 	static Weapon TwoHandedSword;
 	static Weapon TwoHandedAxe;
 };
-
 
 //

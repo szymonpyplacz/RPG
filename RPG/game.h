@@ -20,14 +20,11 @@ public:
 	void rodger();
 
 protected:
-
 	GameState state;
 	Texture background, background2, background3;
 	Sprite bg;
 	Font font;
-	sf::RenderWindow window;
-
-private: 
+	RenderWindow window;
 };
 
 

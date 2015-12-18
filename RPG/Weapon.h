@@ -20,8 +20,6 @@ public:
 		TwoHandedSword,
 		TwoHandedAxe,
 	};
-
-
 	Weapon();
 	Weapon(int dmg, bool soldier, bool twoHanded, bool light, int critic, int criticRange, listOfWeapons numb);
 	sf::String printWeapon();
@@ -41,6 +39,15 @@ private:
 	int critic;
 	int criticRange;
 	listOfWeapons WeaponList;
-
 };
+
+//class DistanceWeapon : public Weapon
+//{
+//public:
+//	DistanceWeapon : public Weapon();
+//	~DistanceWeapon : public Weapon();
+//
+//private:
+//
+//};
 
