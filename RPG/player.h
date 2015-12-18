@@ -46,6 +46,7 @@ public:
 	void modAtrFromRase();
 	void setMainWeapon(Weapon weap);
 	void setDistanceWeapon(DistanceWeapon weap);
+	void setShield(Weapon weap, Shield shield);
 
 	int printHpMax();
 	int printHpNow();
@@ -56,9 +57,9 @@ public:
 	int setSpeed();
 
 
-	
+	Shield getShield();
 	Weapon getMainWeapon();
-	Weapon getSecondWeapon();
+	DistanceWeapon getSecondWeapon();
 
 	Player(playerClass plCl, rase plRase, Ability str, Ability dex, Ability con, Ability itl, Ability wis, Ability cha, Level lvl, Armor ac, bool male, char* name);
 
@@ -86,5 +87,6 @@ private:
 	sf::Texture avatar;
 	Weapon mainWeapon;
 	DistanceWeapon secondWeapon;
+	Shield playerShield;
 
 };

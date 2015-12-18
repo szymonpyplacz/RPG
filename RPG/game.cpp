@@ -168,10 +168,14 @@ void::Game::khelgar() {
 	buttonImg.emplace_back(wood, pair<float, float>(820, 35));
 	
 	Player* Khelgar = new Player(playerClass::fighter, rase::dwarf, Ability(15), Ability(12), Ability(14), Ability(10), Ability(10), Ability(10), Level(0), Armor(), true, "Khelgar");
-	Khelgar->setMainWeapon(WeaponCollection::TwoHandedAxe);
+	Khelgar->setMainWeapon(WeaponCollection::SmallAxe);
+	Khelgar->setDistanceWeapon(WeaponCollection::Crossbow);
+	Khelgar->setShield(Khelgar->getMainWeapon(), WeaponCollection::HeavyShield); //logicial error, TH weapon with shield is impossible
 
 	buttonImg.emplace_back(Khelgar->printAvatar(), pair<float, float>(45, 40));
 	buttonImg.emplace_back(Khelgar->getMainWeapon().printSprite(), pair<float, float>(50, 360));
+	buttonImg.emplace_back(Khelgar->getSecondWeapon().printSprite(), pair<float, float>(50, 460));
+	buttonImg.emplace_back(Khelgar->getShield().printSprite(), pair<float, float>(470, 360));
 	
 	Color gold(252, 255, 166);
 
@@ -186,6 +190,9 @@ void::Game::khelgar() {
 	string name = Khelgar->printName();
 	string hp = ("PW: " + to_string(Khelgar->printHpNow()) + "/" + to_string(Khelgar->printHpMax()));
 	string ac = ("KP: " + to_string(Khelgar->printAC()));
+	string shield = "+" + to_string(Khelgar->getShield().getAC()) + " KP";
+	if (Khelgar->getShield().getAC()==0)
+		shield = "";
 	//Sing::GetInstance().GetTwoHandedAxe;
 	
 	vector<printText> button;
@@ -195,6 +202,8 @@ void::Game::khelgar() {
 	button.emplace_back(L"Si³a: \n\nZrêcznoœæ: \n\nWytrzyma³oœæ: \n\nIntelekt: \n\nRozs¹dek: \n\nCharyzma: ", font, gold, 22, pair<float, float>(900, 50));
 	button.emplace_back(s + "\n\n" + d + "\n\n" + c + "\n\n" + i + "\n\n" + w + "\n\n" + ch, font, gold, 22, pair<float, float>(1130, 50));
 	button.emplace_back(Khelgar->getMainWeapon().printWeapon() + "\n1k" + to_string(Khelgar->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Khelgar->getMainWeapon().printCr()) + "/" + Khelgar->getMainWeapon().printCrRg(), font, gold, 24, pair<float, float>(125, 370));
+	button.emplace_back(Khelgar->getSecondWeapon().printWeapon() + " poc. " + to_string(Khelgar->getSecondWeapon().printMissles()) + L" zasiêg " + to_string(Khelgar->getSecondWeapon().printRange()) + "\n1k" + to_string(Khelgar->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Khelgar->getSecondWeapon().printCr()) + "/" + Khelgar->getSecondWeapon().printCrRg(), font, gold, 24, pair<float, float>(125, 470));
+	button.emplace_back(Khelgar->getShield().printShield() + "\n" + shield, font, gold, 22, pair<float, float>(550, 370));
 	button.emplace_back(L"Powrót", font, gold, 28, pair<float, float>(200, 600), GameState::MENU2);
 	button.emplace_back(L"Dalej", font, gold, 28, pair<float, float>(800, 600), GameState::MENU2);
 
@@ -252,11 +261,12 @@ void::Game::tharwen() {
 
 	Player* Tharwen = new Player(playerClass::hunter, rase::elf, Ability(15), Ability(14), Ability(12), Ability(10), Ability(10), Ability(10), Level(0), Armor(), false, "Tharwen");
 	Tharwen->setMainWeapon(WeaponCollection::Longsword);
-	Tharwen->setDistanceWeapon(WeaponCollection::Bow);
+	Tharwen->setDistanceWeapon(WeaponCollection::Longbow);
 
 	buttonImg.emplace_back(Tharwen->printAvatar(), pair<float, float>(45, 40));
 	buttonImg.emplace_back(Tharwen->getMainWeapon().printSprite(), pair<float, float>(50, 360));
 	buttonImg.emplace_back(Tharwen->getSecondWeapon().printSprite(), pair<float, float>(50, 460));
+	buttonImg.emplace_back(Tharwen->getShield().printSprite(), pair<float, float>(470, 360));
 
 	Color gold(252, 255, 166);
 
@@ -271,7 +281,11 @@ void::Game::tharwen() {
 	string name = Tharwen->printName();
 	string hp = ("PW: " + to_string(Tharwen->printHpNow()) + "/" + to_string(Tharwen->printHpMax()));
 	string ac = ("KP: " + to_string(Tharwen->printAC()));
+	string shield = "+" + to_string(Tharwen->getShield().getAC()) + " KP";
+	if (Tharwen->getShield().getAC() == 0)
+		shield = "";
 	//ona jedna ma dwie bronie
+
 	vector<printText> button;
 	button.emplace_back(name + "\n\n" + raseName + "\n" + className + "\n\nPoziom: " + to_string(Tharwen->printLvl()) + "\n\nPD: " + to_string(Tharwen->printExp()) + "/" + to_string(Tharwen->printExpToLv()), font, gold, 28, pair<float, float>(260, 50));
 	button.emplace_back(hp + "\n\n" + L"Premia do ataku: \n\nPrêdkoœæ \n\nWytrwa³oœæ: \n\nRefleks: \n\nWola: ", font, gold, 22, pair<float, float>(490, 50));
@@ -279,7 +293,8 @@ void::Game::tharwen() {
 	button.emplace_back(L"Si³a: \n\nZrêcznoœæ: \n\nWytrzyma³oœæ: \n\nIntelekt: \n\nRozs¹dek: \n\nCharyzma: ", font, gold, 22, pair<float, float>(900, 50));
 	button.emplace_back(s + "\n\n" + d + "\n\n" + c + "\n\n" + i + "\n\n" + w + "\n\n" + ch, font, gold, 22, pair<float, float>(1130, 50));
 	button.emplace_back(Tharwen->getMainWeapon().printWeapon() + "\n1k" + to_string(Tharwen->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Tharwen->getMainWeapon().printCr()) + "/" + Tharwen->getMainWeapon().printCrRg(), font, gold, 24, pair<float, float>(125, 370));
-	button.emplace_back(Tharwen->getSecondWeapon().printWeapon() + "\n1k" + to_string(Tharwen->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Tharwen->getSecondWeapon().printCr()) + "/" + Tharwen->getSecondWeapon().printCrRg(), font, gold, 24, pair<float, float>(125, 470));
+	button.emplace_back(Tharwen->getSecondWeapon().printWeapon() + " poc. " + to_string(Tharwen->getSecondWeapon().printMissles()) + L" zasiêg " + to_string(Tharwen->getSecondWeapon().printRange()) + "\n1k" + to_string(Tharwen->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Tharwen->getSecondWeapon().printCr()) + "/" + Tharwen->getSecondWeapon().printCrRg(), font, gold, 24, pair<float, float>(125, 470));
+	button.emplace_back(Tharwen->getShield().printShield() + "\n" + shield, font, gold, 22, pair<float, float>(550, 370));
 	button.emplace_back(L"Powrót", font, gold, 28, pair<float, float>(200, 600), GameState::MENU2);
 	button.emplace_back(L"Dalej", font, gold, 28, pair<float, float>(800, 600), GameState::MENU2);
 
@@ -336,10 +351,15 @@ void::Game::rodger() {
 	buttonImg.emplace_back(wood, pair<float, float>(430, 35));
 	buttonImg.emplace_back(wood, pair<float, float>(820, 35));
 
+
 Player* Rodger = new Player(playerClass::wizard, rase::human, Ability(8), Ability(12), Ability(10), Ability(16), Ability(14), Ability(10), Level(0), Armor(), true, "Rodger");
+
+Rodger->setDistanceWeapon(WeaponCollection::Slingshot);
 
 buttonImg.emplace_back(Rodger->printAvatar(), pair<float, float>(45, 40));
 buttonImg.emplace_back(Rodger->getMainWeapon().printSprite(), pair<float, float>(50, 360));
+buttonImg.emplace_back(Rodger->getSecondWeapon().printSprite(), pair<float, float>(50, 460));
+buttonImg.emplace_back(Rodger->getShield().printSprite(), pair<float, float>(470, 360));
 
 Color gold(252, 255, 166);
 
@@ -354,6 +374,9 @@ string raseName = Rodger->printRaseName();
 string name = Rodger->printName();
 string hp = ("PW: " + to_string(Rodger->printHpNow()) + "/" + to_string(Rodger->printHpMax()));
 string ac = ("KP: " + to_string(Rodger->printAC()));
+string shield = "+" + to_string(Rodger->getShield().getAC()) + " KP";
+if (Rodger->getShield().getAC() == 0)
+	shield = "";
 
 vector<printText> button;
 button.emplace_back(name + "\n\n" + raseName + "\n" + className + "\n\nPoziom: " + to_string(Rodger->printLvl()) + "\n\nPD: " + to_string(Rodger->printExp()) + "/" + to_string(Rodger->printExpToLv()), font, gold, 28, pair<float, float>(260, 50));
@@ -362,6 +385,8 @@ button.emplace_back(ac + "\n\n" + to_string(Rodger->printBasicAttack()) + "/" + 
 button.emplace_back(L"Si³a: \n\nZrêcznoœæ: \n\nWytrzyma³oœæ: \n\nIntelekt: \n\nRozs¹dek: \n\nCharyzma: ", font, gold, 22, pair<float, float>(900, 50));
 button.emplace_back(s + "\n\n" + d + "\n\n" + c + "\n\n" + i + "\n\n" + w + "\n\n" + ch, font, gold, 22, pair<float, float>(1130, 50));
 button.emplace_back(Rodger->getMainWeapon().printWeapon() + "\n1k" + to_string(Rodger->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Rodger->getMainWeapon().printCr()) + "/" + Rodger->getMainWeapon().printCrRg(), font, gold, 24, pair<float, float>(125, 370));
+button.emplace_back(Rodger->getSecondWeapon().printWeapon() + " poc. " + to_string(Rodger->getSecondWeapon().printMissles()) + L" zasiêg " + to_string(Rodger->getSecondWeapon().printRange()) + "\n1k" + to_string(Rodger->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Rodger->getSecondWeapon().printCr()) + "/" + Rodger->getSecondWeapon().printCrRg(), font, gold, 24, pair<float, float>(125, 470));
+button.emplace_back(Rodger->getShield().printShield() + "\n" + shield, font, gold, 22, pair<float, float>(550, 370));
 button.emplace_back(L"Powrót", font, gold, 28, pair<float, float>(200, 600), GameState::MENU2);
 button.emplace_back(L"Dalej", font, gold, 28, pair<float, float>(800, 600), GameState::MENU2);
 

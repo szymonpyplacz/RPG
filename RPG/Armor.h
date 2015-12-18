@@ -14,6 +14,7 @@ public:
 	void getAC(int armor);
 	int printAC();
 
+
 private:
 	int ac;
 };

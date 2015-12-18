@@ -6,14 +6,12 @@
 #include <cstring>
 #include "Weapon.h"
 #include "Dice.h"
-#include <vector>
 
 //int dmg, bool soldier, bool twoHanded, bool light, int crit, int crRange, 
 
 class WeaponCollection
 {
 public:
-
 	static Weapon Fist;
 	static Weapon Dagger;
 	static Weapon ShortSword;
@@ -26,6 +24,8 @@ public:
 	static DistanceWeapon Crossbow;
 	static DistanceWeapon Longbow;
 	static DistanceWeapon Slingshot;
+	static Shield LightShield;
+	static Shield HeavyShield;
 
 };
 

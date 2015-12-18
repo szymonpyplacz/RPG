@@ -85,7 +85,7 @@ string Player::printCha(){
 }
 
 void Player::setArmor(){
-	this->ac.getAC(this->dexterity.printMod());
+	this->ac.getAC(this->dexterity.printMod()+this->getShield().getAC());
 }
 
 string Player::printClassName(){
@@ -215,7 +215,6 @@ void Player::setDistanceWeapon(DistanceWeapon weap){
 	this->secondWeapon = weap;
 }
 
-
 sf::Sprite Player::printWeapIcon(){
 	return(this->mainWeapon.printSprite());
 }
@@ -224,6 +223,17 @@ Weapon Player::getMainWeapon(){
 	return this->mainWeapon;
 }
 
-Weapon Player::getSecondWeapon(){
+DistanceWeapon Player::getSecondWeapon(){
 	return this->secondWeapon;
+}
+
+void Player::setShield(Weapon weap, Shield shie){
+	if (weap.isTwoHanded() == false){
+		this->playerShield = shie;
+		this->setArmor();
+	}
+}
+
+Shield Player::getShield(){
+	return this->playerShield;
 }
