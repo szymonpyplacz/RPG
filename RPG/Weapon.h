@@ -44,7 +44,7 @@ public:
 	sf::Sprite printSprite();
 	int printMissles();
 	int printRange();
-	DistanceWeapon() : Weapon(){};
+	DistanceWeapon();
 	DistanceWeapon(int dmg, bool soldier,  int critic, int criticRange, int range, int missles, listOfDistanceWeapons numb);
 private:
 	int range;

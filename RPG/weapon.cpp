@@ -78,7 +78,11 @@ bool Weapon::isTwoHanded(){
 	return twoHanded;
 }
 
-
+DistanceWeapon::DistanceWeapon(){
+	name = L"Brak broni dystansowej";
+	picture.loadFromFile("empty.png");
+	pictureSprite.setTexture(picture);
+}
 
 DistanceWeapon::DistanceWeapon(int dmg, bool soldier,   int crit, int crRange, int range, int missles, listOfDistanceWeapons number) : Damage(dmg), soldier(soldier), twoHanded(twoHanded), critic(crit), criticRange(crRange), missles(missles), range(range){
 	twoHanded = 1;
