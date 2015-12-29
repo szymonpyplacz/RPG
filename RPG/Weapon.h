@@ -9,6 +9,7 @@
 enum class listOfWeapons{ Fist, Dagger, ShortSword, SmallAxe, Longsword, Spear, TwoHandedSword, TwoHandedAxe };
 enum class listOfDistanceWeapons{Bow, Crossbow, Longbow, Slingshot};
 enum class listOfShields{ LightShield, HeavyShield };
+enum class listOfArmour {Gambeson, LeatherArmor, MailShirt, Chainmail, PlateArmor};
 class Weapon
 {
 public:
@@ -18,6 +19,8 @@ public:
 	int printWeaponDmg();
 	int printCr();
 	bool isTwoHanded();
+	bool isSoldier();
+	//void changeWeap();
 	std::string printCrRg();
 	sf::Sprite printSprite();
 
@@ -32,6 +35,7 @@ private:
 	int critic;
 	int criticRange;
 	listOfWeapons WeaponList;
+
 };
 
 class DistanceWeapon : public Weapon
@@ -76,3 +80,24 @@ private:
 	listOfShields ShieldList;
 };
 
+class Armour
+{
+public:
+	Armour();
+	Armour(int ac, int speed, int maxDex, bool heavy, listOfArmour numb);
+	sf::String printArmour();
+	sf::Sprite printSprite();
+	int getAC();
+	bool isHeavy();
+	int printMaxDex();
+	int printSpeed();
+private:
+	int ac;
+	int speed;
+	int maxDex;
+	bool heavy;
+	sf::Sprite pictureSprite;
+	sf::Texture picture;
+	sf::String name;
+	listOfArmour ArmourList;
+};

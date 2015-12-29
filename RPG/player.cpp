@@ -4,10 +4,14 @@
 #include "Weapon.h"
 #pragma once
 
+
+Player::Player(){
+	Player(playerClass::fighter, rase::human, Ability(0), Ability(0), Ability(0), Ability(0), Ability(0), Ability(0), Level(0), Armor(), true, "noName");
+}
 Player::Player(playerClass plcl, rase plRase, Ability s, Ability d, Ability c, Ability i, Ability w, Ability ch, Level lvl, Armor arcl, bool gender, char* name) : PlayerCl(plcl), PlayerRase(plRase), strenght(s), dexterity(d), constitution(c), intelligence(i), wisdom(w), charisma(ch), level(lvl), male(gender){
 	this->name = new char(strlen(name) + 1);
 	strncpy(this->name, name, (strlen(name) + 1));
-	
+	this->isUsingMeleeWeapon = 1;
 	this->modAtrFromRase();	
 	this->setBasicAttack();
 	this->setSpeed(); 
@@ -18,7 +22,7 @@ Player::Player(playerClass plcl, rase plRase, Ability s, Ability d, Ability c, A
 	this->init = this->dexterity.printMod();
 
 	if (this->PlayerRase == rase::dwarf && male == true){
-		avatar.loadFromFile("dwarf.jpg");
+		avatar.loadFromFile("dwarf.png");
 		avatarSprite.setTexture(avatar);
 	}
 	if (this->PlayerRase == rase::elf && male == false){
@@ -29,7 +33,6 @@ Player::Player(playerClass plcl, rase plRase, Ability s, Ability d, Ability c, A
 		avatar.loadFromFile("human.png");		
 		avatarSprite.setTexture(avatar);
 }
-
 };
 
 string Player::printName(){
@@ -85,7 +88,17 @@ string Player::printCha(){
 }
 
 void Player::setArmor(){
-	this->ac.getAC(this->dexterity.printMod()+this->getShield().getAC());
+	if (isMeleeWeapon()){
+	if (this->dexterity.printMod() > this->playerArmour.printMaxDex())
+		this->ac.getAC(this->playerArmour.printMaxDex() + this->getShield().getAC() + this->playerArmour.getAC());
+	else
+		this->ac.getAC(this->dexterity.printMod() + this->getShield().getAC() + this->playerArmour.getAC());
+	}
+	else
+	if (this->dexterity.printMod() > this->playerArmour.printMaxDex())
+		this->ac.getAC(this->playerArmour.printMaxDex() + this->playerArmour.getAC());
+	else
+		this->ac.getAC(this->dexterity.printMod() + this->playerArmour.getAC());
 }
 
 string Player::printClassName(){
@@ -193,7 +206,7 @@ void Player::modAtrFromRase(){
 }
 
 int Player::setSpeed() {
-	if (this->PlayerRase == rase::dwarf)
+	if (this->PlayerRase == rase::dwarf || this->playerArmour.printSpeed() == 4)
 		return this->speed = 4;
 	else
 		return this->speed = 6;
@@ -203,15 +216,18 @@ int Player::printSpeed(){
 	return this->speed;
 }
 
-sf::Sprite Player::printAvatar(){
-	return(this->avatarSprite);
-}
+sf::Sprite &Player::printAvatar(){
+		return(this->avatarSprite);
+	}
+
 
 void Player::setMainWeapon(Weapon weap){
+	if (weap.isSoldier() == false || (weap.isSoldier() && (this->PlayerCl == playerClass::fighter || this->PlayerCl == playerClass::hunter)))
 	this->mainWeapon = weap;
 }
 
 void Player::setDistanceWeapon(DistanceWeapon weap){
+	if (weap.isSoldier() == false || (weap.isSoldier() && (this->PlayerCl == playerClass::fighter || this->PlayerCl == playerClass::hunter)))
 	this->secondWeapon = weap;
 }
 
@@ -227,8 +243,8 @@ DistanceWeapon Player::getSecondWeapon(){
 	return this->secondWeapon;
 }
 
-void Player::setShield(Weapon weap, Shield shie){
-	if (weap.isTwoHanded() == false){
+void Player::setShield(Shield shie){
+	if (this->mainWeapon.isTwoHanded() == false && this->PlayerCl != playerClass::wizard){
 		this->playerShield = shie;
 		this->setArmor();
 	}
@@ -236,4 +252,29 @@ void Player::setShield(Weapon weap, Shield shie){
 
 Shield Player::getShield(){
 	return this->playerShield;
+}
+
+Armour Player::getArmour(){
+	return this->playerArmour;
+}
+
+void Player::setArmour(Armour arm){
+	if (arm.isHeavy() != true && this->PlayerCl != playerClass::wizard)
+		this->playerArmour = arm;
+	else if (arm.isHeavy() == true && this->PlayerCl == playerClass::fighter)
+		this->playerArmour = arm;
+	setArmor();
+	setSpeed();
+}
+
+void Player::changeWeapon(){
+	if (isMeleeWeapon())
+		isUsingMeleeWeapon = 0;
+	else 
+		isUsingMeleeWeapon = 1;
+	setArmor();
+}
+
+bool Player::isMeleeWeapon(){
+	return this->isUsingMeleeWeapon;
 }

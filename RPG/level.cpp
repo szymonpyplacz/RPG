@@ -37,3 +37,4 @@ int Level::printExpToLv(){
 };
 
 Level::Level(int exp) :level(1), exp(exp), expLvl(1000){};
+Level::Level() :level(1), exp(0), expLvl(1000){};

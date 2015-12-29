@@ -1,5 +1,9 @@
 #include "Ability.h"
 
+Ability::Ability(){
+	Ability(0);
+}
+
 void Ability::setValue(int value)
 {
 	this->value = value;

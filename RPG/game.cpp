@@ -16,7 +16,7 @@ Game::Game(void) : window(VideoMode(1280, 720, 32), "", Style::None)
 	state = GameState::END;
 
 
-	if ((!background.loadFromFile("bg3.jpg")) || (!background2.loadFromFile("bg2.jpg")) || (!background3.loadFromFile("bg.gif")))
+	if ((!background.loadFromFile("bg3.jpg")) || (!background2.loadFromFile("bg2.jpg")) || (!background3.loadFromFile("bg.gif")) || (!background4.loadFromFile("bg4.png")))
 		return;
 
 	state = GameState::MENU;
@@ -35,9 +35,9 @@ void Game::runGame()
 	{
 		Music muzyka;
 		muzyka.openFromFile("arise.ogg");
-		muzyka.play();
-		muzyka.setVolume(30);
-		
+		//muzyka.play();
+		//muzyka.setVolume(30);
+
 		switch (state)
 		{
 		case GameState::MENU:
@@ -46,14 +46,35 @@ void Game::runGame()
 		case GameState::MENU2:
 			newPlayer();
 			break;
-		case GameState::MENU2_a:
-			khelgar();
+		case GameState::MENU2_a:{
+			//khelgar(Gracz);
+			Player* Gracz = new Player(playerClass::fighter, rase::dwarf, Ability(15), Ability(12), Ability(14), Ability(10), Ability(10), Ability(10), Level(0), Armor(), true, "Khelgar");
+			Gracz->setMainWeapon(WeaponCollection::SmallAxe);
+			Gracz->setDistanceWeapon(WeaponCollection::Crossbow);
+			Gracz->setShield(WeaponCollection::LightShield); //logicial error, TH weapon with shield is impossible
+			Gracz->setArmour(WeaponCollection::MailShirt);
+			printPlayer(Gracz);
+			gamePlay(Gracz);
+		}
 			break;
-		case GameState::MENU2_b:
-			rodger();
+		case GameState::MENU2_b:{
+			Player* Gracz =  new Player(playerClass::wizard, rase::human, Ability(8), Ability(12), Ability(10), Ability(16), Ability(14), Ability(10), Level(0), Armor(), true, "Rodger");
+			Gracz->setMainWeapon(WeaponCollection::Fist); //trolololo i tak nie mo¿e
+			Gracz->setDistanceWeapon(WeaponCollection::Slingshot);
+			Gracz->setArmour(WeaponCollection::LeatherArmor);//trololo i tak nie mo¿e
+			Gracz->setShield(WeaponCollection::LightShield);
+			printPlayer(Gracz);
+			gamePlay(Gracz);
+		}
 			break;
-		case GameState::MENU2_c:
-			tharwen();
+		case GameState::MENU2_c:{
+			Player* Gracz = new Player(playerClass::hunter, rase::elf, Ability(15), Ability(14), Ability(12), Ability(10), Ability(10), Ability(10), Level(0), Armor(), false, "Tharwen");
+			Gracz->setMainWeapon(WeaponCollection::Longsword);
+			Gracz->setDistanceWeapon(WeaponCollection::Longbow);
+			Gracz->setArmour(WeaponCollection::LeatherArmor);
+			printPlayer(Gracz);
+			gamePlay(Gracz);
+		}
 			break;
 		}
 	}
@@ -157,155 +178,58 @@ void Game::newPlayer(){
 	}
 }
 
-///// the first played character - dwarf /////
 
-void::Game::khelgar() {
+void::Game::printPlayer(Player* Gracz) {
 	bg.setTexture(background3);
 	Texture wood;
 	wood.loadFromFile("belka.gif");
 	vector<printSprite> buttonImg;
 	buttonImg.emplace_back(wood, pair<float, float>(430, 35));
 	buttonImg.emplace_back(wood, pair<float, float>(820, 35));
-	
-	Player* Khelgar = new Player(playerClass::fighter, rase::dwarf, Ability(15), Ability(12), Ability(14), Ability(10), Ability(10), Ability(10), Level(0), Armor(), true, "Khelgar");
-	Khelgar->setMainWeapon(WeaponCollection::SmallAxe);
-	//Khelgar->setDistanceWeapon(WeaponCollection::Crossbow);
-	Khelgar->setShield(Khelgar->getMainWeapon(), WeaponCollection::HeavyShield); //logicial error, TH weapon with shield is impossible
-
-	buttonImg.emplace_back(Khelgar->printAvatar(), pair<float, float>(45, 40));
-	buttonImg.emplace_back(Khelgar->getMainWeapon().printSprite(), pair<float, float>(50, 360));
-	buttonImg.emplace_back(Khelgar->getSecondWeapon().printSprite(), pair<float, float>(50, 460));
-	buttonImg.emplace_back(Khelgar->getShield().printSprite(), pair<float, float>(470, 360));
-	
+	buttonImg.emplace_back(Gracz->printAvatar(), pair<float, float>(45, 40));
+	buttonImg.emplace_back(Gracz->getMainWeapon().printSprite(), pair<float, float>(50, 360));
+	buttonImg.emplace_back(Gracz->getSecondWeapon().printSprite(), pair<float, float>(50, 460));
+	buttonImg.emplace_back(Gracz->getShield().printSprite(), pair<float, float>(470, 360));
+	buttonImg.emplace_back(Gracz->getArmour().printSprite(), pair<float, float>(470, 460));
 	Color gold(252, 255, 166);
 
-	string s = Khelgar->printStr();
-	string d = Khelgar->printDex();
-	string c = Khelgar->printCon();
-	string i = Khelgar->printInt();
-	string w = Khelgar->printWis();
-	string ch = Khelgar->printCha();
-	string className = Khelgar->printClassName();
-	string raseName = Khelgar->printRaseName();
-	string name = Khelgar->printName();
-	string hp = ("PW: " + to_string(Khelgar->printHpNow()) + "/" + to_string(Khelgar->printHpMax()));
-	string ac = ("KP: " + to_string(Khelgar->printAC()));
-	sf::String distance = Khelgar->getSecondWeapon().printWeapon() + " poc. " + to_string(Khelgar->getSecondWeapon().printMissles()) + L" zasiêg " + to_string(Khelgar->getSecondWeapon().printRange()) + "\n1k" + to_string(Khelgar->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Khelgar->getSecondWeapon().printCr()) + "/" + Khelgar->getSecondWeapon().printCrRg();
-	if (Khelgar->getSecondWeapon().printWeapon() == "Brak broni dystansowej")
-		distance = Khelgar->getSecondWeapon().printWeapon();
-	sf::String shield = "+" + to_string(Khelgar->getShield().getAC()) + " KP";
-	if (Khelgar->getShield().getAC()==0)
+	string s = Gracz->printStr();
+	string d = Gracz->printDex();
+	string c = Gracz->printCon();
+	string i = Gracz->printInt();
+	string w = Gracz->printWis();
+	string ch = Gracz->printCha();
+	string className = Gracz->printClassName();
+	string raseName = Gracz->printRaseName();
+	string name = Gracz->printName();
+	string hp = ("PW: " + to_string(Gracz->printHpNow()) + "/" + to_string(Gracz->printHpMax()));
+	string ac = ("KP: " + to_string(Gracz->printAC()));
+	sf::String distance = Gracz->getSecondWeapon().printWeapon() + " poc. " + to_string(Gracz->getSecondWeapon().printMissles()) + L" zasiêg " + to_string(Gracz->getSecondWeapon().printRange()) + "\n1k" + to_string(Gracz->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getSecondWeapon().printCr()) + "/" + Gracz->getSecondWeapon().printCrRg();
+	if (Gracz->getSecondWeapon().printWeapon() == "Brak broni dystansowej")
+		distance = Gracz->getSecondWeapon().printWeapon();
+	sf::String shield = "+" + to_string(Gracz->getShield().getAC()) + " KP";
+	if (Gracz->getShield().getAC() == 0)
 		shield = "";
-	//Sing::GetInstance().GetTwoHandedAxe;
-	
+	sf::String armour = "+" + to_string(Gracz->getArmour().getAC()) + " KP";
+	if (Gracz->getArmour().getAC() == 0)
+		armour = "";
+
+
 	vector<printText> button;
-	button.emplace_back(name + "\n\n" + raseName + "\n" + className + "\n\nPoziom: " + to_string(Khelgar->printLvl()) + "\n\nPD: " + to_string(Khelgar->printExp()) + "/" + to_string(Khelgar->printExpToLv()), font, gold, 28, pair<float, float>(260, 50));
+	button.emplace_back(name + "\n\n" + raseName + "\n" + className + "\n\nPoziom: " + to_string(Gracz->printLvl()) + "\n\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()), font, gold, 28, pair<float, float>(260, 50));
 	button.emplace_back(hp + "\n\n" + L"Premia do ataku: \n\nPrêdkoœæ \n\nWytrwa³oœæ: \n\nRefleks: \n\nWola: ", font, gold, 22, pair<float, float>(490, 50));
-	button.emplace_back(ac + "\n\n" + to_string(Khelgar->printBasicAttack()) + "/" + to_string(Khelgar->printDistanceAttack()) + "\n\n" + to_string(Khelgar->printSpeed()) + "\n\n" + to_string(Khelgar->printSTFor()) + "\n\n" + to_string(Khelgar->printSTRef()) + "\n\n" + to_string(Khelgar->printSTWl()), font, gold, 22, pair<float, float>(720, 50));
+	button.emplace_back(ac + "\n\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n\n" + to_string(Gracz->printSpeed()) + "\n\n" + to_string(Gracz->printSTFor()) + "\n\n" + to_string(Gracz->printSTRef()) + "\n\n" + to_string(Gracz->printSTWl()), font, gold, 22, pair<float, float>(720, 50));
 	button.emplace_back(L"Si³a: \n\nZrêcznoœæ: \n\nWytrzyma³oœæ: \n\nIntelekt: \n\nRozs¹dek: \n\nCharyzma: ", font, gold, 22, pair<float, float>(900, 50));
 	button.emplace_back(s + "\n\n" + d + "\n\n" + c + "\n\n" + i + "\n\n" + w + "\n\n" + ch, font, gold, 22, pair<float, float>(1130, 50));
-	button.emplace_back(Khelgar->getMainWeapon().printWeapon() + "\n1k" + to_string(Khelgar->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Khelgar->getMainWeapon().printCr()) + "/" + Khelgar->getMainWeapon().printCrRg(), font, gold, 24, pair<float, float>(125, 370));
+	button.emplace_back(Gracz->getMainWeapon().printWeapon() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, gold, 24, pair<float, float>(125, 370));
 	button.emplace_back(distance, font, gold, 24, pair<float, float>(125, 470));
-	button.emplace_back(Khelgar->getShield().printShield() + "\n" + shield, font, gold, 22, pair<float, float>(550, 370));
+	button.emplace_back(Gracz->getShield().printShield() + "\n" + shield, font, gold, 22, pair<float, float>(550, 370));
+	button.emplace_back(Gracz->getArmour().printArmour() + "\n" + armour, font, gold, 22, pair<float, float>(550, 470));
 	button.emplace_back(L"Powrót", font, gold, 28, pair<float, float>(200, 600), GameState::MENU2);
-	button.emplace_back(L"Dalej", font, gold, 28, pair<float, float>(800, 600), GameState::MENU2);
+	button.emplace_back(L"Dalej", font, gold, 28, pair<float, float>(800, 600), GameState::GAME);
 
 	printText* hoverPrintText = nullptr;
-	while (state == GameState::MENU2_a)
-	{
-		Vector2f mouse(Mouse::getPosition(window));
-		Event event;
-		hoverPrintText = nullptr;
-
-		for (auto& button : button){
-		if ((button.GetText().getGlobalBounds().contains(mouse)) && (button.GetState() != GameState::UNKNOWN))
-		{
-			button.GetText().setStyle(Text::Underlined);
-			hoverPrintText = &button;
-		}
-		else
-		{
-			button.GetText().setStyle(Text::Regular);
-			button.GetText().setColor(Color::Black);
-		}
-		}
-		while (window.pollEvent(event))
-		{
-			if (event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left && hoverPrintText)
-			{
-				if (hoverPrintText->GetState() != GameState::UNKNOWN)
-					state = hoverPrintText->GetState();
-				break;
-			}
-		}
-		window.clear();
-		window.draw(bg);
-		for (auto &button : button)
-		{
-				button.GetText().setColor(button.setColor());
-				window.draw(button.GetText());
-		}
-		for (auto& button : buttonImg){
-				window.draw(button.GetSprite());
-		}
-		window.display();
-	}
-}
-
-///// the second played character - elf /////
-
-void::Game::tharwen() {
-	bg.setTexture(background3);
-	Texture wood;
-	wood.loadFromFile("belka.gif");
-	vector<printSprite> buttonImg;
-	buttonImg.emplace_back(wood, pair<float, float>(430, 35));
-	buttonImg.emplace_back(wood, pair<float, float>(820, 35));
-
-	Player* Tharwen = new Player(playerClass::hunter, rase::elf, Ability(15), Ability(14), Ability(12), Ability(10), Ability(10), Ability(10), Level(0), Armor(), false, "Tharwen");
-	Tharwen->setMainWeapon(WeaponCollection::Longsword);
-	Tharwen->setDistanceWeapon(WeaponCollection::Longbow);
-
-	buttonImg.emplace_back(Tharwen->printAvatar(), pair<float, float>(45, 40));
-	buttonImg.emplace_back(Tharwen->getMainWeapon().printSprite(), pair<float, float>(50, 360));
-	buttonImg.emplace_back(Tharwen->getSecondWeapon().printSprite(), pair<float, float>(50, 460));
-	buttonImg.emplace_back(Tharwen->getShield().printSprite(), pair<float, float>(470, 360));
-
-	Color gold(252, 255, 166);
-
-	string s = Tharwen->printStr();
-	string d = Tharwen->printDex();
-	string c = Tharwen->printCon();
-	string i = Tharwen->printInt();
-	string w = Tharwen->printWis();
-	string ch = Tharwen->printCha();
-	string className = Tharwen->printClassName();
-	string raseName = Tharwen->printRaseName();
-	string name = Tharwen->printName();
-	string hp = ("PW: " + to_string(Tharwen->printHpNow()) + "/" + to_string(Tharwen->printHpMax()));
-	string ac = ("KP: " + to_string(Tharwen->printAC()));
-	sf::String distance = Tharwen->getSecondWeapon().printWeapon() + " poc. " + to_string(Tharwen->getSecondWeapon().printMissles()) + L" zasiêg " + to_string(Tharwen->getSecondWeapon().printRange()) + "\n1k" + to_string(Tharwen->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Tharwen->getSecondWeapon().printCr()) + "/" + Tharwen->getSecondWeapon().printCrRg();
-	if (Tharwen->getSecondWeapon().printWeapon() == "Brak broni dystansowej")
-		distance = Tharwen->getSecondWeapon().printWeapon();
-	sf::String shield = "+" + to_string(Tharwen->getShield().getAC()) + " KP";
-	if (Tharwen->getShield().getAC() == 0)
-		shield = "";
-	//ona jedna ma dwie bronie
-
-	vector<printText> button;
-	button.emplace_back(name + "\n\n" + raseName + "\n" + className + "\n\nPoziom: " + to_string(Tharwen->printLvl()) + "\n\nPD: " + to_string(Tharwen->printExp()) + "/" + to_string(Tharwen->printExpToLv()), font, gold, 28, pair<float, float>(260, 50));
-	button.emplace_back(hp + "\n\n" + L"Premia do ataku: \n\nPrêdkoœæ \n\nWytrwa³oœæ: \n\nRefleks: \n\nWola: ", font, gold, 22, pair<float, float>(490, 50));
-	button.emplace_back(ac + "\n\n" + to_string(Tharwen->printBasicAttack()) + "/" + to_string(Tharwen->printDistanceAttack()) + "\n\n" + to_string(Tharwen->printSpeed()) + "\n\n" + to_string(Tharwen->printSTFor()) + "\n\n" + to_string(Tharwen->printSTRef()) + "\n\n" + to_string(Tharwen->printSTWl()), font, gold, 22, pair<float, float>(720, 50));
-	button.emplace_back(L"Si³a: \n\nZrêcznoœæ: \n\nWytrzyma³oœæ: \n\nIntelekt: \n\nRozs¹dek: \n\nCharyzma: ", font, gold, 22, pair<float, float>(900, 50));
-	button.emplace_back(s + "\n\n" + d + "\n\n" + c + "\n\n" + i + "\n\n" + w + "\n\n" + ch, font, gold, 22, pair<float, float>(1130, 50));
-	button.emplace_back(Tharwen->getMainWeapon().printWeapon() + "\n1k" + to_string(Tharwen->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Tharwen->getMainWeapon().printCr()) + "/" + Tharwen->getMainWeapon().printCrRg(), font, gold, 24, pair<float, float>(125, 370));
-	button.emplace_back(distance, font, gold, 24, pair<float, float>(125, 470)); 
-	button.emplace_back(Tharwen->getShield().printShield() + "\n" + shield, font, gold, 22, pair<float, float>(550, 370));
-	button.emplace_back(L"Powrót", font, gold, 28, pair<float, float>(200, 600), GameState::MENU2);
-	button.emplace_back(L"Dalej", font, gold, 28, pair<float, float>(800, 600), GameState::MENU2);
-
-	printText* hoverPrintText = nullptr;
-	while (state == GameState::MENU2_c)
+	while (state == GameState::MENU2_a || state == GameState::MENU2_c || state == GameState::MENU2_b )
 	{
 		Vector2f mouse(Mouse::getPosition(window));
 		Event event;
@@ -334,111 +258,119 @@ void::Game::tharwen() {
 		}
 		window.clear();
 		window.draw(bg);
-
 		for (auto &button : button)
 		{
-				button.GetText().setColor(button.setColor());
-				window.draw(button.GetText());
+			button.GetText().setColor(button.setColor());
+			window.draw(button.GetText());
 		}
 		for (auto& button : buttonImg){
-				window.draw(button.GetSprite());
+			window.draw(button.GetSprite());
 		}
 		window.display();
 	}
 }
 
-// the last created person
+void::Game::gamePlay(Player* Gracz) {
+	bg.setTexture(background4);
+	Color green(103, 190, 75);
 
-void::Game::rodger() {
-	bg.setTexture(background3);
-	Texture wood;
-	wood.loadFromFile("belka.gif");
 	vector<printSprite> buttonImg;
-	buttonImg.emplace_back(wood, pair<float, float>(430, 35));
-	buttonImg.emplace_back(wood, pair<float, float>(820, 35));
+	Gracz->printAvatar().setScale(0.65, 0.65);
+	buttonImg.emplace_back(Gracz->printAvatar(), pair<float, float>(770, 70));
+	
+	
+	//buttonImg.emplace_back(Gracz->getShield().printSprite(), pair<float, float>(470, 360));
+	//buttonImg.emplace_back(Gracz->getArmour().printSprite(), pair<float, float>(470, 460));
+
+	string s = Gracz->printStr();
+	string d = Gracz->printDex();
+	string c = Gracz->printCon();
+	string i = Gracz->printInt();
+	string w = Gracz->printWis();
+	string ch = Gracz->printCha();
+	string className = Gracz->printClassName();
+	string raseName = Gracz->printRaseName();
+	string name = Gracz->printName();
+	string hp = (to_string(Gracz->printHpNow()) + "/" + to_string(Gracz->printHpMax()));
+	string ac = (to_string(Gracz->printAC()));
+	sf::String distance = Gracz->getSecondWeapon().printWeapon() + " poc. " + to_string(Gracz->getSecondWeapon().printMissles()) + L" zasiêg " + to_string(Gracz->getSecondWeapon().printRange()) + "\n1k" + to_string(Gracz->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getSecondWeapon().printCr()) + "/" + Gracz->getSecondWeapon().printCrRg();
+	if (Gracz->getSecondWeapon().printWeapon() == "Brak broni dystansowej")
+		distance = Gracz->getSecondWeapon().printWeapon();
+	sf::String shield = "+" + to_string(Gracz->getShield().getAC()) + " KP";
+	if (Gracz->getShield().getAC() == 0)
+		shield = "";
+	sf::String armour = "+" + to_string(Gracz->getArmour().getAC()) + " KP";
+	if (Gracz->getArmour().getAC() == 0)
+		armour = "";
 
 
-Player* Rodger = new Player(playerClass::wizard, rase::human, Ability(8), Ability(12), Ability(10), Ability(16), Ability(14), Ability(10), Level(0), Armor(), true, "Rodger");
+	vector<printText> button;
+	button.emplace_back("Poziom: " + to_string(Gracz->printLvl()) + "\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()), font, green, 22, pair<float, float>(780, 260));
+	button.emplace_back(name, font, green, 28, pair<float, float>(780, 40));
 
-Rodger->setDistanceWeapon(WeaponCollection::Slingshot);
+	button.emplace_back("PW:\nKP:\nAtak: \nPr", font, green, 22, pair<float, float>(940, 120));
+	button.emplace_back(hp+"\n" + ac +"\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n" + to_string(Gracz->printSpeed()), font, green, 22, pair<float, float>(1000, 120));
+	button.emplace_back(L"S: \nZr: \nWtr: \nInt: \nRz: \nCh: \n\nWytr: \nRef: \nWola:", font, green, 22, pair<float, float>(1120, 50));
+	button.emplace_back(s + "\n" + d + "\n" + c + "\n" + i + "\n" + w + "\n" + ch + "\n\n   " + to_string(Gracz->printSTFor()) + "\n   " + to_string(Gracz->printSTRef()) + "\n   " + to_string(Gracz->printSTWl()), font, green, 22, pair<float, float>(1180, 50));
+	button.emplace_back(L"Zmieñ broñ", font, green, 22, pair<float, float>(1120, 360), Gracz, Orders::ChangeWeapon);
+	button.emplace_back(L"Wyjœcie", font, green, 28, pair<float, float>(1120, 600), GameState::END);
 
-buttonImg.emplace_back(Rodger->printAvatar(), pair<float, float>(45, 40));
-buttonImg.emplace_back(Rodger->getMainWeapon().printSprite(), pair<float, float>(50, 360));
-buttonImg.emplace_back(Rodger->getSecondWeapon().printSprite(), pair<float, float>(50, 460));
-buttonImg.emplace_back(Rodger->getShield().printSprite(), pair<float, float>(470, 360));
 
-Color gold(252, 255, 166);
-
-string s = Rodger->printStr();
-string d = Rodger->printDex();
-string c = Rodger->printCon();
-string i = Rodger->printInt();
-string w = Rodger->printWis();
-string ch = Rodger->printCha();
-string className = Rodger->printClassName();
-string raseName = Rodger->printRaseName();
-string name = Rodger->printName();
-string hp = ("PW: " + to_string(Rodger->printHpNow()) + "/" + to_string(Rodger->printHpMax()));
-string ac = ("KP: " + to_string(Rodger->printAC()));
-sf::String distance = Rodger->getSecondWeapon().printWeapon() + " poc. " + to_string(Rodger->getSecondWeapon().printMissles()) + L" zasiêg " + to_string(Rodger->getSecondWeapon().printRange()) + "\n1k" + to_string(Rodger->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Rodger->getSecondWeapon().printCr()) + "/" + Rodger->getSecondWeapon().printCrRg();
-if (Rodger->getSecondWeapon().printWeapon() == "Brak broni dystansowej")
-distance = Rodger->getSecondWeapon().printWeapon();
-sf::String shield = "+" + to_string(Rodger->getShield().getAC()) + " KP";
-if (Rodger->getShield().getAC() == 0)
-	shield = "";
-
-vector<printText> button;
-button.emplace_back(name + "\n\n" + raseName + "\n" + className + "\n\nPoziom: " + to_string(Rodger->printLvl()) + "\n\nPD: " + to_string(Rodger->printExp()) + "/" + to_string(Rodger->printExpToLv()), font, gold, 28, pair<float, float>(260, 50));
-button.emplace_back(hp + "\n\n" + L"Premia do ataku: \n\nPrêdkoœæ \n\nWytrwa³oœæ: \n\nRefleks: \n\nWola: ", font, gold, 22, pair<float, float>(490, 50));
-button.emplace_back(ac + "\n\n" + to_string(Rodger->printBasicAttack()) + "/" + to_string(Rodger->printDistanceAttack()) + "\n\n" + to_string(Rodger->printSpeed()) + "\n\n" + to_string(Rodger->printSTFor()) + "\n\n" + to_string(Rodger->printSTRef()) + "\n\n" + to_string(Rodger->printSTWl()), font, gold, 22, pair<float, float>(720, 50));
-button.emplace_back(L"Si³a: \n\nZrêcznoœæ: \n\nWytrzyma³oœæ: \n\nIntelekt: \n\nRozs¹dek: \n\nCharyzma: ", font, gold, 22, pair<float, float>(900, 50));
-button.emplace_back(s + "\n\n" + d + "\n\n" + c + "\n\n" + i + "\n\n" + w + "\n\n" + ch, font, gold, 22, pair<float, float>(1130, 50));
-button.emplace_back(Rodger->getMainWeapon().printWeapon() + "\n1k" + to_string(Rodger->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Rodger->getMainWeapon().printCr()) + "/" + Rodger->getMainWeapon().printCrRg(), font, gold, 24, pair<float, float>(125, 370));
-button.emplace_back(distance, font, gold, 24, pair<float, float>(125, 470));
-button.emplace_back(Rodger->getShield().printShield() + "\n" + shield, font, gold, 22, pair<float, float>(550, 370));
-button.emplace_back(L"Powrót", font, gold, 28, pair<float, float>(200, 600), GameState::MENU2);
-button.emplace_back(L"Dalej", font, gold, 28, pair<float, float>(800, 600), GameState::MENU2);
-
-printText* hoverPrintText = nullptr;
-while (state == GameState::MENU2_b)
-{
-	Vector2f mouse(Mouse::getPosition(window));
-	Event event;
-	hoverPrintText = nullptr;
-
-	for (auto& button : button){
-		if ((button.GetText().getGlobalBounds().contains(mouse)) && (button.GetState() != GameState::UNKNOWN))
-		{
-			button.GetText().setStyle(Text::Underlined);
-			hoverPrintText = &button;
-		}
-		else
-		{
-			button.GetText().setStyle(Text::Regular);
-			button.GetText().setColor(Color::Black);
-		}
+	if (Gracz->isMeleeWeapon()){
+		buttonImg.emplace_back(Gracz->getMainWeapon().printSprite(), pair<float, float>(780, 320));
+		buttonImg.emplace_back(Gracz->getShield().printSprite(), pair<float, float>(780, 420));
+		button.emplace_back(Gracz->getMainWeapon().printWeapon() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, green, 24, pair<float, float>(855, 330));
+		button.emplace_back(Gracz->getShield().printShield() + "\n" + shield, font, green, 22, pair<float, float>(855, 420));
 	}
-	while (window.pollEvent(event))
-	{
-		if (event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left && hoverPrintText)
-		{
-			if (hoverPrintText->GetState() != GameState::UNKNOWN)
-				state = hoverPrintText->GetState();
-			break;
-		}
+	else{
+		buttonImg.emplace_back(Gracz->getSecondWeapon().printSprite(), pair<float, float>(780, 320));
+		button.emplace_back(distance, font, green, 24, pair<float, float>(855, 330));
 	}
-	window.clear();
-	window.draw(bg);
 
-	for (auto &button : button)
+
+	printText* hoverPrintText = nullptr;
+	while (state == GameState::GAME)
 	{
+		Vector2f mouse(Mouse::getPosition(window));
+		Event event;
+		hoverPrintText = nullptr;
+
+		for (auto& button : button){
+			if ((button.GetText().getGlobalBounds().contains(mouse)) && (button.GetState() != GameState::UNKNOWN || button.getOrder() == Orders::ChangeWeapon))
+			{
+				button.GetText().setStyle(Text::Underlined);
+				hoverPrintText = &button;
+			}
+			else
+			{
+				button.GetText().setStyle(Text::Regular);
+				button.GetText().setColor(Color::Black);
+			}
+		}
+		while (window.pollEvent(event))
+		{
+			if (event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left && hoverPrintText)
+			{
+				if (hoverPrintText->GetState() != GameState::UNKNOWN)
+					state = hoverPrintText->GetState();
+				if (hoverPrintText->getOrder() == Orders::ChangeWeapon){
+					Gracz->changeWeapon();
+					gamePlay(Gracz);
+				}
+				break;
+			}
+		}
+		window.clear();
+		window.draw(bg);
+		for (auto &button : button)
+		{
 			button.GetText().setColor(button.setColor());
 			window.draw(button.GetText());
-	}
-	for (auto& button : buttonImg){
+		}
+		for (auto& button : buttonImg){
 			window.draw(button.GetSprite());
+		}
+		window.display();
 	}
-	window.display();
-}
 }
 // wzorzec projektowy fabryka

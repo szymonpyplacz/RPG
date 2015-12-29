@@ -26,7 +26,11 @@ public:
 	static DistanceWeapon Slingshot;
 	static Shield LightShield;
 	static Shield HeavyShield;
-
+	static Armour Gambeson;
+	static Armour LeatherArmor;
+	static Armour MailShirt;
+	static Armour Chainmail;
+	static Armour PlateArmor;
 };
 
 

@@ -10,6 +10,7 @@ public:
 	int printMod();
 	void setValue(int value);
 	Ability(int value);
+	Ability();
 
 private:
 	int value;

@@ -8,6 +8,7 @@ class Level
 {
 public:
 	Level(int exp);
+	Level();
 	void getExp(int exp);
 	void addExp(int add);
 	void levelUp(int level);
