@@ -24,14 +24,20 @@ Player::Player(playerClass plcl, rase plRase, Ability s, Ability d, Ability c, A
 	if (this->PlayerRase == rase::dwarf && male == true){
 		avatar.loadFromFile("dwarf.png");
 		avatarSprite.setTexture(avatar);
+		icon.loadFromFile("dwarf_icon.png");
+		iconSprite.setTexture(icon);
 	}
 	if (this->PlayerRase == rase::elf && male == false){
 		avatar.loadFromFile("elf_female.png");		
 		avatarSprite.setTexture(avatar);
+		icon.loadFromFile("elf_icon.png");
+		iconSprite.setTexture(icon);
 }
 	if (this->PlayerRase == rase::human && male == true){
 		avatar.loadFromFile("human.png");		
 		avatarSprite.setTexture(avatar);
+		icon.loadFromFile("human_icon.png");
+		iconSprite.setTexture(icon);
 }
 };
 
@@ -39,13 +45,6 @@ string Player::printName(){
 	return (this->name);
 }
 
-int Player::printHpMax(){
-	return(this->hp.printMaxHP());
-}
-
-int Player::printHpNow(){
-	return(this->hp.printHP());
-}
 
 int Player::printAC(){
 	return(this->ac.printAC());
@@ -220,6 +219,9 @@ sf::Sprite &Player::printAvatar(){
 		return(this->avatarSprite);
 	}
 
+sf::Sprite &Player::printIcon(){
+	return(this->iconSprite);
+}
 
 void Player::setMainWeapon(Weapon weap){
 	if (weap.isSoldier() == false || (weap.isSoldier() && (this->PlayerCl == playerClass::fighter || this->PlayerCl == playerClass::hunter)))
@@ -231,9 +233,6 @@ void Player::setDistanceWeapon(DistanceWeapon weap){
 	this->secondWeapon = weap;
 }
 
-sf::Sprite Player::printWeapIcon(){
-	return(this->mainWeapon.printSprite());
-}
 
 Weapon Player::getMainWeapon(){
 	return this->mainWeapon;
@@ -258,6 +257,11 @@ Armour Player::getArmour(){
 	return this->playerArmour;
 }
 
+Hp &Player::getHp(){
+	return this->hp;
+}
+
+
 void Player::setArmour(Armour arm){
 	if (arm.isHeavy() != true && this->PlayerCl != playerClass::wizard)
 		this->playerArmour = arm;
@@ -277,4 +281,16 @@ void Player::changeWeapon(){
 
 bool Player::isMeleeWeapon(){
 	return this->isUsingMeleeWeapon;
+}
+
+void Player::setPosition(int x, int y){
+	if (x < 0)
+		x = 0;
+	if (y < 0)
+		y = 0;
+	position = make_pair(x, y);
+}
+
+pair<int, int> Player::getPosition(){
+	return this->position;
 }

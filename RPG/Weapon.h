@@ -20,7 +20,6 @@ public:
 	int printCr();
 	bool isTwoHanded();
 	bool isSoldier();
-	//void changeWeap();
 	std::string printCrRg();
 	sf::Sprite printSprite();
 

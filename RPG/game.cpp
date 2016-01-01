@@ -6,6 +6,7 @@
 #include "player.h"
 #include "printText.h"
 #include "printSprite.h"
+#include "Map.h"
 
 //24 punkty do budowy postaci
 
@@ -183,15 +184,18 @@ void::Game::printPlayer(Player* Gracz) {
 	bg.setTexture(background3);
 	Texture wood;
 	wood.loadFromFile("belka.gif");
+	Sprite woodSprite;
+	woodSprite.setTexture(wood);
 	vector<printSprite> buttonImg;
-	buttonImg.emplace_back(wood, pair<float, float>(430, 35));
-	buttonImg.emplace_back(wood, pair<float, float>(820, 35));
+	buttonImg.emplace_back(woodSprite, pair<float, float>(430, 35));
+	buttonImg.emplace_back(woodSprite, pair<float, float>(820, 35));
 	buttonImg.emplace_back(Gracz->printAvatar(), pair<float, float>(45, 40));
 	buttonImg.emplace_back(Gracz->getMainWeapon().printSprite(), pair<float, float>(50, 360));
 	buttonImg.emplace_back(Gracz->getSecondWeapon().printSprite(), pair<float, float>(50, 460));
 	buttonImg.emplace_back(Gracz->getShield().printSprite(), pair<float, float>(470, 360));
 	buttonImg.emplace_back(Gracz->getArmour().printSprite(), pair<float, float>(470, 460));
 	Color gold(252, 255, 166);
+
 
 	string s = Gracz->printStr();
 	string d = Gracz->printDex();
@@ -202,7 +206,7 @@ void::Game::printPlayer(Player* Gracz) {
 	string className = Gracz->printClassName();
 	string raseName = Gracz->printRaseName();
 	string name = Gracz->printName();
-	string hp = ("PW: " + to_string(Gracz->printHpNow()) + "/" + to_string(Gracz->printHpMax()));
+	string hp = ("PW: " + to_string(Gracz->getHp().printHP()) + "/" + to_string(Gracz->getHp().printMaxHP()));
 	string ac = ("KP: " + to_string(Gracz->printAC()));
 	sf::String distance = Gracz->getSecondWeapon().printWeapon() + " poc. " + to_string(Gracz->getSecondWeapon().printMissles()) + L" zasiêg " + to_string(Gracz->getSecondWeapon().printRange()) + "\n1k" + to_string(Gracz->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getSecondWeapon().printCr()) + "/" + Gracz->getSecondWeapon().printCrRg();
 	if (Gracz->getSecondWeapon().printWeapon() == "Brak broni dystansowej")
@@ -214,6 +218,7 @@ void::Game::printPlayer(Player* Gracz) {
 	if (Gracz->getArmour().getAC() == 0)
 		armour = "";
 
+	Gracz->setPosition(5, 3);
 
 	vector<printText> button;
 	button.emplace_back(name + "\n\n" + raseName + "\n" + className + "\n\nPoziom: " + to_string(Gracz->printLvl()) + "\n\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()), font, gold, 28, pair<float, float>(260, 50));
@@ -273,12 +278,17 @@ void::Game::printPlayer(Player* Gracz) {
 void::Game::gamePlay(Player* Gracz) {
 	bg.setTexture(background4);
 	Color green(103, 190, 75);
-
+	//Gracz->getHp().getDmg(1);
 	vector<printSprite> buttonImg;
 	Gracz->printAvatar().setScale(0.65, 0.65);
 	buttonImg.emplace_back(Gracz->printAvatar(), pair<float, float>(770, 70));
-	
-	
+	Grass trawka;
+	for (int i = 0; i < 24; i++){
+		for (int j = 0; j < 24; j++){
+			buttonImg.emplace_back(trawka.printTerrain(), pair<float, float>(30 * i, 30 * j));
+		}
+	}
+	buttonImg.emplace_back(Gracz->printIcon(), pair<float, float>(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second));
 	//buttonImg.emplace_back(Gracz->getShield().printSprite(), pair<float, float>(470, 360));
 	//buttonImg.emplace_back(Gracz->getArmour().printSprite(), pair<float, float>(470, 460));
 
@@ -291,9 +301,9 @@ void::Game::gamePlay(Player* Gracz) {
 	string className = Gracz->printClassName();
 	string raseName = Gracz->printRaseName();
 	string name = Gracz->printName();
-	string hp = (to_string(Gracz->printHpNow()) + "/" + to_string(Gracz->printHpMax()));
+	string hp = (to_string(Gracz->getHp().printHP()) + "/" + to_string(Gracz->getHp().printMaxHP()));
 	string ac = (to_string(Gracz->printAC()));
-	sf::String distance = Gracz->getSecondWeapon().printWeapon() + " poc. " + to_string(Gracz->getSecondWeapon().printMissles()) + L" zasiêg " + to_string(Gracz->getSecondWeapon().printRange()) + "\n1k" + to_string(Gracz->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getSecondWeapon().printCr()) + "/" + Gracz->getSecondWeapon().printCrRg();
+	sf::String distance = Gracz->getSecondWeapon().printWeapon() + " " + to_string(Gracz->getSecondWeapon().printMissles()) + " poc. " + to_string(Gracz->getSecondWeapon().printRange()) + "m\n1k" + to_string(Gracz->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getSecondWeapon().printCr()) + "/" + Gracz->getSecondWeapon().printCrRg();
 	if (Gracz->getSecondWeapon().printWeapon() == "Brak broni dystansowej")
 		distance = Gracz->getSecondWeapon().printWeapon();
 	sf::String shield = "+" + to_string(Gracz->getShield().getAC()) + " KP";
@@ -305,11 +315,11 @@ void::Game::gamePlay(Player* Gracz) {
 
 
 	vector<printText> button;
-	button.emplace_back("Poziom: " + to_string(Gracz->printLvl()) + "\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()), font, green, 22, pair<float, float>(780, 260));
+	button.emplace_back("Poziom: " + to_string(Gracz->printLvl()) + "\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()), font, green, 22, pair<float, float>(940, 180));
 	button.emplace_back(name, font, green, 28, pair<float, float>(780, 40));
 
-	button.emplace_back("PW:\nKP:\nAtak: \nPr", font, green, 22, pair<float, float>(940, 120));
-	button.emplace_back(hp+"\n" + ac +"\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n" + to_string(Gracz->printSpeed()), font, green, 22, pair<float, float>(1000, 120));
+	button.emplace_back("PW:\nKP:\nAtak: \nPr", font, green, 22, pair<float, float>(940, 80));
+	button.emplace_back(hp + "\n" + ac + "\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n" + to_string(Gracz->printSpeed()), font, green, 22, pair<float, float>(1000, 80));
 	button.emplace_back(L"S: \nZr: \nWtr: \nInt: \nRz: \nCh: \n\nWytr: \nRef: \nWola:", font, green, 22, pair<float, float>(1120, 50));
 	button.emplace_back(s + "\n" + d + "\n" + c + "\n" + i + "\n" + w + "\n" + ch + "\n\n   " + to_string(Gracz->printSTFor()) + "\n   " + to_string(Gracz->printSTRef()) + "\n   " + to_string(Gracz->printSTWl()), font, green, 22, pair<float, float>(1180, 50));
 	button.emplace_back(L"Zmieñ broñ", font, green, 22, pair<float, float>(1120, 360), Gracz, Orders::ChangeWeapon);
@@ -317,23 +327,73 @@ void::Game::gamePlay(Player* Gracz) {
 
 
 	if (Gracz->isMeleeWeapon()){
-		buttonImg.emplace_back(Gracz->getMainWeapon().printSprite(), pair<float, float>(780, 320));
-		buttonImg.emplace_back(Gracz->getShield().printSprite(), pair<float, float>(780, 420));
-		button.emplace_back(Gracz->getMainWeapon().printWeapon() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, green, 24, pair<float, float>(855, 330));
-		button.emplace_back(Gracz->getShield().printShield() + "\n" + shield, font, green, 22, pair<float, float>(855, 420));
+		buttonImg.emplace_back(Gracz->getMainWeapon().printSprite(), pair<float, float>(780, 270));
+		buttonImg.emplace_back(Gracz->getShield().printSprite(), pair<float, float>(780, 360));
+		button.emplace_back(Gracz->getMainWeapon().printWeapon() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, green, 24, pair<float, float>(855, 280));
+		button.emplace_back(Gracz->getShield().printShield() + "\n" + shield, font, green, 22, pair<float, float>(855, 360));
 	}
 	else{
-		buttonImg.emplace_back(Gracz->getSecondWeapon().printSprite(), pair<float, float>(780, 320));
-		button.emplace_back(distance, font, green, 24, pair<float, float>(855, 330));
+		buttonImg.emplace_back(Gracz->getSecondWeapon().printSprite(), pair<float, float>(780, 270));
+		button.emplace_back(distance, font, green, 24, pair<float, float>(855, 280));
 	}
 
+	buttonImg.emplace_back(Gracz->getHp().printSprite(), pair<float, float>(940, 40));
+
+	Texture end;
+	end.loadFromFile("end.png");
+	Sprite endSprite;
+	endSprite.setTexture(end);
+	Texture top;
+	top.loadFromFile("top.png");
+	Sprite topSprite;
+	topSprite.setTexture(top);
+	Texture down;
+	down.loadFromFile("down.png");
+	Sprite downSprite;
+	downSprite.setTexture(down);
+	Texture left;
+	left.loadFromFile("left.png");
+	Sprite leftSprite;
+	leftSprite.setTexture(left);
+	Texture leftTop;
+	leftTop.loadFromFile("left_top.png");
+	Sprite leftTopSprite;
+	leftTopSprite.setTexture(leftTop);
+	Texture leftDown;
+	leftDown.loadFromFile("left_down.png");
+	Sprite leftDownSprite;
+	leftDownSprite.setTexture(leftDown);
+	Texture right;
+	right.loadFromFile("right.png");
+	Sprite rightSprite;
+	rightSprite.setTexture(right);
+	Texture rightTop;
+	rightTop.loadFromFile("right_top.png");
+	Sprite rightTopSprite;
+	rightTopSprite.setTexture(rightTop);
+	Texture rightDown;
+	rightDown.loadFromFile("right_down.png");
+	Sprite rightDownSprite;
+	rightDownSprite.setTexture(rightDown);
+
+	buttonImg.emplace_back(leftSprite, pair<float, float>(800, 500), Gracz, Orders2::Left);
+	buttonImg.emplace_back(leftTopSprite, pair<float, float>(800, 450), Gracz, Orders2::LeftTop);
+	buttonImg.emplace_back(leftDownSprite, pair<float, float>(800, 550), Gracz, Orders2::LeftDown);
+	buttonImg.emplace_back(topSprite, pair<float, float>(850, 450), Gracz, Orders2::Top);
+	buttonImg.emplace_back(endSprite, pair<float, float>(850, 500), Gracz, Orders2::Left);
+	buttonImg.emplace_back(downSprite, pair<float, float>(850, 550), Gracz, Orders2::Down);
+	buttonImg.emplace_back(rightSprite, pair<float, float>(900, 500), Gracz, Orders2::Right);
+	buttonImg.emplace_back(rightTopSprite, pair<float, float>(900, 450), Gracz, Orders2::RightTop);
+	buttonImg.emplace_back(rightDownSprite, pair<float, float>(900, 550), Gracz, Orders2::RightDown);
 
 	printText* hoverPrintText = nullptr;
+	printSprite* hoverSprite = nullptr;
 	while (state == GameState::GAME)
 	{
 		Vector2f mouse(Mouse::getPosition(window));
 		Event event;
 		hoverPrintText = nullptr;
+		hoverSprite = nullptr;
 
 		for (auto& button : button){
 			if ((button.GetText().getGlobalBounds().contains(mouse)) && (button.GetState() != GameState::UNKNOWN || button.getOrder() == Orders::ChangeWeapon))
@@ -347,30 +407,90 @@ void::Game::gamePlay(Player* Gracz) {
 				button.GetText().setColor(Color::Black);
 			}
 		}
-		while (window.pollEvent(event))
-		{
-			if (event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left && hoverPrintText)
-			{
-				if (hoverPrintText->GetState() != GameState::UNKNOWN)
-					state = hoverPrintText->GetState();
-				if (hoverPrintText->getOrder() == Orders::ChangeWeapon){
-					Gracz->changeWeapon();
-					gamePlay(Gracz);
-				}
-				break;
+
+		for (auto& button : buttonImg){
+			if (button.GetSprite().getGlobalBounds().contains(mouse)){
+				hoverSprite = &button;
 			}
 		}
-		window.clear();
-		window.draw(bg);
-		for (auto &button : button)
+
+
+		while (window.pollEvent(event))
 		{
-			button.GetText().setColor(button.setColor());
-			window.draw(button.GetText());
+			if (event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
+			{
+				if (hoverPrintText)
+				{
+					if (hoverPrintText->GetState() != GameState::UNKNOWN)
+						state = hoverPrintText->GetState();
+					if (hoverPrintText->getOrder() == Orders::ChangeWeapon){
+						Gracz->changeWeapon();
+						gamePlay(Gracz);
+					}
+				}
+				if (hoverSprite){
+					if ((hoverSprite->getOrder() == Orders2::Left))	{
+						pair<int, int>help;
+						help = Gracz->getPosition();
+						Gracz->setPosition(help.first - 1, help.second);
+						gamePlay(Gracz);
+					}
+					if ((hoverSprite->getOrder() == Orders2::Right))	{
+						pair<int, int>help;
+						help = Gracz->getPosition();
+						Gracz->setPosition(help.first + 1, help.second);
+						gamePlay(Gracz);
+					}
+					if ((hoverSprite->getOrder() == Orders2::LeftDown))	{
+						pair<int, int>help;
+						help = Gracz->getPosition();
+						Gracz->setPosition(help.first - 1, help.second + 1);
+						gamePlay(Gracz);
+					}
+					if ((hoverSprite->getOrder() == Orders2::RightDown))	{
+						pair<int, int>help;
+						help = Gracz->getPosition();
+						Gracz->setPosition(help.first + 1, help.second + 1);
+						gamePlay(Gracz);
+					}
+					if ((hoverSprite->getOrder() == Orders2::LeftTop))	{
+						pair<int, int>help;
+						help = Gracz->getPosition();
+						Gracz->setPosition(help.first - 1, help.second - 1);
+						gamePlay(Gracz);
+					}
+					if ((hoverSprite->getOrder() == Orders2::RightTop))	{
+						pair<int, int>help;
+						help = Gracz->getPosition();
+						Gracz->setPosition(help.first + 1, help.second - 1);
+						gamePlay(Gracz);
+					}
+					if ((hoverSprite->getOrder() == Orders2::Top))	{
+						pair<int, int>help;
+						help = Gracz->getPosition();
+						Gracz->setPosition(help.first, help.second - 1);
+						gamePlay(Gracz);
+					}
+					if ((hoverSprite->getOrder() == Orders2::Down))	{
+						pair<int, int>help;
+						help = Gracz->getPosition();
+						Gracz->setPosition(help.first, help.second + 1);
+						gamePlay(Gracz);
+					}
+				}
+			}
+			window.clear();
+			window.draw(bg);
+			for (auto &button : button)
+			{
+				button.GetText().setColor(button.setColor());
+				window.draw(button.GetText());
+			}
+			for (auto& button : buttonImg){
+				window.draw(button.GetSprite());
+			}
+			window.display();
 		}
-		for (auto& button : buttonImg){
-			window.draw(button.GetSprite());
-		}
-		window.display();
 	}
 }
 // wzorzec projektowy fabryka

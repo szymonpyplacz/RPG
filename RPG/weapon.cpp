@@ -68,7 +68,7 @@ std::string Weapon::printCrRg(){
 }
 
 sf::Sprite Weapon::printSprite(){
-	return(pictureSprite);
+	return pictureSprite;
 }
 
 bool Weapon::isTwoHanded(){

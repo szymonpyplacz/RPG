@@ -31,8 +31,7 @@ public:
 	string printClassName();
 	string printRaseName();
 	sf::Sprite& printAvatar();
-	sf::Sprite printWeapIcon();
-	
+	sf::Sprite& printIcon();
 	int printSTFor();
 	int printSTRef();
 	int printSTWl();
@@ -49,27 +48,28 @@ public:
 	void setShield(Shield shield);
 	void setArmour(Armour arm);
 	void changeWeapon();
-	int printHpMax();
-	int printHpNow();
 	int printAC();
 	int printBasicAttack();
 	int printSpeed();
 	int printDistanceAttack();
 	int setSpeed();
 	bool isMeleeWeapon();
-
+	void setPosition(int x, int y);
+	pair<int, int> getPosition();
 	Shield getShield();
 	Weapon getMainWeapon();
 	DistanceWeapon getSecondWeapon();
 	Armour getArmour();
+	Hp& getHp();
 	Player(playerClass plCl, rase plRase, Ability str, Ability dex, Ability con, Ability itl, Ability wis, Ability cha, Level lvl, Armor ac, bool male, char* name);
 	Player();
 
 private:
+	pair<int, int> position;
 	playerClass PlayerCl;
 	rase PlayerRase;
 	char* name;
-	Hp hp = 0;
+	Hp hp;
 	Ability strenght;
 	Ability dexterity;
 	Ability constitution;
@@ -87,7 +87,9 @@ private:
 	bool male;
 	bool isUsingMeleeWeapon;
 	sf::Sprite avatarSprite;
+	sf::Sprite iconSprite;
 	sf::Texture avatar;
+	sf::Texture icon;
 	Weapon mainWeapon;
 	DistanceWeapon secondWeapon;
 	Shield playerShield;

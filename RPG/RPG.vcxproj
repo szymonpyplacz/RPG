@@ -84,10 +84,12 @@
     <ClCompile Include="hp.cpp" />
     <ClCompile Include="level.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="printSprite.cpp" />
     <ClCompile Include="printText.cpp" />
     <ClCompile Include="SavingThrows.cpp" />
+    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="weapon.cpp" />
     <ClCompile Include="WeaponCollection.cpp" />
   </ItemGroup>
@@ -98,10 +100,12 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="Hp.h" />
     <ClInclude Include="Level.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="printSprite.h" />
     <ClInclude Include="printText.h" />
     <ClInclude Include="SavingThrows.h" />
+    <ClInclude Include="Terrain.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="WeaponCollection.h" />
   </ItemGroup>
