@@ -18,6 +18,7 @@ Player::Player(playerClass plcl, rase plRase, Ability s, Ability d, Ability c, A
 	this->hp = this->classHP() + this->constitution.printMod();
 	this->setST();
 	this->setArmor();
+	this->leftMove = printSpeed()+1;
 
 	this->init = this->dexterity.printMod();
 
@@ -215,12 +216,13 @@ int Player::printSpeed(){
 	return this->speed;
 }
 
+
 sf::Sprite &Player::printAvatar(){
 		return(this->avatarSprite);
 	}
 
 sf::Sprite &Player::printIcon(){
-	return(this->iconSprite);
+	return this->iconSprite;
 }
 
 void Player::setMainWeapon(Weapon weap){
@@ -284,11 +286,43 @@ bool Player::isMeleeWeapon(){
 }
 
 void Player::setPosition(int x, int y){
-	if (x < 0)
-		x = 0;
-	if (y < 0)
-		y = 0;
+	if (isCrossMove && wasCrossMove == false){
+			this->leftMove--;
+			this->leftMove--;
+			position = make_pair(x, y);
+			this->isCrossMove = false;
+			this->wasCrossMove = true;
+		}
+	else if (isCrossMove && wasCrossMove){
+		this->leftMove--;
+		position = make_pair(x, y);
+		this->isCrossMove = false;
+		this->wasCrossMove = false;
+	}
+	else{
+	this->leftMove -- ;
 	position = make_pair(x, y);
+	}
+}
+
+int Player::printLeftMove(){
+	return leftMove;
+}
+
+void Player::isCrossedMove(){
+	isCrossMove = true;
+}
+
+bool Player::wasCrossedMove(){
+	return wasCrossMove;
+}
+
+void Player::setCrossedMove(){
+	this-> wasCrossMove = false;
+}
+
+void Player::setLeftMove(){
+	leftMove = this->printSpeed();
 }
 
 pair<int, int> Player::getPosition(){

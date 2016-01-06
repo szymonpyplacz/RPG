@@ -9,7 +9,7 @@ void Hp::getHp(int newHp){
 }
 
 void Hp::getHpMax(int newHpMax){
-	this->hpMax = newHpMax;
+	hpMax = newHpMax;
 }
 
 void Hp::getDmg(int dmg){
@@ -58,6 +58,27 @@ sf::Sprite& Hp::printSprite(){
 		picture.loadFromFile("hp0.png");
 		pictureSprite.setTexture(picture);
 	}
-
 	return pictureSprite;
+}
+
+sf::Texture& Hp::printTexture(){
+	if (printHP() >= 0.9*printMaxHP()){
+		picture.loadFromFile("hp100.png");
+	}
+	else if (printHP() > 0.6*printMaxHP()){
+		picture.loadFromFile("hp80.png");
+	}
+	else if (printHP() > 0.4*printMaxHP()){
+		picture.loadFromFile("hp60.png");
+	}
+	else if (printHP() > 0.2*printMaxHP()){
+		picture.loadFromFile("hp40.png");
+	}
+	else if (printHP() > 0){
+		picture.loadFromFile("hp20.png");
+	}
+	else {
+		picture.loadFromFile("hp0.png");
+	}
+	return picture;
 }

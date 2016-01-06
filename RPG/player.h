@@ -53,7 +53,13 @@ public:
 	int printSpeed();
 	int printDistanceAttack();
 	int setSpeed();
+	void setLeftMove();
+	int printLeftMove();
 	bool isMeleeWeapon();
+	bool wasCrossedMove();
+	void setCrossedMove();
+	void isCrossedMove();
+
 	void setPosition(int x, int y);
 	pair<int, int> getPosition();
 	Shield getShield();
@@ -82,6 +88,10 @@ private:
 	Level level;
 	Armor ac;
 	int speed = 0;
+	int leftMove = 0;
+	bool wasCrossMove = 0;
+	bool isCrossMove = 0;
+
 	int basicAttack = 0;
 	int init = 0;
 	bool male;

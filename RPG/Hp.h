@@ -15,6 +15,7 @@ public:
 	int printHP();
 	int printMaxHP();
 	sf::Sprite& printSprite();
+	sf::Texture& printTexture();
 
 private:
 	sf::Sprite pictureSprite;

@@ -278,20 +278,11 @@ void::Game::printPlayer(Player* Gracz) {
 void::Game::gamePlay(Player* Gracz) {
 	bg.setTexture(background4);
 	Color green(103, 190, 75);
-	//Gracz->getHp().getDmg(1);
 	vector<printSprite> buttonImg;
 	Gracz->printAvatar().setScale(0.65, 0.65);
 	buttonImg.emplace_back(Gracz->printAvatar(), pair<float, float>(770, 70));
-	Grass trawka;
-	for (int i = 0; i < 24; i++){
-		for (int j = 0; j < 24; j++){
-			buttonImg.emplace_back(trawka.printTerrain(), pair<float, float>(30 * i, 30 * j));
-		}
-	}
-	buttonImg.emplace_back(Gracz->printIcon(), pair<float, float>(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second));
-	//buttonImg.emplace_back(Gracz->getShield().printSprite(), pair<float, float>(470, 360));
-	//buttonImg.emplace_back(Gracz->getArmour().printSprite(), pair<float, float>(470, 460));
 
+	
 	string s = Gracz->printStr();
 	string d = Gracz->printDex();
 	string c = Gracz->printCon();
@@ -319,25 +310,39 @@ void::Game::gamePlay(Player* Gracz) {
 	button.emplace_back(name, font, green, 28, pair<float, float>(780, 40));
 
 	button.emplace_back("PW:\nKP:\nAtak: \nPr", font, green, 22, pair<float, float>(940, 80));
-	button.emplace_back(hp + "\n" + ac + "\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n" + to_string(Gracz->printSpeed()), font, green, 22, pair<float, float>(1000, 80));
+
+	Text printHpLine(hp + "\n" + ac + "\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n" + to_string(Gracz->printSpeed()), font, 22);
+	printHpLine.setColor(green);
+	printHpLine.setPosition(1000, 80);
+
+	Sprite hpBar(Gracz->getHp().printSprite());
+	hpBar.setPosition(940, 40);
+		//buttonImg.emplace_back(Gracz->getHp().printSprite(), pair<float, float>(940, 40));
+
 	button.emplace_back(L"S: \nZr: \nWtr: \nInt: \nRz: \nCh: \n\nWytr: \nRef: \nWola:", font, green, 22, pair<float, float>(1120, 50));
 	button.emplace_back(s + "\n" + d + "\n" + c + "\n" + i + "\n" + w + "\n" + ch + "\n\n   " + to_string(Gracz->printSTFor()) + "\n   " + to_string(Gracz->printSTRef()) + "\n   " + to_string(Gracz->printSTWl()), font, green, 22, pair<float, float>(1180, 50));
 	button.emplace_back(L"Zmieñ broñ", font, green, 22, pair<float, float>(1120, 360), Gracz, Orders::ChangeWeapon);
 	button.emplace_back(L"Wyjœcie", font, green, 28, pair<float, float>(1120, 600), GameState::END);
 
+	Sprite weapon(Gracz->getMainWeapon().printSprite());
+	weapon.setPosition(780, 270);
+	Text weapTx(Gracz->getMainWeapon().printWeapon() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, 24);
+	weapTx.setPosition(855, 280);
+	weapTx.setColor(green);
+	Sprite sh(Gracz->getShield().printSprite());
+	sh.setPosition(780, 360);
+	Text shieldTx(Gracz->getShield().printShield() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, 24);
+	shieldTx.setPosition(855, 360);
+	shieldTx.setColor(green);
 
-	if (Gracz->isMeleeWeapon()){
-		buttonImg.emplace_back(Gracz->getMainWeapon().printSprite(), pair<float, float>(780, 270));
-		buttonImg.emplace_back(Gracz->getShield().printSprite(), pair<float, float>(780, 360));
-		button.emplace_back(Gracz->getMainWeapon().printWeapon() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, green, 24, pair<float, float>(855, 280));
-		button.emplace_back(Gracz->getShield().printShield() + "\n" + shield, font, green, 22, pair<float, float>(855, 360));
-	}
-	else{
-		buttonImg.emplace_back(Gracz->getSecondWeapon().printSprite(), pair<float, float>(780, 270));
-		button.emplace_back(distance, font, green, 24, pair<float, float>(855, 280));
-	}
+	Sprite secWeap(Gracz->getSecondWeapon().printSprite());
+	secWeap.setPosition(780, 270);
+	Text secWeapTx(Gracz->getSecondWeapon().printWeapon() + " " + to_string(Gracz->getSecondWeapon().printMissles()) + " poc. " + to_string(Gracz->getSecondWeapon().printRange()) + "m\n1k" + to_string(Gracz->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getSecondWeapon().printCr()) + "/" + Gracz->getSecondWeapon().printCrRg(), font, 24);
+	secWeapTx.setPosition(855, 280);
+	secWeapTx.setColor(green);
 
-	buttonImg.emplace_back(Gracz->getHp().printSprite(), pair<float, float>(940, 40));
+
+
 
 	Texture end;
 	end.loadFromFile("end.png");
@@ -380,16 +385,51 @@ void::Game::gamePlay(Player* Gracz) {
 	buttonImg.emplace_back(leftTopSprite, pair<float, float>(800, 450), Gracz, Orders2::LeftTop);
 	buttonImg.emplace_back(leftDownSprite, pair<float, float>(800, 550), Gracz, Orders2::LeftDown);
 	buttonImg.emplace_back(topSprite, pair<float, float>(850, 450), Gracz, Orders2::Top);
-	buttonImg.emplace_back(endSprite, pair<float, float>(850, 500), Gracz, Orders2::Left);
+	buttonImg.emplace_back(endSprite, pair<float, float>(850, 500), Gracz, Orders2::EndTurn);
 	buttonImg.emplace_back(downSprite, pair<float, float>(850, 550), Gracz, Orders2::Down);
 	buttonImg.emplace_back(rightSprite, pair<float, float>(900, 500), Gracz, Orders2::Right);
 	buttonImg.emplace_back(rightTopSprite, pair<float, float>(900, 450), Gracz, Orders2::RightTop);
 	buttonImg.emplace_back(rightDownSprite, pair<float, float>(900, 550), Gracz, Orders2::RightDown);
+	
+	Text ruch(L"Pozosta³o " + to_string(Gracz->printLeftMove()), font, 22);
+	ruch.setColor(green);
+	ruch.setPosition(1000, 500);
 
+	Grass trawka;
+	for (int i = 0; i < 24; i++){
+		for (int j = 0; j < 24; j++){
+			buttonImg.emplace_back(trawka.printTerrain(), pair<float, float>(30 * i, 30 * j));
+		}
+	}
+
+	bool endTurn = true;
 	printText* hoverPrintText = nullptr;
 	printSprite* hoverSprite = nullptr;
 	while (state == GameState::GAME)
 	{
+		if (endTurn){
+			Gracz->getHp().getDmg(1);
+		//zestaw rzeczy do wykonania przed tur¹ //
+		for (int i = 0; i < 24; i++){
+			for (int j = 0; j < 24; j++){
+				buttonImg.emplace_back(trawka.printTerrain(), pair<float, float>(30 * i, 30 * j));
+			}
+		}
+
+		Gracz->setCrossedMove();
+		Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
+		Gracz->setLeftMove();
+		ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+
+		hpBar.setTexture(Gracz->getHp().printTexture());
+		hp = (to_string(Gracz->getHp().printHP()) + "/" + to_string(Gracz->getHp().printMaxHP()));
+		printHpLine.setString(hp + "\n" + ac + "\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n" + to_string(Gracz->printSpeed()));
+
+		//koniec zestawu
+
+		endTurn = false;
+		}
+
 		Vector2f mouse(Mouse::getPosition(window));
 		Event event;
 		hoverPrintText = nullptr;
@@ -417,65 +457,66 @@ void::Game::gamePlay(Player* Gracz) {
 
 		while (window.pollEvent(event))
 		{
+
 			if (event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
 			{
 				if (hoverPrintText)
 				{
 					if (hoverPrintText->GetState() != GameState::UNKNOWN)
 						state = hoverPrintText->GetState();
-					if (hoverPrintText->getOrder() == Orders::ChangeWeapon){
+					else if (hoverPrintText->getOrder() == Orders::ChangeWeapon){
 						Gracz->changeWeapon();
-						gamePlay(Gracz);
+						endTurn = true;
 					}
 				}
 				if (hoverSprite){
-					if ((hoverSprite->getOrder() == Orders2::Left))	{
-						pair<int, int>help;
-						help = Gracz->getPosition();
-						Gracz->setPosition(help.first - 1, help.second);
-						gamePlay(Gracz);
+					if ((hoverSprite->getOrder() == Orders2::Left) && Gracz->printLeftMove() > 0 && Gracz->getPosition().first > 0)	{
+						Gracz->setPosition(Gracz->getPosition().first - 1, Gracz->getPosition().second);
+						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
+						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}
-					if ((hoverSprite->getOrder() == Orders2::Right))	{
-						pair<int, int>help;
-						help = Gracz->getPosition();
-						Gracz->setPosition(help.first + 1, help.second);
-						gamePlay(Gracz);
+					else if ((hoverSprite->getOrder() == Orders2::Right) && Gracz->printLeftMove() > 0 && Gracz->getPosition().first < 23)	{
+						Gracz->setPosition(Gracz->getPosition().first + 1, Gracz->getPosition().second);
+						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
+						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}
-					if ((hoverSprite->getOrder() == Orders2::LeftDown))	{
-						pair<int, int>help;
-						help = Gracz->getPosition();
-						Gracz->setPosition(help.first - 1, help.second + 1);
-						gamePlay(Gracz);
+					else if ((hoverSprite->getOrder() == Orders2::LeftDown) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().first > 0 && Gracz->getPosition().second<23)	{
+						Gracz->isCrossedMove();
+						Gracz->setPosition(Gracz->getPosition().first - 1, Gracz->getPosition().second + 1);
+						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
+						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}
-					if ((hoverSprite->getOrder() == Orders2::RightDown))	{
-						pair<int, int>help;
-						help = Gracz->getPosition();
-						Gracz->setPosition(help.first + 1, help.second + 1);
-						gamePlay(Gracz);
+					else if ((hoverSprite->getOrder() == Orders2::RightDown) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().second<23 && Gracz->getPosition().first < 23)	{
+						Gracz->isCrossedMove();
+						Gracz->setPosition(Gracz->getPosition().first + 1, Gracz->getPosition().second + 1);
+						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
+						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}
-					if ((hoverSprite->getOrder() == Orders2::LeftTop))	{
-						pair<int, int>help;
-						help = Gracz->getPosition();
-						Gracz->setPosition(help.first - 1, help.second - 1);
-						gamePlay(Gracz);
+					else if ((hoverSprite->getOrder() == Orders2::LeftTop) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().first > 0 && Gracz->getPosition().second>0)	{
+						Gracz->isCrossedMove();
+						Gracz->setPosition(Gracz->getPosition().first - 1, Gracz->getPosition().second - 1);
+						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
+						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}
-					if ((hoverSprite->getOrder() == Orders2::RightTop))	{
-						pair<int, int>help;
-						help = Gracz->getPosition();
-						Gracz->setPosition(help.first + 1, help.second - 1);
-						gamePlay(Gracz);
+					else if ((hoverSprite->getOrder() == Orders2::RightTop) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().second>0 && Gracz->getPosition().first < 23)	{
+						Gracz->isCrossedMove();
+						Gracz->setPosition(Gracz->getPosition().first + 1, Gracz->getPosition().second - 1);
+						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
+						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}
-					if ((hoverSprite->getOrder() == Orders2::Top))	{
-						pair<int, int>help;
-						help = Gracz->getPosition();
-						Gracz->setPosition(help.first, help.second - 1);
-						gamePlay(Gracz);
+					else if ((hoverSprite->getOrder() == Orders2::Top) && Gracz->printLeftMove() > 0 && Gracz->getPosition().second>0)	{
+						Gracz->setPosition(Gracz->getPosition().first, Gracz->getPosition().second - 1);
+						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
+						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}
-					if ((hoverSprite->getOrder() == Orders2::Down))	{
-						pair<int, int>help;
-						help = Gracz->getPosition();
-						Gracz->setPosition(help.first, help.second + 1);
-						gamePlay(Gracz);
+					else if ((hoverSprite->getOrder() == Orders2::Down) && Gracz->printLeftMove() > 0 && Gracz->getPosition().second<23)	{
+						Gracz->setPosition(Gracz->getPosition().first, Gracz->getPosition().second + 1);
+						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
+						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+					}
+
+					else if ((hoverSprite->getOrder() == Orders2::EndTurn))	{
+						endTurn = true;
 					}
 				}
 			}
@@ -489,6 +530,28 @@ void::Game::gamePlay(Player* Gracz) {
 			for (auto& button : buttonImg){
 				window.draw(button.GetSprite());
 			}
+			window.draw(Gracz->printIcon());
+			if (Gracz->getHp().printHP() <= 0){
+				Sprite deathSprite;
+				Texture death;
+				death.loadFromFile("death.png");
+				deathSprite.setTexture(death);
+				window.draw(deathSprite);
+			}
+			window.draw(hpBar);
+			window.draw(printHpLine);
+			if (Gracz->isMeleeWeapon()){
+			window.draw(weapon);
+			window.draw(weapTx);
+			window.draw(sh);
+			window.draw(shieldTx);
+			}
+			else{
+				window.draw(secWeap);
+				window.draw(secWeapTx);
+			}
+//
+			window.draw(ruch);
 			window.display();
 		}
 	}

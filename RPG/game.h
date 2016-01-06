@@ -21,6 +21,8 @@ public:
 	void rodger(Player* Gracz);
 	void gamePlay(Player* Gracz);
 	void printPlayer(Player* Gracz);
+	void nextTurn();
+	//dodaæ wyj¹tki
 
 protected:
 	GameState state;
