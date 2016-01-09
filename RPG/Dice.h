@@ -11,7 +11,7 @@ class Dice
 public:
 	Dice();
 	Dice(int size);
-	int rollDice(int size);
+	int rollDice();
 	int returnSize();
 
 private:

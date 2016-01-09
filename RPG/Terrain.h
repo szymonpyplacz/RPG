@@ -25,3 +25,15 @@ private:
 	sf::Texture picture;
 	sf::Sprite pictureSprite;
 };
+
+class Hill :public Terrain{
+public:
+	Hill();
+	sf::Sprite& printTerrain();
+
+
+private:
+	bool walkable = 0;
+	sf::Texture picture;
+	sf::Sprite pictureSprite;
+};

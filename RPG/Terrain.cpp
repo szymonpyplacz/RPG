@@ -8,3 +8,13 @@ Grass::Grass(){
 sf::Sprite &Grass::printTerrain(){
 	return this->pictureSprite;
 }
+
+
+Hill::Hill(){
+	picture.loadFromFile("hill.png");
+	pictureSprite.setTexture(picture);
+}
+
+sf::Sprite &Hill::printTerrain(){
+	return this->pictureSprite;
+}

@@ -1,19 +1,27 @@
-#pragma once
 #include "Map.h"
-#include <vector>
-
 
 Map::Map(){
-	Grass trawa;
-	for (int i = 0; i < 576; i++){
-	wektor.emplace_back(trawa);
+
+}
+
+void Map::addPosition(std::pair<int, int> kordy){
+	busyPosition.emplace_back(kordy);
+};
+
+void Map::freePosition(std::pair<int, int> kordy){
+	for (int i = 0; busyPosition.size(); i++){
+		if (busyPosition[i].first == kordy.first && busyPosition[i].second == kordy.second){
+			busyPosition.erase(busyPosition.begin() + i);
+			break;
+		}
 	}
 }
 
-void Map::print(){
-	for (int i = 0; i < 24; i++){
-		for (int j = 0; j < 24; j++){
-
+bool Map::isEmpty(std::pair<int, int> kordy){
+	for (int i = 0; i <busyPosition.size(); i++){
+		if (busyPosition[i].first == kordy.first && busyPosition[i].second == kordy.second){
+			return false;
 		}
 	}
+	return true;
 }

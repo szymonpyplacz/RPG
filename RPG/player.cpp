@@ -2,6 +2,7 @@
 #include "Dice.h"
 #include <algorithm>
 #include "Weapon.h"
+#include "Map.h"
 #pragma once
 
 
@@ -285,24 +286,24 @@ bool Player::isMeleeWeapon(){
 	return this->isUsingMeleeWeapon;
 }
 
-void Player::setPosition(int x, int y){
+void Player::setPosition(int x, int y, Map& mapa){
 	if (isCrossMove && wasCrossMove == false){
 			this->leftMove--;
-			this->leftMove--;
-			position = make_pair(x, y);
+			//this->leftMove--;
+			//position = make_pair(x, y);
 			this->isCrossMove = false;
 			this->wasCrossMove = true;
 		}
 	else if (isCrossMove && wasCrossMove){
-		this->leftMove--;
-		position = make_pair(x, y);
+		//this->leftMove--;
+		//position = make_pair(x, y);
 		this->isCrossMove = false;
 		this->wasCrossMove = false;
 	}
-	else{
-	this->leftMove -- ;
+
+	this->leftMove--;
 	position = make_pair(x, y);
-	}
+	mapa.addPosition(position);
 }
 
 int Player::printLeftMove(){

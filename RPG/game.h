@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <string>
 #include "player.h"
+#include "Map.h"
 
 using namespace std;
 using namespace sf;
@@ -31,6 +32,7 @@ protected:
 	Font font;
 	RenderWindow window;
 	Player* Gracz;
+	Map mapa;
 
 };
 

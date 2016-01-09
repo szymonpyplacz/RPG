@@ -218,7 +218,7 @@ void::Game::printPlayer(Player* Gracz) {
 	if (Gracz->getArmour().getAC() == 0)
 		armour = "";
 
-	Gracz->setPosition(5, 3);
+	Gracz->setPosition(5, 3, mapa);
 
 	vector<printText> button;
 	button.emplace_back(name + "\n\n" + raseName + "\n" + className + "\n\nPoziom: " + to_string(Gracz->printLvl()) + "\n\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()), font, gold, 28, pair<float, float>(260, 50));
@@ -327,8 +327,10 @@ void::Game::gamePlay(Player* Gracz) {
 	Sprite weapon(Gracz->getMainWeapon().printSprite());
 	weapon.setPosition(780, 270);
 	Text weapTx(Gracz->getMainWeapon().printWeapon() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, 24);
+	
 	weapTx.setPosition(855, 280);
 	weapTx.setColor(green);
+
 	Sprite sh(Gracz->getShield().printSprite());
 	sh.setPosition(780, 360);
 	Text shieldTx(Gracz->getShield().printShield() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, 24);
@@ -340,8 +342,6 @@ void::Game::gamePlay(Player* Gracz) {
 	Text secWeapTx(Gracz->getSecondWeapon().printWeapon() + " " + to_string(Gracz->getSecondWeapon().printMissles()) + " poc. " + to_string(Gracz->getSecondWeapon().printRange()) + "m\n1k" + to_string(Gracz->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getSecondWeapon().printCr()) + "/" + Gracz->getSecondWeapon().printCrRg(), font, 24);
 	secWeapTx.setPosition(855, 280);
 	secWeapTx.setColor(green);
-
-
 
 
 	Texture end;
@@ -396,11 +396,19 @@ void::Game::gamePlay(Player* Gracz) {
 	ruch.setPosition(1000, 500);
 
 	Grass trawka;
+	Hill gory;
 	for (int i = 0; i < 24; i++){
 		for (int j = 0; j < 24; j++){
-			buttonImg.emplace_back(trawka.printTerrain(), pair<float, float>(30 * i, 30 * j));
+			if (i > 4 && i < 20 && j > 2 && j< 18){
+				buttonImg.emplace_back(trawka.printTerrain(), pair<float, float>(30 * i, 30 * j));
+			}
+			else {
+				buttonImg.emplace_back(gory.printTerrain(), pair<float, float>(30 * i, 30 * j));
+				mapa.addPosition(make_pair(i, j));
+			}
 		}
 	}
+
 
 	bool endTurn = true;
 	printText* hoverPrintText = nullptr;
@@ -410,11 +418,15 @@ void::Game::gamePlay(Player* Gracz) {
 		if (endTurn){
 			Gracz->getHp().getDmg(1);
 		//zestaw rzeczy do wykonania przed tur¹ //
-		for (int i = 0; i < 24; i++){
-			for (int j = 0; j < 24; j++){
-				buttonImg.emplace_back(trawka.printTerrain(), pair<float, float>(30 * i, 30 * j));
+			for (int i = 0; i < 24; i++){
+				for (int j = 0; j < 24; j++){
+					if (i > 4 && i < 20 && j > 2 && j< 18){
+						buttonImg.emplace_back(trawka.printTerrain(), pair<float, float>(30 * i, 30 * j));
+					}
+					else
+						buttonImg.emplace_back(gory.printTerrain(), pair<float, float>(30 * i, 30 * j));
+				}
 			}
-		}
 
 		Gracz->setCrossedMove();
 		Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
@@ -469,48 +481,57 @@ void::Game::gamePlay(Player* Gracz) {
 						endTurn = true;
 					}
 				}
+				// TERAZ PAMIÊTAJ!!!!!!!!!! TRZEBA JESZCZE SPRAWDZI CZY JAKI CIUL NIE WLEZIE NA ZAJÊTE MIEJSCE !!!!!!!!!!!!!
 				if (hoverSprite){
-					if ((hoverSprite->getOrder() == Orders2::Left) && Gracz->printLeftMove() > 0 && Gracz->getPosition().first > 0)	{
-						Gracz->setPosition(Gracz->getPosition().first - 1, Gracz->getPosition().second);
+					if ((hoverSprite->getOrder() == Orders2::Left) && Gracz->printLeftMove() > 0 && Gracz->getPosition().first > 0 && mapa.isEmpty(make_pair(Gracz->getPosition().first-1, Gracz->getPosition().second)))	{
+						mapa.freePosition(Gracz->getPosition());
+						Gracz->setPosition(Gracz->getPosition().first - 1, Gracz->getPosition().second, mapa);
 						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
 						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}
-					else if ((hoverSprite->getOrder() == Orders2::Right) && Gracz->printLeftMove() > 0 && Gracz->getPosition().first < 23)	{
-						Gracz->setPosition(Gracz->getPosition().first + 1, Gracz->getPosition().second);
+					else if ((hoverSprite->getOrder() == Orders2::Right) && Gracz->printLeftMove() > 0 && Gracz->getPosition().first < 23 && mapa.isEmpty(make_pair(Gracz->getPosition().first+1, Gracz->getPosition().second)))	{
+						mapa.freePosition(Gracz->getPosition());
+						Gracz->setPosition(Gracz->getPosition().first + 1, Gracz->getPosition().second, mapa);
 						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
 						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}
-					else if ((hoverSprite->getOrder() == Orders2::LeftDown) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().first > 0 && Gracz->getPosition().second<23)	{
+					else if ((hoverSprite->getOrder() == Orders2::LeftDown) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().first > 0 && Gracz->getPosition().second<23 && mapa.isEmpty(make_pair(Gracz->getPosition().first-1, Gracz->getPosition().second+1)))	{
+						mapa.freePosition(Gracz->getPosition());
 						Gracz->isCrossedMove();
-						Gracz->setPosition(Gracz->getPosition().first - 1, Gracz->getPosition().second + 1);
+						Gracz->setPosition(Gracz->getPosition().first - 1, Gracz->getPosition().second + 1, mapa);
 						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
 						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}
-					else if ((hoverSprite->getOrder() == Orders2::RightDown) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().second<23 && Gracz->getPosition().first < 23)	{
+					else if ((hoverSprite->getOrder() == Orders2::RightDown) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().second<23 && Gracz->getPosition().first < 23 && mapa.isEmpty(make_pair(Gracz->getPosition().first + 1, Gracz->getPosition().second + 1)))	{
+						mapa.freePosition(Gracz->getPosition());
 						Gracz->isCrossedMove();
-						Gracz->setPosition(Gracz->getPosition().first + 1, Gracz->getPosition().second + 1);
+						Gracz->setPosition(Gracz->getPosition().first + 1, Gracz->getPosition().second + 1, mapa);
 						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
 						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}
-					else if ((hoverSprite->getOrder() == Orders2::LeftTop) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().first > 0 && Gracz->getPosition().second>0)	{
+					else if ((hoverSprite->getOrder() == Orders2::LeftTop) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().first > 0 && Gracz->getPosition().second>0 && mapa.isEmpty(make_pair(Gracz->getPosition().first - 1, Gracz->getPosition().second - 1)))	{
+						mapa.freePosition(Gracz->getPosition());
 						Gracz->isCrossedMove();
-						Gracz->setPosition(Gracz->getPosition().first - 1, Gracz->getPosition().second - 1);
+						Gracz->setPosition(Gracz->getPosition().first - 1, Gracz->getPosition().second - 1, mapa);
 						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
 						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}
-					else if ((hoverSprite->getOrder() == Orders2::RightTop) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().second>0 && Gracz->getPosition().first < 23)	{
+					else if ((hoverSprite->getOrder() == Orders2::RightTop) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().second>0 && Gracz->getPosition().first < 23 && mapa.isEmpty(make_pair(Gracz->getPosition().first+1, Gracz->getPosition().second-1)))	{
+						mapa.freePosition(Gracz->getPosition());
 						Gracz->isCrossedMove();
-						Gracz->setPosition(Gracz->getPosition().first + 1, Gracz->getPosition().second - 1);
+						Gracz->setPosition(Gracz->getPosition().first + 1, Gracz->getPosition().second - 1, mapa);
 						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
 						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}
-					else if ((hoverSprite->getOrder() == Orders2::Top) && Gracz->printLeftMove() > 0 && Gracz->getPosition().second>0)	{
-						Gracz->setPosition(Gracz->getPosition().first, Gracz->getPosition().second - 1);
+					else if ((hoverSprite->getOrder() == Orders2::Top) && Gracz->printLeftMove() > 0 && Gracz->getPosition().second>0 && mapa.isEmpty(make_pair(Gracz->getPosition().first, Gracz->getPosition().second - 1)))	{
+						mapa.freePosition(Gracz->getPosition());
+						Gracz->setPosition(Gracz->getPosition().first, Gracz->getPosition().second - 1, mapa);
 						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
 						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}
-					else if ((hoverSprite->getOrder() == Orders2::Down) && Gracz->printLeftMove() > 0 && Gracz->getPosition().second<23)	{
-						Gracz->setPosition(Gracz->getPosition().first, Gracz->getPosition().second + 1);
+					else if ((hoverSprite->getOrder() == Orders2::Down) && Gracz->printLeftMove() > 0 && Gracz->getPosition().second<23 && mapa.isEmpty(make_pair(Gracz->getPosition().first, Gracz->getPosition().second + 1)))	{
+						mapa.freePosition(Gracz->getPosition());
+						Gracz->setPosition(Gracz->getPosition().first, Gracz->getPosition().second + 1, mapa);
 						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
 						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}

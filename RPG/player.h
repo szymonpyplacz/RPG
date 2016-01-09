@@ -11,6 +11,7 @@
 #include "SavingThrows.h"
 #include "Weapon.h"
 #include "WeaponCollection.h"
+#include "Map.h"
 
 using namespace std;
 using namespace sf;
@@ -60,7 +61,7 @@ public:
 	void setCrossedMove();
 	void isCrossedMove();
 
-	void setPosition(int x, int y);
+	void setPosition(int x, int y, Map& mapa);
 	pair<int, int> getPosition();
 	Shield getShield();
 	Weapon getMainWeapon();
