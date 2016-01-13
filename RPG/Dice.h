@@ -2,6 +2,7 @@
 #include <SFML\Graphics.hpp>
 #include <Windows.h>
 #include <string>
+#include <random>
 
 #ifndef _DICE_H
 #define _DICE_H

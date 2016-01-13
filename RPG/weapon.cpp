@@ -67,6 +67,10 @@ std::string Weapon::printCrRg(){
 	else return("19-20");
 }
 
+int Weapon::printCrRange(){
+	return this->criticRange;
+}
+
 sf::Sprite Weapon::printSprite(){
 	return pictureSprite;
 }
@@ -77,6 +81,10 @@ bool Weapon::isTwoHanded(){
 
 bool Weapon::isSoldier(){
 	return soldier;
+}
+
+Dice Weapon::returnDice(){
+	return Damage;
 }
 
 DistanceWeapon::DistanceWeapon(){
@@ -140,6 +148,9 @@ int DistanceWeapon::printRange(){
 	return this->range;
 }
 
+int DistanceWeapon::printCrRange(){
+	return this->criticRange;
+}
 
 Shield::Shield(int ac, listOfShields number) :ac(ac){
 	if (number == listOfShields::LightShield){

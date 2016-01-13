@@ -236,6 +236,9 @@ void Player::setDistanceWeapon(DistanceWeapon weap){
 	this->secondWeapon = weap;
 }
 
+Level& Player::getLevel(){
+	return this->level;
+}
 
 Weapon Player::getMainWeapon(){
 	return this->mainWeapon;
@@ -245,7 +248,8 @@ DistanceWeapon Player::getSecondWeapon(){
 	return this->secondWeapon;
 }
 
-void Player::setShield(Shield shie){
+void Player::setShield(Shield shie)
+{
 	if (this->mainWeapon.isTwoHanded() == false && this->PlayerCl != playerClass::wizard){
 		this->playerShield = shie;
 		this->setArmor();
@@ -306,6 +310,10 @@ void Player::setPosition(int x, int y, Map& mapa){
 	mapa.addPosition(position);
 }
 
+void Player::endTurn(){
+	this->leftMove = 0;
+}
+
 int Player::printLeftMove(){
 	return leftMove;
 }
@@ -328,4 +336,266 @@ void Player::setLeftMove(){
 
 pair<int, int> Player::getPosition(){
 	return this->position;
+}
+
+
+
+////
+NPC::NPC(){
+	NPC(false, Ability(0), Ability(0), Ability(0), Ability(0), Ability(0), Ability(0), Level(0), Armor(), "noName");
+}
+NPC::NPC(bool archer, Ability s, Ability d, Ability c, Ability i, Ability w, Ability ch, Level lvl, Armor arcl, char* name) :strenght(s), dexterity(d), constitution(c), intelligence(i), wisdom(w), charisma(ch), level(lvl){
+	this->name = new char(strlen(name) + 1);
+	strncpy(this->name, name, (strlen(name) + 1));
+	this->isUsingMeleeWeapon = 1;
+	this->modAtrFromRase();
+	this->setBasicAttack();
+	this->setSpeed();
+	this->hp = this->classHP() + this->constitution.printMod();
+	this->setST();
+	this->setArmor();
+	this->leftMove = printSpeed() + 1;
+	this->init = this->dexterity.printMod();
+	this->PlayerRase = rase::human;
+	this->male = true;
+
+	if (archer){
+		this->PlayerCl = playerClass::hunter;
+		icon.loadFromFile("archer_icon.png");
+		iconSprite.setTexture(icon);
+		this->expValue = 120;
+	}
+	else{
+		this->PlayerCl = playerClass::fighter;
+		icon.loadFromFile("soldier_icon.png");
+		iconSprite.setTexture(icon);
+		this->expValue = 100;
+	}
+	
+};
+
+string NPC::printName(){
+	return (this->name);
+}
+
+
+int NPC::printAC(){
+	return(this->ac.printAC());
+}
+
+void NPC::setArmor(){
+	if (isMeleeWeapon()){
+		if (this->dexterity.printMod() > this->playerArmour.printMaxDex())
+			this->ac.getAC(this->playerArmour.printMaxDex() + this->getShield().getAC() + this->playerArmour.getAC());
+		else
+			this->ac.getAC(this->dexterity.printMod() + this->getShield().getAC() + this->playerArmour.getAC());
+	}
+	else
+	if (this->dexterity.printMod() > this->playerArmour.printMaxDex())
+		this->ac.getAC(this->playerArmour.printMaxDex() + this->playerArmour.getAC());
+	else
+		this->ac.getAC(this->dexterity.printMod() + this->playerArmour.getAC());
+}
+
+
+
+
+void NPC::setBasicAttack(){
+	if (this->PlayerCl == playerClass::fighter)
+		this->basicAttack = 1;
+	else
+		this->basicAttack = 0;
+}
+
+void NPC::setST(){
+	if (this->PlayerCl == playerClass::fighter){
+		this->fortitude.setVal(this->level.printStHigh() + this->constitution.printMod());
+		this->reflex.setVal(this->level.printStLow() + this->dexterity.printMod());
+		this->will.setVal(this->level.printStLow() + this->wisdom.printMod());
+	}
+	else if (this->PlayerCl == playerClass::hunter){
+		this->fortitude.setVal(this->level.printStHigh() + this->constitution.printMod());
+		this->reflex.setVal(this->level.printStHigh() + this->dexterity.printMod());
+		this->will.setVal(this->level.printStLow() + this->wisdom.printMod());
+	}
+	else if (this->PlayerCl == playerClass::priest){
+		this->fortitude.setVal(this->level.printStHigh() + this->constitution.printMod());
+		this->reflex.setVal(this->level.printStLow() + this->dexterity.printMod());
+		this->will.setVal(this->level.printStHigh() + this->wisdom.printMod());
+	}
+	else {
+		this->fortitude.setVal(this->level.printStLow() + this->constitution.printMod());
+		this->reflex.setVal(this->level.printStLow() + this->dexterity.printMod());
+		this->will.setVal(this->level.printStHigh() + this->wisdom.printMod());
+	}
+}
+
+int NPC::printSTFor(){
+	return(this->fortitude.printVal());
+}
+
+int NPC::printSTRef(){
+	return(this->reflex.printVal());
+}
+
+int NPC::printSTWl(){
+	return(this->will.printVal());
+}
+
+int NPC::printBasicAttack(){
+	return(this->basicAttack + this->strenght.printMod());
+}
+
+int NPC::printDistanceAttack(){
+	return(this->basicAttack + this->dexterity.printMod());
+}
+
+
+int NPC::classHP(){
+	if (this->PlayerCl == playerClass::fighter)
+		return (10);
+	else if (this->PlayerCl == playerClass::wizard)
+		return (4);
+	else
+		return(8);
+}
+
+
+void NPC::modAtrFromRase(){
+
+	if (this->PlayerRase == rase::dwarf){
+		this->constitution.setValue(this->constitution.printAb() + 2);
+		this->charisma.setValue(this->wisdom.printAb() - 2);
+	}
+	else if (this->PlayerRase == rase::elf){
+		this->dexterity.setValue(this->dexterity.printAb() + 2);
+		this->constitution.setValue(this->constitution.printAb() - 2);
+	}
+}
+
+int NPC::setSpeed() {
+	if (this->PlayerRase == rase::dwarf || this->playerArmour.printSpeed() == 4)
+		return this->speed = 4;
+	else
+		return this->speed = 6;
+}
+
+int NPC::printSpeed(){
+	return this->speed;
+}
+
+
+sf::Sprite &NPC::printIcon(){
+	return this->iconSprite;
+}
+
+void NPC::setMainWeapon(Weapon weap){
+	if (weap.isSoldier() == false || (weap.isSoldier() && (this->PlayerCl == playerClass::fighter || this->PlayerCl == playerClass::hunter)))
+		this->mainWeapon = weap;
+}
+
+void NPC::setDistanceWeapon(DistanceWeapon weap){
+	if (weap.isSoldier() == false || (weap.isSoldier() && (this->PlayerCl == playerClass::fighter || this->PlayerCl == playerClass::hunter)))
+		this->secondWeapon = weap;
+}
+
+Weapon NPC::getMainWeapon(){
+	return this->mainWeapon;
+}
+
+DistanceWeapon NPC::getSecondWeapon(){
+	return this->secondWeapon;
+}
+
+void NPC::setShield(Shield shie)
+{
+	if (this->mainWeapon.isTwoHanded() == false && this->PlayerCl != playerClass::wizard){
+		this->playerShield = shie;
+		this->setArmor();
+	}
+}
+
+Shield NPC::getShield(){
+	return this->playerShield;
+}
+
+Armour NPC::getArmour(){
+	return this->playerArmour;
+}
+
+Hp &NPC::getHp(){
+	return this->hp;
+}
+
+void NPC::setArmour(Armour arm){
+	if (arm.isHeavy() != true && this->PlayerCl != playerClass::wizard)
+		this->playerArmour = arm;
+	else if (arm.isHeavy() == true && this->PlayerCl == playerClass::fighter)
+		this->playerArmour = arm;
+	setArmor();
+	setSpeed();
+}
+
+void NPC::changeWeapon(){
+	if (isMeleeWeapon())
+		isUsingMeleeWeapon = 0;
+	else
+		isUsingMeleeWeapon = 1;
+	setArmor();
+}
+
+bool NPC::isMeleeWeapon(){
+	return this->isUsingMeleeWeapon;
+}
+
+void NPC::setPosition(int x, int y, Map& mapa){
+	if (isCrossMove && wasCrossMove == false){
+		this->leftMove--;
+		//this->leftMove--;
+		//position = make_pair(x, y);
+		this->isCrossMove = false;
+		this->wasCrossMove = true;
+	}
+	else if (isCrossMove && wasCrossMove){
+		//this->leftMove--;
+		//position = make_pair(x, y);
+		this->isCrossMove = false;
+		this->wasCrossMove = false;
+	}
+
+	this->leftMove--;
+	position = make_pair(x, y);
+	mapa.addPosition(position);
+}
+
+int NPC::printLeftMove(){
+	return leftMove;
+}
+
+void NPC::isCrossedMove(){
+	isCrossMove = true;
+}
+
+bool NPC::wasCrossedMove(){
+	return wasCrossMove;
+}
+
+void NPC::setCrossedMove(){
+	this->wasCrossMove = false;
+}
+
+void NPC::setLeftMove(){
+	leftMove = this->printSpeed();
+}
+
+pair<int, int> NPC::getPosition(){
+	return this->position;
+}
+
+int NPC::returnExpValue(){
+	return this->expValue;
+}
+
+void NPC::endTurn(){
+	this->leftMove = 0;
 }

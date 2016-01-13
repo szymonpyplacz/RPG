@@ -86,10 +86,10 @@ void Game::menu()
 {
 	bg.setTexture(background2);
 	vector<printText> button;
-	button.emplace_back(L"Witaj dzielny œmia³ku, \nOd Twojego zadania\n  Zale¿¹ losy\n  nas wszystkich", font, Color::Black, 48, pair<float, float>(300, 20));
-	button.emplace_back(L"Nowa Gra", font, Color::Black, 36, pair<float, float>(650, 300), GameState::MENU2);
-	button.emplace_back(L"Graj dalej", font, Color::Black, 36, pair<float, float>(650, 350));
-	button.emplace_back(L"WyjdŸ z gry", font, Color::Black, 36, pair<float, float>(700, 500), GameState::END);
+	button.emplace_back(L"Witaj dzielny œmia³ku, \nOd Twojego zadania\n  Zale¿¹ losy\n  nas wszystkich", font, Color::Black, 48, pair<int, int>(300, 20));
+	button.emplace_back(L"Nowa Gra", font, Color::Black, 36, pair<int, int>(650, 300), GameState::MENU2);
+	button.emplace_back(L"Graj dalej", font, Color::Black, 36, pair<int, int>(650, 350));
+	button.emplace_back(L"WyjdŸ z gry", font, Color::Black, 36, pair<int, int>(700, 500), GameState::END);
 
 	printText* hoverPrintText = nullptr;
 	while (state == GameState::MENU)
@@ -132,11 +132,11 @@ void Game::menu()
 void Game::newPlayer(){
 	bg.setTexture(background);
 	vector<printText> button;
-	button.emplace_back(L"Wybierz któregoœ z bohaterów", font, Color::Black, 48, pair<float, float>(120, 20));
-	button.emplace_back(L"Khelgar, krasnolud wojownik", font, Color::Black, 32, pair<float, float>(120, 200), GameState::MENU2_a);
-	button.emplace_back(L"Rodger, mag cz³owiek", font, Color::Black, 32, pair<float, float>(120, 260), GameState::MENU2_b);
-	button.emplace_back(L"Thárwen, elfka tropiciel", font, Color::Black, 32, pair<float, float>(120, 320), GameState::MENU2_c);
-	button.emplace_back(L"Powrót", font, Color::Black, 32, pair<float, float>(120, 600), GameState::MENU);
+	button.emplace_back(L"Wybierz któregoœ z bohaterów", font, Color::Black, 48, pair<int, int>(120, 20));
+	button.emplace_back(L"Khelgar, krasnolud wojownik", font, Color::Black, 32, pair<int, int>(120, 200), GameState::MENU2_a);
+	button.emplace_back(L"Rodger, mag cz³owiek", font, Color::Black, 32, pair<int, int>(120, 260), GameState::MENU2_b);
+	button.emplace_back(L"Thárwen, elfka tropiciel", font, Color::Black, 32, pair<int, int>(120, 320), GameState::MENU2_c);
+	button.emplace_back(L"Powrót", font, Color::Black, 32, pair<int, int>(120, 600), GameState::MENU);
 
 	printText* hoverPrintText = nullptr;
 	while (state == GameState::MENU2)
@@ -182,18 +182,19 @@ void Game::newPlayer(){
 
 void::Game::printPlayer(Player* Gracz) {
 	bg.setTexture(background3);
+//	GamePlayers.emplace_back(Gracz);
 	Texture wood;
 	wood.loadFromFile("belka.gif");
 	Sprite woodSprite;
 	woodSprite.setTexture(wood);
 	vector<printSprite> buttonImg;
-	buttonImg.emplace_back(woodSprite, pair<float, float>(430, 35));
-	buttonImg.emplace_back(woodSprite, pair<float, float>(820, 35));
-	buttonImg.emplace_back(Gracz->printAvatar(), pair<float, float>(45, 40));
-	buttonImg.emplace_back(Gracz->getMainWeapon().printSprite(), pair<float, float>(50, 360));
-	buttonImg.emplace_back(Gracz->getSecondWeapon().printSprite(), pair<float, float>(50, 460));
-	buttonImg.emplace_back(Gracz->getShield().printSprite(), pair<float, float>(470, 360));
-	buttonImg.emplace_back(Gracz->getArmour().printSprite(), pair<float, float>(470, 460));
+	buttonImg.emplace_back(woodSprite, pair<int, int>(430, 35));
+	buttonImg.emplace_back(woodSprite, pair<int, int>(820, 35));
+	buttonImg.emplace_back(Gracz->printAvatar(), pair<int, int>(45, 40));
+	buttonImg.emplace_back(Gracz->getMainWeapon().printSprite(), pair<int, int>(50, 360));
+	buttonImg.emplace_back(Gracz->getSecondWeapon().printSprite(), pair<int, int>(50, 460));
+	buttonImg.emplace_back(Gracz->getShield().printSprite(), pair<int, int>(470, 360));
+	buttonImg.emplace_back(Gracz->getArmour().printSprite(), pair<int, int>(470, 460));
 	Color gold(252, 255, 166);
 
 
@@ -218,20 +219,20 @@ void::Game::printPlayer(Player* Gracz) {
 	if (Gracz->getArmour().getAC() == 0)
 		armour = "";
 
-	Gracz->setPosition(5, 3, mapa);
+	Gracz->setPosition(15, 3, mapa);
 
 	vector<printText> button;
-	button.emplace_back(name + "\n\n" + raseName + "\n" + className + "\n\nPoziom: " + to_string(Gracz->printLvl()) + "\n\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()), font, gold, 28, pair<float, float>(260, 50));
-	button.emplace_back(hp + "\n\n" + L"Premia do ataku: \n\nPrêdkoœæ \n\nWytrwa³oœæ: \n\nRefleks: \n\nWola: ", font, gold, 22, pair<float, float>(490, 50));
-	button.emplace_back(ac + "\n\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n\n" + to_string(Gracz->printSpeed()) + "\n\n" + to_string(Gracz->printSTFor()) + "\n\n" + to_string(Gracz->printSTRef()) + "\n\n" + to_string(Gracz->printSTWl()), font, gold, 22, pair<float, float>(720, 50));
-	button.emplace_back(L"Si³a: \n\nZrêcznoœæ: \n\nWytrzyma³oœæ: \n\nIntelekt: \n\nRozs¹dek: \n\nCharyzma: ", font, gold, 22, pair<float, float>(900, 50));
-	button.emplace_back(s + "\n\n" + d + "\n\n" + c + "\n\n" + i + "\n\n" + w + "\n\n" + ch, font, gold, 22, pair<float, float>(1130, 50));
-	button.emplace_back(Gracz->getMainWeapon().printWeapon() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, gold, 24, pair<float, float>(125, 370));
-	button.emplace_back(distance, font, gold, 24, pair<float, float>(125, 470));
-	button.emplace_back(Gracz->getShield().printShield() + "\n" + shield, font, gold, 22, pair<float, float>(550, 370));
-	button.emplace_back(Gracz->getArmour().printArmour() + "\n" + armour, font, gold, 22, pair<float, float>(550, 470));
-	button.emplace_back(L"Powrót", font, gold, 28, pair<float, float>(200, 600), GameState::MENU2);
-	button.emplace_back(L"Dalej", font, gold, 28, pair<float, float>(800, 600), GameState::GAME);
+	button.emplace_back(name + "\n\n" + raseName + "\n" + className + "\n\nPoziom: " + to_string(Gracz->printLvl()) + "\n\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()), font, gold, 28, pair<int, int>(260, 50));
+	button.emplace_back(hp + "\n\n" + L"Premia do ataku: \n\nPrêdkoœæ \n\nWytrwa³oœæ: \n\nRefleks: \n\nWola: ", font, gold, 22, pair<int, int>(490, 50));
+	button.emplace_back(ac + "\n\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n\n" + to_string(Gracz->printSpeed()) + "\n\n" + to_string(Gracz->printSTFor()) + "\n\n" + to_string(Gracz->printSTRef()) + "\n\n" + to_string(Gracz->printSTWl()), font, gold, 22, pair<int, int>(720, 50));
+	button.emplace_back(L"Si³a: \n\nZrêcznoœæ: \n\nWytrzyma³oœæ: \n\nIntelekt: \n\nRozs¹dek: \n\nCharyzma: ", font, gold, 22, pair<int, int>(900, 50));
+	button.emplace_back(s + "\n\n" + d + "\n\n" + c + "\n\n" + i + "\n\n" + w + "\n\n" + ch, font, gold, 22, pair<int, int>(1130, 50));
+	button.emplace_back(Gracz->getMainWeapon().printWeapon() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, gold, 24, pair<int, int>(125, 370));
+	button.emplace_back(distance, font, gold, 24, pair<int, int>(125, 470));
+	button.emplace_back(Gracz->getShield().printShield() + "\n" + shield, font, gold, 22, pair<int, int>(550, 370));
+	button.emplace_back(Gracz->getArmour().printArmour() + "\n" + armour, font, gold, 22, pair<int, int>(550, 470));
+	button.emplace_back(L"Powrót", font, gold, 28, pair<int, int>(200, 600), GameState::MENU2);
+	button.emplace_back(L"Dalej", font, gold, 28, pair<int, int>(800, 600), GameState::GAME);
 
 	printText* hoverPrintText = nullptr;
 	while (state == GameState::MENU2_a || state == GameState::MENU2_c || state == GameState::MENU2_b )
@@ -275,14 +276,169 @@ void::Game::printPlayer(Player* Gracz) {
 	}
 }
 
+void::Game::addNPC(vector<NPC*>& listaGraczy, pair<int, int> location, bool isArcher){
+	if (isArcher){
+		NPC* enemy = new NPC(true, Ability(15), Ability(12), Ability(14), Ability(10), Ability(10), Ability(10), Level(0), Armor(), "NPC1");
+		enemy->setMainWeapon(WeaponCollection::Dagger);
+		enemy->setDistanceWeapon(WeaponCollection::Bow);
+		enemy->setArmour(WeaponCollection::LeatherArmor);
+		enemy->setPosition(location.first, location.second, mapa);
+		listaGraczy.emplace_back(enemy);
+	}
+	else{
+		NPC* enemy = new NPC(false, Ability(15), Ability(12), Ability(14), Ability(10), Ability(10), Ability(10), Level(0), Armor(),  "NPC2");
+		enemy->setMainWeapon(WeaponCollection::Longsword);
+		enemy->setArmour(WeaponCollection::LeatherArmor);
+		enemy->setPosition(location.first, location.second, mapa);
+		listaGraczy.emplace_back(enemy);
+	}
+}
+
+String Game::atack(Player* player, vector<NPC*>& enemy, int number, RenderWindow& okno){
+	Dice k20(20);
+	Color green(103, 190, 75);
+	int damage = 0;
+	int roll = k20.rollDice();
+	string killThemAll = "";
+	if (roll + (player->printBasicAttack()) >= enemy[number]->printAC()){
+		damage = player->getMainWeapon().returnDice().rollDice();
+		if (roll >= player->getMainWeapon().printCrRange())
+			damage = damage*player->getMainWeapon().printCr();
+		enemy[number]->getHp().getDmg(damage);
+			if (enemy[number]->getHp().printHP() == 0){
+			mapa.freePosition(make_pair(enemy[number]->getPosition().first, enemy[number]->getPosition().second));
+			player->getLevel().addExp(enemy[number]->returnExpValue());
+			enemy.erase(enemy.begin() + number);
+			killThemAll = "\nZabito wroga!";
+			}
+	player->endTurn();
+	if (roll >= player->getMainWeapon().printCrRange())
+	return(L"Wyrzucono: " + to_string(roll) + " + " + to_string(player->printBasicAttack()) + L"\nTrafienie krytyczne!\n\nZadano " + to_string(damage) + L" obra¿eñ" + killThemAll);
+	
+	else
+		return(L"Wyrzucono: " + to_string(roll) + " + " + to_string(player->printBasicAttack()) + L"\nTrafienie!\n\nZadano " + to_string(damage) + L" obra¿eñ" + killThemAll);
+	}
+	player->endTurn();
+	return("Wyrzucono: " + to_string(roll) + " + " + to_string(player->printBasicAttack()) + "\nNie trafiono!");
+}
+
+bool Game::isEnemy(pair<int, int> pozycja){
+	for (auto& players : NPCPlayers){
+		if (players->getPosition().first == pozycja.first && players->getPosition().second == pozycja.second)
+			return true;
+	}
+	return false;
+}
+
+int Game::whoIs(pair<int, int> pozycja){
+	int it = 0;
+	for (auto& players : NPCPlayers){
+		if (players->getPosition().first == pozycja.first && players->getPosition().second == pozycja.second)
+			return it;
+		it++;
+	}
+
+}
+
+pair<int, int> Game::wayToPlayer(Player* player, NPC* enemy){
+	return make_pair(enemy->getPosition().first - player->getPosition().first, enemy->getPosition().second - player->getPosition().second);
+}
+
+String Game::NPCturn(Player* player, NPC* enemy, RenderWindow& okno){
+	String out;
+	enemy->setLeftMove();
+	enemy->setCrossedMove();
+	while (enemy->printLeftMove() > 0){
+		if (wayToPlayer(player, enemy).first < -1 || wayToPlayer(player, enemy).first > 1 || wayToPlayer(player, enemy).second < -1 || wayToPlayer(player, enemy).second > 1){
+			if ((wayToPlayer(player, enemy).first  < -1 && wayToPlayer(player, enemy).second  > 1) && mapa.isEmpty(make_pair(enemy->getPosition().first + 1, enemy->getPosition().second - 1))){//prawo góra
+				mapa.freePosition(enemy->getPosition());
+				enemy->isCrossedMove();
+				enemy->setPosition(enemy->getPosition().first + 1, enemy->getPosition().second - 1, mapa);
+				enemy->printIcon().setPosition(30 * enemy->getPosition().first, 30 * enemy->getPosition().second);
+			}
+			else if ((wayToPlayer(player, enemy).first > 1 && wayToPlayer(player, enemy).second > 1) && mapa.isEmpty(make_pair(enemy->getPosition().first - 1, enemy->getPosition().second - 1))){ //lewo góra
+				mapa.freePosition(enemy->getPosition());
+				enemy->isCrossedMove();
+				enemy->setPosition(enemy->getPosition().first - 1, enemy->getPosition().second - 1, mapa);
+				enemy->printIcon().setPosition(30 * enemy->getPosition().first, 30 * enemy->getPosition().second);
+			}
+			else if ((wayToPlayer(player, enemy).first < -1 && wayToPlayer(player, enemy).second  < -1) && mapa.isEmpty(make_pair(enemy->getPosition().first + 1, enemy->getPosition().second + 1))){ //prawo dó³
+				mapa.freePosition(enemy->getPosition());
+				enemy->isCrossedMove();
+				enemy->setPosition(enemy->getPosition().first + 1, enemy->getPosition().second + 1, mapa);
+				enemy->printIcon().setPosition(30 * enemy->getPosition().first, 30 * enemy->getPosition().second);
+			}
+			else if ((wayToPlayer(player, enemy).first  > 1 && wayToPlayer(player, enemy).second  < -1) && mapa.isEmpty(make_pair(enemy->getPosition().first + 1, enemy->getPosition().second + 1))){ //lewo góra
+				mapa.freePosition(enemy->getPosition());
+				enemy->isCrossedMove();
+				enemy->setPosition(enemy->getPosition().first - 1, enemy->getPosition().second + 1, mapa);
+				enemy->printIcon().setPosition(30 * enemy->getPosition().first, 30 * enemy->getPosition().second);
+			}
+			else if ((wayToPlayer(player, enemy).first > 1) && mapa.isEmpty(make_pair(enemy->getPosition().first - 1, enemy->getPosition().second))) {//lewo
+				mapa.freePosition(enemy->getPosition());
+				enemy->setPosition(enemy->getPosition().first - 1, enemy->getPosition().second, mapa);
+				enemy->printIcon().setPosition(30 * enemy->getPosition().first, 30 * enemy->getPosition().second);
+			}
+			else if ((wayToPlayer(player, enemy).first < -1) && mapa.isEmpty(make_pair(enemy->getPosition().first + 1, enemy->getPosition().second))) {//prawo
+				mapa.freePosition(enemy->getPosition());
+				enemy->setPosition(enemy->getPosition().first + 1, enemy->getPosition().second, mapa);
+				enemy->printIcon().setPosition(30 * enemy->getPosition().first, 30 * enemy->getPosition().second);
+			}
+			else if ((wayToPlayer(player, enemy).second  > 1) && mapa.isEmpty(make_pair(enemy->getPosition().first, enemy->getPosition().second - 1))) {//góra
+				mapa.freePosition(enemy->getPosition());
+				enemy->setPosition(enemy->getPosition().first, enemy->getPosition().second - 1, mapa);
+				enemy->printIcon().setPosition(30 * enemy->getPosition().first, 30 * enemy->getPosition().second);
+			}
+			else if ((wayToPlayer(player, enemy).second < -1) && mapa.isEmpty(make_pair(enemy->getPosition().first, enemy->getPosition().second + 1))) {//dó³
+				mapa.freePosition(enemy->getPosition());
+				enemy->setPosition(enemy->getPosition().first, enemy->getPosition().second + 1, mapa);
+				enemy->printIcon().setPosition(30 * enemy->getPosition().first, 30 * enemy->getPosition().second);
+			}
+			else {
+				enemy->setPosition(enemy->getPosition().first, enemy->getPosition().second, mapa);
+				mapa.freePosition(enemy->getPosition());
+			}
+			out = (L"Przeciwnik siê ruszy³");
+		}
+		else {
+			Dice k20(20);
+			int damage = 0;
+			int roll = k20.rollDice();
+			string killThemAll = "";
+			if (roll + (enemy->printBasicAttack()) >= player->printAC()){
+				damage = enemy->getMainWeapon().returnDice().rollDice();
+				if (roll >= enemy->getMainWeapon().printCrRange())
+					damage = damage*enemy->getMainWeapon().printCr();
+				player->getHp().getDmg(damage);
+
+				if (roll >= enemy->getMainWeapon().printCrRange())
+				out = (L"Wróg wyrzuci³: " + to_string(roll) + " + " + to_string(enemy->printBasicAttack()) + L"\nTrafienie krytyczne!\n\nZadano " + to_string(damage) + L" obra¿eñ" + killThemAll);
+		
+				else
+				out = (L"Wróg wyrzuci³: " + to_string(roll) + " + " + to_string(enemy->printBasicAttack()) + L"\nTrafienie!\n\nZadano " + to_string(damage) + L" obra¿eñ" + killThemAll);
+
+				player->endTurn();
+				}
+			else
+				out = (L"Wróg wyrzuci³: " + to_string(roll) + " + " + to_string(player->printBasicAttack()) + "\nNie trafiono!");
+				enemy->endTurn();
+		}
+	}
+	return out;
+}
+
 void::Game::gamePlay(Player* Gracz) {
+
+	addNPC(NPCPlayers, make_pair(12, 8), 0);
+//	addNPC(NPCPlayers, make_pair(12, 10), 0);
+//	addNPC(NPCPlayers, make_pair(5, 5), 0);
+
 	bg.setTexture(background4);
 	Color green(103, 190, 75);
 	vector<printSprite> buttonImg;
 	Gracz->printAvatar().setScale(0.65, 0.65);
-	buttonImg.emplace_back(Gracz->printAvatar(), pair<float, float>(770, 70));
+	buttonImg.emplace_back(Gracz->printAvatar(), pair<int, int>(770, 70));
 
-	
 	string s = Gracz->printStr();
 	string d = Gracz->printDex();
 	string c = Gracz->printCon();
@@ -306,10 +462,14 @@ void::Game::gamePlay(Player* Gracz) {
 
 
 	vector<printText> button;
-	button.emplace_back("Poziom: " + to_string(Gracz->printLvl()) + "\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()), font, green, 22, pair<float, float>(940, 180));
-	button.emplace_back(name, font, green, 28, pair<float, float>(780, 40));
 
-	button.emplace_back("PW:\nKP:\nAtak: \nPr", font, green, 22, pair<float, float>(940, 80));
+	Text level("Poziom: " + to_string(Gracz->printLvl()) + "\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()), font, 22);
+	level.setPosition(940, 180);
+	level.setColor(green);
+
+	button.emplace_back(name, font, green, 28, pair<int, int>(780, 40));
+
+	button.emplace_back("PW:\nKP:\nAtak: \nPr", font, green, 22, pair<int, int>(940, 80));
 
 	Text printHpLine(hp + "\n" + ac + "\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n" + to_string(Gracz->printSpeed()), font, 22);
 	printHpLine.setColor(green);
@@ -317,17 +477,15 @@ void::Game::gamePlay(Player* Gracz) {
 
 	Sprite hpBar(Gracz->getHp().printSprite());
 	hpBar.setPosition(940, 40);
-		//buttonImg.emplace_back(Gracz->getHp().printSprite(), pair<float, float>(940, 40));
 
-	button.emplace_back(L"S: \nZr: \nWtr: \nInt: \nRz: \nCh: \n\nWytr: \nRef: \nWola:", font, green, 22, pair<float, float>(1120, 50));
-	button.emplace_back(s + "\n" + d + "\n" + c + "\n" + i + "\n" + w + "\n" + ch + "\n\n   " + to_string(Gracz->printSTFor()) + "\n   " + to_string(Gracz->printSTRef()) + "\n   " + to_string(Gracz->printSTWl()), font, green, 22, pair<float, float>(1180, 50));
-	button.emplace_back(L"Zmieñ broñ", font, green, 22, pair<float, float>(1120, 360), Gracz, Orders::ChangeWeapon);
-	button.emplace_back(L"Wyjœcie", font, green, 28, pair<float, float>(1120, 600), GameState::END);
+	button.emplace_back(L"S: \nZr: \nWtr: \nInt: \nRz: \nCh: \n\nWytr: \nRef: \nWola:", font, green, 22, pair<int, int>(1120, 50));
+	button.emplace_back(s + "\n" + d + "\n" + c + "\n" + i + "\n" + w + "\n" + ch + "\n\n   " + to_string(Gracz->printSTFor()) + "\n   " + to_string(Gracz->printSTRef()) + "\n   " + to_string(Gracz->printSTWl()), font, green, 22, pair<int, int>(1180, 50));
+	button.emplace_back(L"Zmieñ broñ", font, green, 22, pair<int, int>(1120, 360), Gracz, Orders::ChangeWeapon);
+	button.emplace_back(L"Wyjœcie", font, green, 28, pair<int, int>(1120, 650), GameState::END);
 
 	Sprite weapon(Gracz->getMainWeapon().printSprite());
 	weapon.setPosition(780, 270);
 	Text weapTx(Gracz->getMainWeapon().printWeapon() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, 24);
-	
 	weapTx.setPosition(855, 280);
 	weapTx.setColor(green);
 
@@ -343,6 +501,10 @@ void::Game::gamePlay(Player* Gracz) {
 	secWeapTx.setPosition(855, 280);
 	secWeapTx.setColor(green);
 
+	Text info(L"", font, 22);
+	info.setPosition(960, 450);
+	info.setColor(green);
+	window.draw(info);
 
 	Texture end;
 	end.loadFromFile("end.png");
@@ -381,34 +543,33 @@ void::Game::gamePlay(Player* Gracz) {
 	Sprite rightDownSprite;
 	rightDownSprite.setTexture(rightDown);
 
-	buttonImg.emplace_back(leftSprite, pair<float, float>(800, 500), Gracz, Orders2::Left);
-	buttonImg.emplace_back(leftTopSprite, pair<float, float>(800, 450), Gracz, Orders2::LeftTop);
-	buttonImg.emplace_back(leftDownSprite, pair<float, float>(800, 550), Gracz, Orders2::LeftDown);
-	buttonImg.emplace_back(topSprite, pair<float, float>(850, 450), Gracz, Orders2::Top);
-	buttonImg.emplace_back(endSprite, pair<float, float>(850, 500), Gracz, Orders2::EndTurn);
-	buttonImg.emplace_back(downSprite, pair<float, float>(850, 550), Gracz, Orders2::Down);
-	buttonImg.emplace_back(rightSprite, pair<float, float>(900, 500), Gracz, Orders2::Right);
-	buttonImg.emplace_back(rightTopSprite, pair<float, float>(900, 450), Gracz, Orders2::RightTop);
-	buttonImg.emplace_back(rightDownSprite, pair<float, float>(900, 550), Gracz, Orders2::RightDown);
-	
+	buttonImg.emplace_back(leftSprite, pair<int, int>(800, 500), Gracz, Orders2::Left);
+	buttonImg.emplace_back(leftTopSprite, pair<int, int>(800, 450), Gracz, Orders2::LeftTop);
+	buttonImg.emplace_back(leftDownSprite, pair<int, int>(800, 550), Gracz, Orders2::LeftDown);
+	buttonImg.emplace_back(topSprite, pair<int, int>(850, 450), Gracz, Orders2::Top);
+	buttonImg.emplace_back(endSprite, pair<int, int>(850, 500), Gracz, Orders2::EndTurn);
+	buttonImg.emplace_back(downSprite, pair<int, int>(850, 550), Gracz, Orders2::Down);
+	buttonImg.emplace_back(rightSprite, pair<int, int>(900, 500), Gracz, Orders2::Right);
+	buttonImg.emplace_back(rightTopSprite, pair<int, int>(900, 450), Gracz, Orders2::RightTop);
+	buttonImg.emplace_back(rightDownSprite, pair<int, int>(900, 550), Gracz, Orders2::RightDown);
+
 	Text ruch(L"Pozosta³o " + to_string(Gracz->printLeftMove()), font, 22);
 	ruch.setColor(green);
-	ruch.setPosition(1000, 500);
+	ruch.setPosition(800, 620);
 
 	Grass trawka;
 	Hill gory;
 	for (int i = 0; i < 24; i++){
 		for (int j = 0; j < 24; j++){
-			if (i > 4 && i < 20 && j > 2 && j< 18){
-				buttonImg.emplace_back(trawka.printTerrain(), pair<float, float>(30 * i, 30 * j));
+			if (i > 4 && i < 20 && j > 2 && j < 18){
+				buttonImg.emplace_back(trawka.printTerrain(), pair<int, int>(30 * i, 30 * j));
 			}
 			else {
-				buttonImg.emplace_back(gory.printTerrain(), pair<float, float>(30 * i, 30 * j));
+				buttonImg.emplace_back(gory.printTerrain(), pair<int, int>(30 * i, 30 * j));
 				mapa.addPosition(make_pair(i, j));
 			}
 		}
 	}
-
 
 	bool endTurn = true;
 	printText* hoverPrintText = nullptr;
@@ -416,30 +577,34 @@ void::Game::gamePlay(Player* Gracz) {
 	while (state == GameState::GAME)
 	{
 		if (endTurn){
-			Gracz->getHp().getDmg(1);
-		//zestaw rzeczy do wykonania przed tur¹ //
+
+			//zestaw rzeczy do wykonania przed tur¹ //
 			for (int i = 0; i < 24; i++){
 				for (int j = 0; j < 24; j++){
-					if (i > 4 && i < 20 && j > 2 && j< 18){
-						buttonImg.emplace_back(trawka.printTerrain(), pair<float, float>(30 * i, 30 * j));
+					if (i > 4 && i < 20 && j > 2 && j < 18){
+						buttonImg.emplace_back(trawka.printTerrain(), pair<int, int>(30 * i, 30 * j));
 					}
 					else
-						buttonImg.emplace_back(gory.printTerrain(), pair<float, float>(30 * i, 30 * j));
+						buttonImg.emplace_back(gory.printTerrain(), pair<int, int>(30 * i, 30 * j));
 				}
 			}
 
-		Gracz->setCrossedMove();
-		Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
-		Gracz->setLeftMove();
-		ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+			Gracz->setCrossedMove();
 
-		hpBar.setTexture(Gracz->getHp().printTexture());
-		hp = (to_string(Gracz->getHp().printHP()) + "/" + to_string(Gracz->getHp().printMaxHP()));
-		printHpLine.setString(hp + "\n" + ac + "\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n" + to_string(Gracz->printSpeed()));
+			for (auto& players : NPCPlayers){
+				players->printIcon().setPosition(30 * players->getPosition().first, 30 * players->getPosition().second);
+			}
+			Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
 
-		//koniec zestawu
+			Gracz->setLeftMove();
+			ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+			hpBar.setTexture(Gracz->getHp().printTexture());
+			hp = (to_string(Gracz->getHp().printHP()) + "/" + to_string(Gracz->getHp().printMaxHP()));
+			printHpLine.setString(hp + "\n" + ac + "\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n" + to_string(Gracz->printSpeed()));
+			//info.setString("");
+			//koniec zestawu
 
-		endTurn = false;
+			endTurn = false;
 		}
 
 		Vector2f mouse(Mouse::getPosition(window));
@@ -481,63 +646,123 @@ void::Game::gamePlay(Player* Gracz) {
 						endTurn = true;
 					}
 				}
-				// TERAZ PAMIÊTAJ!!!!!!!!!! TRZEBA JESZCZE SPRAWDZI CZY JAKI CIUL NIE WLEZIE NA ZAJÊTE MIEJSCE !!!!!!!!!!!!!
+
+				//
 				if (hoverSprite){
-					if ((hoverSprite->getOrder() == Orders2::Left) && Gracz->printLeftMove() > 0 && Gracz->getPosition().first > 0 && mapa.isEmpty(make_pair(Gracz->getPosition().first-1, Gracz->getPosition().second)))	{
+					if (hoverSprite->getOrder() == Orders2::Left){
+						if(Gracz->printLeftMove() > 0 && Gracz->getPosition().first > 0 && mapa.isEmpty(make_pair(Gracz->getPosition().first - 1, Gracz->getPosition().second))){
 						mapa.freePosition(Gracz->getPosition());
 						Gracz->setPosition(Gracz->getPosition().first - 1, Gracz->getPosition().second, mapa);
 						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
 						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+						}
+						else if ((hoverSprite->getOrder() == Orders2::Left) && Gracz->printLeftMove() > 0 && isEnemy(make_pair(Gracz->getPosition().first - 1, Gracz->getPosition().second))){
+							info.setString(atack(Gracz, NPCPlayers, whoIs(make_pair(Gracz->getPosition().first - 1, Gracz->getPosition().second)), window));
+							ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+							level.setString("Poziom: " + to_string(Gracz->printLvl()) + "\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()));
+						}
 					}
-					else if ((hoverSprite->getOrder() == Orders2::Right) && Gracz->printLeftMove() > 0 && Gracz->getPosition().first < 23 && mapa.isEmpty(make_pair(Gracz->getPosition().first+1, Gracz->getPosition().second)))	{
+					else if (hoverSprite->getOrder() == Orders2::Right){
+						if (Gracz->printLeftMove() > 0 && Gracz->getPosition().first < 23 && mapa.isEmpty(make_pair(Gracz->getPosition().first + 1, Gracz->getPosition().second)))	{
 						mapa.freePosition(Gracz->getPosition());
 						Gracz->setPosition(Gracz->getPosition().first + 1, Gracz->getPosition().second, mapa);
 						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
 						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+						}
+						else if ((hoverSprite->getOrder() == Orders2::Right) && Gracz->printLeftMove() > 0 && isEnemy(make_pair(Gracz->getPosition().first + 1, Gracz->getPosition().second))){
+							info.setString(atack(Gracz, NPCPlayers, whoIs(make_pair(Gracz->getPosition().first + 1, Gracz->getPosition().second)), window));
+							ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+							level.setString("Poziom: " + to_string(Gracz->printLvl()) + "\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()));
+						}
 					}
-					else if ((hoverSprite->getOrder() == Orders2::LeftDown) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().first > 0 && Gracz->getPosition().second<23 && mapa.isEmpty(make_pair(Gracz->getPosition().first-1, Gracz->getPosition().second+1)))	{
+					else if (hoverSprite->getOrder() == Orders2::LeftDown){
+						if (((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().first > 0 && Gracz->getPosition().second<23 && mapa.isEmpty(make_pair(Gracz->getPosition().first - 1, Gracz->getPosition().second + 1)))	{
 						mapa.freePosition(Gracz->getPosition());
 						Gracz->isCrossedMove();
 						Gracz->setPosition(Gracz->getPosition().first - 1, Gracz->getPosition().second + 1, mapa);
 						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
 						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+						}
+						else if ((hoverSprite->getOrder() == Orders2::LeftDown) && Gracz->printLeftMove() > 0 && isEnemy(make_pair(Gracz->getPosition().first - 1, Gracz->getPosition().second + 1))){
+							info.setString(atack(Gracz, NPCPlayers, whoIs(make_pair(Gracz->getPosition().first - 1, Gracz->getPosition().second + 1)), window));
+							ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+							level.setString("Poziom: " + to_string(Gracz->printLvl()) + "\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()));
+						}
 					}
-					else if ((hoverSprite->getOrder() == Orders2::RightDown) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().second<23 && Gracz->getPosition().first < 23 && mapa.isEmpty(make_pair(Gracz->getPosition().first + 1, Gracz->getPosition().second + 1)))	{
-						mapa.freePosition(Gracz->getPosition());
-						Gracz->isCrossedMove();
-						Gracz->setPosition(Gracz->getPosition().first + 1, Gracz->getPosition().second + 1, mapa);
-						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
-						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+					else if (hoverSprite->getOrder() == Orders2::RightDown){
+						if (((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().second < 23 && Gracz->getPosition().first < 23 && mapa.isEmpty(make_pair(Gracz->getPosition().first + 1, Gracz->getPosition().second + 1)))	{
+							mapa.freePosition(Gracz->getPosition());
+							Gracz->isCrossedMove();
+							Gracz->setPosition(Gracz->getPosition().first + 1, Gracz->getPosition().second + 1, mapa);
+							Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
+							ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+						}
+						else if ((hoverSprite->getOrder() == Orders2::RightDown) && Gracz->printLeftMove() > 0 && isEnemy(make_pair(Gracz->getPosition().first + 1, Gracz->getPosition().second + 1))){
+							info.setString(atack(Gracz, NPCPlayers, whoIs(make_pair(Gracz->getPosition().first + 1, Gracz->getPosition().second + 1)), window));
+							ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+							level.setString("Poziom: " + to_string(Gracz->printLvl()) + "\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()));
+						}
 					}
-					else if ((hoverSprite->getOrder() == Orders2::LeftTop) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().first > 0 && Gracz->getPosition().second>0 && mapa.isEmpty(make_pair(Gracz->getPosition().first - 1, Gracz->getPosition().second - 1)))	{
+					else if (hoverSprite->getOrder() == Orders2::LeftTop){
+					if (((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().first > 0 && Gracz->getPosition().second > 0 && mapa.isEmpty(make_pair(Gracz->getPosition().first - 1, Gracz->getPosition().second - 1)))	{
 						mapa.freePosition(Gracz->getPosition());
 						Gracz->isCrossedMove();
 						Gracz->setPosition(Gracz->getPosition().first - 1, Gracz->getPosition().second - 1, mapa);
 						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
 						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
 					}
-					else if ((hoverSprite->getOrder() == Orders2::RightTop) && ((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().second>0 && Gracz->getPosition().first < 23 && mapa.isEmpty(make_pair(Gracz->getPosition().first+1, Gracz->getPosition().second-1)))	{
-						mapa.freePosition(Gracz->getPosition());
-						Gracz->isCrossedMove();
-						Gracz->setPosition(Gracz->getPosition().first + 1, Gracz->getPosition().second - 1, mapa);
-						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
+					else if ((hoverSprite->getOrder() == Orders2::LeftTop) && Gracz->printLeftMove() > 0 && isEnemy(make_pair(Gracz->getPosition().first - 1, Gracz->getPosition().second - 1))){
+						info.setString(atack(Gracz, NPCPlayers, whoIs(make_pair(Gracz->getPosition().first - 1, Gracz->getPosition().second - 1)), window));
 						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+						level.setString("Poziom: " + to_string(Gracz->printLvl()) + "\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()));
+						}
 					}
-					else if ((hoverSprite->getOrder() == Orders2::Top) && Gracz->printLeftMove() > 0 && Gracz->getPosition().second>0 && mapa.isEmpty(make_pair(Gracz->getPosition().first, Gracz->getPosition().second - 1)))	{
-						mapa.freePosition(Gracz->getPosition());
-						Gracz->setPosition(Gracz->getPosition().first, Gracz->getPosition().second - 1, mapa);
-						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
-						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+					else if (hoverSprite->getOrder() == Orders2::RightTop){
+						if (((Gracz->printLeftMove() > 1 && Gracz->wasCrossedMove() == false) || (Gracz->printLeftMove() > 0 && Gracz->wasCrossedMove())) && Gracz->getPosition().second > 0 && Gracz->getPosition().first < 23 && mapa.isEmpty(make_pair(Gracz->getPosition().first + 1, Gracz->getPosition().second - 1)))	{
+							mapa.freePosition(Gracz->getPosition());
+							Gracz->isCrossedMove();
+							Gracz->setPosition(Gracz->getPosition().first + 1, Gracz->getPosition().second - 1, mapa);
+							Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
+							ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+						}
+						else if ((hoverSprite->getOrder() == Orders2::RightTop) && Gracz->printLeftMove() > 0 && isEnemy(make_pair(Gracz->getPosition().first + 1, Gracz->getPosition().second - 1))){
+							info.setString(atack(Gracz, NPCPlayers, whoIs(make_pair(Gracz->getPosition().first + 1, Gracz->getPosition().second - 1)), window));
+							ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+							level.setString("Poziom: " + to_string(Gracz->printLvl()) + "\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()));
+						}
 					}
-					else if ((hoverSprite->getOrder() == Orders2::Down) && Gracz->printLeftMove() > 0 && Gracz->getPosition().second<23 && mapa.isEmpty(make_pair(Gracz->getPosition().first, Gracz->getPosition().second + 1)))	{
-						mapa.freePosition(Gracz->getPosition());
-						Gracz->setPosition(Gracz->getPosition().first, Gracz->getPosition().second + 1, mapa);
-						Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
-						ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+					else if (hoverSprite->getOrder() == Orders2::Top){
+						if (Gracz->printLeftMove() > 0 && Gracz->getPosition().second > 0 && mapa.isEmpty(make_pair(Gracz->getPosition().first, Gracz->getPosition().second - 1)))	{
+							mapa.freePosition(Gracz->getPosition());
+							Gracz->setPosition(Gracz->getPosition().first, Gracz->getPosition().second - 1, mapa);
+							Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
+							ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+						}
+						else if ((hoverSprite->getOrder() == Orders2::Top) && Gracz->printLeftMove() > 0 && isEnemy(make_pair(Gracz->getPosition().first, Gracz->getPosition().second - 1))){
+							info.setString(atack(Gracz, NPCPlayers, whoIs(make_pair(Gracz->getPosition().first, Gracz->getPosition().second - 1)), window));
+							ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+							level.setString("Poziom: " + to_string(Gracz->printLvl()) + "\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()));
+						}
+					}
+					else if (hoverSprite->getOrder() == Orders2::Down){
+						if (Gracz->printLeftMove() > 0 && Gracz->getPosition().second < 23 && mapa.isEmpty(make_pair(Gracz->getPosition().first, Gracz->getPosition().second + 1)))	{
+							mapa.freePosition(Gracz->getPosition());
+							Gracz->setPosition(Gracz->getPosition().first, Gracz->getPosition().second + 1, mapa);
+							Gracz->printIcon().setPosition(30 * Gracz->getPosition().first, 30 * Gracz->getPosition().second);
+							ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+						}
+						else if ((hoverSprite->getOrder() == Orders2::Down) && Gracz->printLeftMove() > 0 && isEnemy(make_pair(Gracz->getPosition().first, Gracz->getPosition().second + 1))){
+							info.setString(atack(Gracz, NPCPlayers, whoIs(make_pair(Gracz->getPosition().first, Gracz->getPosition().second + 1)), window));
+							ruch.setString(L"Pozosta³o " + to_string(Gracz->printLeftMove()));
+							level.setString("Poziom: " + to_string(Gracz->printLvl()) + "\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()));
+						}
 					}
 
 					else if ((hoverSprite->getOrder() == Orders2::EndTurn))	{
 						endTurn = true;
+						for (auto& players : NPCPlayers){
+							info.setString(NPCturn(Gracz, players, window));
+						}						
 					}
 				}
 			}
@@ -551,6 +776,9 @@ void::Game::gamePlay(Player* Gracz) {
 			for (auto& button : buttonImg){
 				window.draw(button.GetSprite());
 			}
+			for (auto& players : NPCPlayers){
+				window.draw(players->printIcon());
+			}
 			window.draw(Gracz->printIcon());
 			if (Gracz->getHp().printHP() <= 0){
 				Sprite deathSprite;
@@ -561,20 +789,21 @@ void::Game::gamePlay(Player* Gracz) {
 			}
 			window.draw(hpBar);
 			window.draw(printHpLine);
+			window.draw(level);
+			window.draw(info);
 			if (Gracz->isMeleeWeapon()){
-			window.draw(weapon);
-			window.draw(weapTx);
-			window.draw(sh);
-			window.draw(shieldTx);
+				window.draw(weapon);
+				window.draw(weapTx);
+				window.draw(sh);
+				window.draw(shieldTx);
 			}
 			else{
 				window.draw(secWeap);
 				window.draw(secWeapTx);
 			}
-//
+
 			window.draw(ruch);
 			window.display();
 		}
 	}
 }
-// wzorzec projektowy fabryka

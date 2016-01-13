@@ -9,6 +9,7 @@ using namespace std;
 using namespace sf;
 
 enum class GameState { MENU, MENU2, MENU2_a, MENU2_b, MENU2_c, GAME, GAME_OVER, END, UNKNOWN };
+enum class NPC_Type {fighter, archer};
 
 class Game
 {
@@ -23,6 +24,12 @@ public:
 	void gamePlay(Player* Gracz);
 	void printPlayer(Player* Gracz);
 	void nextTurn();
+	void addNPC(vector<NPC*>& GamePlayers, pair<int, int> location, bool archer);
+	String atack(Player* player, vector<NPC*>& list, int number, RenderWindow& okno);
+	bool isEnemy(pair<int, int> kordy);
+	int whoIs(pair<int, int> kordy);
+	String NPCturn(Player* player, NPC* wrog, RenderWindow& okno);
+	pair<int, int> wayToPlayer(Player* player, NPC* wrog);
 	//dodaæ wyj¹tki
 
 protected:
@@ -32,6 +39,8 @@ protected:
 	Font font;
 	RenderWindow window;
 	Player* Gracz;
+	vector<NPC*> NPCPlayers;
+	vector<pair<int, int>>* NPCposition;
 	Map mapa;
 
 };

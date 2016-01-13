@@ -21,7 +21,9 @@ public:
 	bool isTwoHanded();
 	bool isSoldier();
 	std::string printCrRg();
+	int printCrRange();
 	sf::Sprite printSprite();
+	Dice returnDice();
 
 private:
 	sf::Sprite pictureSprite;
@@ -45,6 +47,7 @@ public:
 	int printCr();
 	std::string printCrRg();
 	sf::Sprite printSprite();
+	int printCrRange();
 	int printMissles();
 	int printRange();
 	DistanceWeapon();

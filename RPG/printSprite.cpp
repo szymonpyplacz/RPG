@@ -3,17 +3,17 @@
 #include <SFML\Graphics.hpp>
 #pragma once
 
-printSprite::printSprite(Texture texture, pair<float, float> cords){
+printSprite::printSprite(Texture texture, pair<int, int> cords){
 	button_sprite.setPosition(cords.first, cords.second);
 	textured = true;
 }
 
-printSprite::printSprite(Sprite photo, pair<float, float> cords) : button_sprite(photo) {
+printSprite::printSprite(Sprite photo, pair<int, int> cords) : button_sprite(photo) {
 	button_sprite.setPosition(cords.first, cords.second);
 	textured = false;
 }
 
-printSprite::printSprite(Sprite photo, pair<float, float> cords, Player* gracz, Orders2 metoda) : button_sprite(photo), method(metoda) {
+printSprite::printSprite(Sprite photo, pair<int, int> cords, Player* gracz, Orders2 metoda) : button_sprite(photo), method(metoda) {
 	button_sprite.setPosition(cords.first, cords.second);
 	textured = false;
 

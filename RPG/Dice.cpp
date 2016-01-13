@@ -1,8 +1,9 @@
 #include "Dice.h"
-#include <random>
+
 
 int Dice::rollDice(){ 
-	std::default_random_engine gen;
+	std::random_device random;
+	std::default_random_engine gen(random());
 	std::uniform_int_distribution<int> dist(1, size);
 	return  dist(gen);
 }
