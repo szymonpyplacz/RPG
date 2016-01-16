@@ -10,6 +10,7 @@ enum class listOfWeapons{ Fist, Dagger, ShortSword, SmallAxe, Longsword, Spear, 
 enum class listOfDistanceWeapons{Bow, Crossbow, Longbow, Slingshot};
 enum class listOfShields{ LightShield, HeavyShield };
 enum class listOfArmour {Gambeson, LeatherArmor, MailShirt, Chainmail, PlateArmor};
+
 class Weapon
 {
 public:
@@ -36,7 +37,6 @@ private:
 	int critic;
 	int criticRange;
 	listOfWeapons WeaponList;
-
 };
 
 class DistanceWeapon : public Weapon

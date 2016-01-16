@@ -599,3 +599,64 @@ int NPC::returnExpValue(){
 void NPC::endTurn(){
 	this->leftMove = 0;
 }
+
+
+void Player::moveLeft(Map&mapa, sf::Text& text){
+	mapa.freePosition(this->getPosition());
+	this->setPosition(this->getPosition().first - 1, this->getPosition().second, mapa);
+	this->printIcon().setPosition(30 * this->getPosition().first, 30 * this->getPosition().second);
+	text.setString(L"Pozosta這 " + to_string(this->printLeftMove()));
+}
+
+void Player::moveLeftTop(Map&mapa, Text& text){
+	mapa.freePosition(this->getPosition());
+	this->isCrossedMove();
+	this->setPosition(this->getPosition().first - 1, this->getPosition().second - 1, mapa);
+	this->printIcon().setPosition(30 * this->getPosition().first, 30 * this->getPosition().second);
+	text.setString(L"Pozosta這 " + to_string(this->printLeftMove()));
+}
+
+void Player::moveLeftDown(Map&mapa, Text& text){
+	mapa.freePosition(this->getPosition());
+	this->isCrossedMove();
+	this->setPosition(this->getPosition().first - 1, this->getPosition().second + 1, mapa);
+	this->printIcon().setPosition(30 * this->getPosition().first, 30 * this->getPosition().second);
+	text.setString(L"Pozosta這 " + to_string(this->printLeftMove()));
+}
+
+void Player::moveRight(Map&mapa, Text& text){
+	mapa.freePosition(this->getPosition());
+	this->setPosition(this->getPosition().first + 1, this->getPosition().second, mapa);
+	this->printIcon().setPosition(30 * this->getPosition().first, 30 * this->getPosition().second);
+	text.setString(L"Pozosta這 " + to_string(this->printLeftMove()));
+}
+
+void Player::moveRightTop(Map&mapa, Text& text){
+	mapa.freePosition(this->getPosition());
+	this->isCrossedMove();
+	this->setPosition(this->getPosition().first + 1, this->getPosition().second - 1, mapa);
+	this->printIcon().setPosition(30 * this->getPosition().first, 30 * this->getPosition().second);
+	text.setString(L"Pozosta這 " + to_string(this->printLeftMove()));
+}
+
+void Player::moveRightDown(Map&mapa, Text& text){
+	mapa.freePosition(this->getPosition());
+	this->isCrossedMove();
+	this->setPosition(this->getPosition().first + 1, this->getPosition().second + 1, mapa);
+	this->printIcon().setPosition(30 * this->getPosition().first, 30 * this->getPosition().second);
+	text.setString(L"Pozosta這 " + to_string(this->printLeftMove()));
+}
+
+void Player::moveTop(Map&mapa, Text& text){
+	mapa.freePosition(this->getPosition());
+	this->setPosition(this->getPosition().first, this->getPosition().second - 1, mapa);
+	this->printIcon().setPosition(30 * this->getPosition().first, 30 * this->getPosition().second);
+	text.setString(L"Pozosta這 " + to_string(this->printLeftMove()));
+}
+
+void Player::moveDown(Map&mapa, Text& text){
+	mapa.freePosition(this->getPosition());
+	this->setPosition(this->getPosition().first, this->getPosition().second + 1, mapa);
+	this->printIcon().setPosition(30 * this->getPosition().first, 30 * this->getPosition().second);
+	text.setString(L"Pozosta這 " + to_string(this->printLeftMove()));
+}

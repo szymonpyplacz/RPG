@@ -19,7 +19,6 @@ using namespace sf;
 enum class playerClass {fighter,hunter,priest,wizard};
 enum class rase { human, elf, dwarf };
 
-
 class Player
 {
 public:
@@ -72,6 +71,15 @@ public:
 	Level& getLevel();
 	Player(playerClass plCl, rase plRase, Ability str, Ability dex, Ability con, Ability itl, Ability wis, Ability cha, Level lvl, Armor ac, bool male, char* name);
 	Player();
+	///dodawane teraz
+	void moveLeft(Map&mapa, Text& text);
+	void moveLeftTop(Map&mapa, Text& text);
+	void moveLeftDown(Map&mapa, Text& text);
+	void moveRight(Map&mapa, Text& text);
+	void moveRightTop(Map&mapa, Text& text);
+	void moveRightDown(Map&mapa, Text& text);
+	void moveTop(Map&mapa, Text& text);
+	void moveDown(Map&mapa, Text& text);
 
 private:
 	pair<int, int> position;

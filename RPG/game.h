@@ -1,9 +1,14 @@
 #pragma once
 #include <SFML\Graphics.hpp>
+#include <SFML\Audio.hpp>
 #include <Windows.h>
 #include <string>
 #include "player.h"
 #include "Map.h"
+#include <vector>
+#include "printSprite.h"
+
+
 
 using namespace std;
 using namespace sf;
@@ -30,7 +35,18 @@ public:
 	int whoIs(pair<int, int> kordy);
 	String NPCturn(Player* player, NPC* wrog, RenderWindow& okno);
 	pair<int, int> wayToPlayer(Player* player, NPC* wrog);
-	//dodaæ wyj¹tki
+	Sprite& addPhoto(Sprite& sprite, Texture& texture, string filename);
+	void attackLeft(Player* gracz, vector<NPC*>& list, Text& info, Text& level, Text& ruch);
+	void attackLeftTop(Player* gracz, vector<NPC*>& list, Text& info, Text& level, Text& ruch);
+	void attackLeftDown(Player* gracz, vector<NPC*>& list, Text& info, Text& level, Text& ruch);
+	void attackRight(Player* gracz, vector<NPC*>& list, Text& info, Text& level, Text& ruch);
+	void attackRightTop(Player* gracz, vector<NPC*>& list, Text& info, Text& level, Text& ruch);
+	void attackRightDown(Player* gracz, vector<NPC*>& list, Text& info, Text& level, Text& ruch);
+	void attackTop(Player* gracz, vector<NPC*>& list, Text& info, Text& level, Text& ruch);
+	void attackDown(Player* gracz, vector<NPC*>& list, Text& info, Text& level, Text& ruch);
+	void setMap(RenderWindow& okno, Map& mapa, bool created, int left, int right, int top, int down, vector<printSprite>& obrazy, Grass trawa, Hill gory);
+	void endPlayerTurn(RenderWindow& window, Player* gracz, Grass trawka, Hill gory, vector<NPC*>& list, bool endTurn, vector<printSprite>& obrazy, Text& ruch, Sprite& hpBar, string& hp, Text& printHpLine);
+	
 
 protected:
 	GameState state;
@@ -44,5 +60,3 @@ protected:
 	Map mapa;
 
 };
-
-

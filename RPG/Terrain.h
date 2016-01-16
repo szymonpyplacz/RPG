@@ -10,7 +10,6 @@ class Terrain
 public:
 	virtual sf::Sprite& printTerrain() = 0;
 	virtual ~Terrain(){};
-
 private:
 };
 
@@ -18,7 +17,6 @@ class Grass :public Terrain{
 public:
 	Grass();
 	sf::Sprite& printTerrain();
-
 
 private:
 	bool walkable = 1;
@@ -30,8 +28,6 @@ class Hill :public Terrain{
 public:
 	Hill();
 	sf::Sprite& printTerrain();
-
-
 private:
 	bool walkable = 0;
 	sf::Texture picture;

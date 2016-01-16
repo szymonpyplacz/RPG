@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML\Graphics.hpp>
-#include <Windows.h>
 #include <string>
 #include "Ability.h"
 
