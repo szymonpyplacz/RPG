@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <iostream>
 #include <cstring>
+#include "DetectMemoryLeaks.h"
 
 class Terrain
 {
@@ -17,9 +18,7 @@ class Grass :public Terrain{
 public:
 	Grass();
 	sf::Sprite& printTerrain();
-
 private:
-	bool walkable = 1;
 	sf::Texture picture;
 	sf::Sprite pictureSprite;
 };
@@ -29,7 +28,6 @@ public:
 	Hill();
 	sf::Sprite& printTerrain();
 private:
-	bool walkable = 0;
 	sf::Texture picture;
 	sf::Sprite pictureSprite;
 };

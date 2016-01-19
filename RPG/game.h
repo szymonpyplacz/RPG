@@ -1,4 +1,6 @@
 #pragma once
+#include "DetectMemoryLeaks.h"
+#include "DetectMemoryLeaks.h"
 #include <SFML\Graphics.hpp>
 #include <SFML\Audio.hpp>
 #include <Windows.h>
@@ -7,13 +9,17 @@
 #include "Map.h"
 #include <vector>
 #include "printSprite.h"
+#include "Terrain.h"
+#include <fstream>
+#include <sstream>
+
 
 
 
 using namespace std;
 using namespace sf;
 
-enum class GameState { MENU, MENU2, MENU2_a, MENU2_b, MENU2_c, GAME, GAME_OVER, END, UNKNOWN };
+enum class GameState { MENU, MENU2, MENU2_a, MENU2_b, MENU2_c, GAME, GAME_OVER, END, WIN, LOSE, UNKNOWN };
 enum class NPC_Type {fighter, archer};
 
 class Game
@@ -23,6 +29,8 @@ public:
 	void runGame();
 	void menu();
 	void newPlayer();
+	void winGame();
+	void loseGame();
 	void khelgar(Player* Gracz);
 	void tharwen(Player* Gracz);
 	void rodger(Player* Gracz);
@@ -44,11 +52,15 @@ public:
 	void attackRightDown(Player* gracz, vector<NPC*>& list, Text& info, Text& level, Text& ruch);
 	void attackTop(Player* gracz, vector<NPC*>& list, Text& info, Text& level, Text& ruch);
 	void attackDown(Player* gracz, vector<NPC*>& list, Text& info, Text& level, Text& ruch);
-	void setMap(RenderWindow& okno, Map& mapa, bool created, int left, int right, int top, int down, vector<printSprite>& obrazy, Grass trawa, Hill gory);
-	void endPlayerTurn(RenderWindow& window, Player* gracz, Grass trawka, Hill gory, vector<NPC*>& list, bool endTurn, vector<printSprite>& obrazy, Text& ruch, Sprite& hpBar, string& hp, Text& printHpLine);
+	void setMap(Player* gracz, RenderWindow& okno, Map& mapa, bool created, int left, int right, int top, int down, vector<printSprite>& obrazy);
+	void setMapFormFile(Player* gracz, RenderWindow& okno, Map& mapa, bool created, vector<printSprite>& obrazy, string filename);
+	void addNPCsFromFile(vector<NPC*>& GamePlayers, string filename);
+	void endPlayerTurn(RenderWindow& window, Player* gracz, vector<NPC*>& list, bool endTurn, vector<printSprite>& obrazy, Text& ruch, Sprite& hpBar, string& hp, Text& printHpLine);
 	
 
 protected:
+	Grass trawa;
+	Hill gory;
 	GameState state;
 	Texture background, background2, background3, background4;
 	Sprite bg;

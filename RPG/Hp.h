@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML\Graphics.hpp>
+#include "DetectMemoryLeaks.h"
 #include <string>
 #include "Ability.h"
 

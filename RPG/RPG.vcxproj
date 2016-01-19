@@ -96,6 +96,7 @@
   <ItemGroup>
     <ClInclude Include="Ability.h" />
     <ClInclude Include="Armor.h" />
+    <ClInclude Include="DetectMemoryLeaks.h" />
     <ClInclude Include="Dice.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="Hp.h" />

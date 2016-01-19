@@ -12,6 +12,7 @@
 #include "Weapon.h"
 #include "WeaponCollection.h"
 #include "Map.h"
+#include "DetectMemoryLeaks.h"
 
 using namespace std;
 using namespace sf;
@@ -69,7 +70,7 @@ public:
 	Armour getArmour();
 	Hp& getHp();
 	Level& getLevel();
-	Player(playerClass plCl, rase plRase, Ability str, Ability dex, Ability con, Ability itl, Ability wis, Ability cha, Level lvl, Armor ac, bool male, char* name);
+	Player(playerClass plCl, rase plRase, Ability str, Ability dex, Ability con, Ability itl, Ability wis, Ability cha, Level lvl, Armor ac, bool male, string name);
 	Player();
 	///dodawane teraz
 	void moveLeft(Map&mapa, Text& text);
@@ -85,7 +86,7 @@ private:
 	pair<int, int> position;
 	playerClass PlayerCl;
 	rase PlayerRase;
-	char* name;
+	string name;
 	Hp hp;
 	Ability strenght;
 	Ability dexterity;
@@ -157,7 +158,7 @@ public:
 	DistanceWeapon getSecondWeapon();
 	Armour getArmour();
 	Hp& getHp();
-	NPC(bool archer, Ability str, Ability dex, Ability con, Ability itl, Ability wis, Ability cha, Level lvl, Armor ac, char* name);
+	NPC(bool archer, Ability str, Ability dex, Ability con, Ability itl, Ability wis, Ability cha, Level lvl, Armor ac);
 	NPC();
 
 private:

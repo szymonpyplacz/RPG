@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "game.h"
 #include "player.h"
+#include "DetectMemoryLeaks.h"
 
 enum class Orders { ChangeWeapon };
 

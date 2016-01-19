@@ -1,10 +1,9 @@
 #pragma once
 #include <SFML\Graphics.hpp>
 #include <Windows.h>
-#include <SFML\Graphics.hpp>
-#include <Windows.h>
 #include <string>
 #include "Ability.h"
+#include "DetectMemoryLeaks.h"
 
 
 class Armor

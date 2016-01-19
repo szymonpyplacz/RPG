@@ -6,6 +6,7 @@
 #include <cstring>
 #include "Weapon.h"
 #include "Dice.h"
+#include "DetectMemoryLeaks.h"
 
 //int dmg, bool soldier, bool twoHanded, bool light, int crit, int crRange, 
 

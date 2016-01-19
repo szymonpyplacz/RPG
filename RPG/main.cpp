@@ -11,5 +11,5 @@ int main(){
 	FreeConsole();
 	Game game;
 	game.runGame();
-
+	_CrtDumpMemoryLeaks();
 }

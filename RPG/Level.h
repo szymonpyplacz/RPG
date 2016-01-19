@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <string>
 #include "Ability.h"
+#include "DetectMemoryLeaks.h"
 
 class Level
 {

@@ -9,9 +9,9 @@
 Player::Player(){
 	Player(playerClass::fighter, rase::human, Ability(0), Ability(0), Ability(0), Ability(0), Ability(0), Ability(0), Level(0), Armor(), true, "noName");
 }
-Player::Player(playerClass plcl, rase plRase, Ability s, Ability d, Ability c, Ability i, Ability w, Ability ch, Level lvl, Armor arcl, bool gender, char* name) : PlayerCl(plcl), PlayerRase(plRase), strenght(s), dexterity(d), constitution(c), intelligence(i), wisdom(w), charisma(ch), level(lvl), male(gender){
-	this->name = new char(strlen(name) + 1);
-	strncpy(this->name, name, (strlen(name) + 1));
+Player::Player(playerClass plcl, rase plRase, Ability s, Ability d, Ability c, Ability i, Ability w, Ability ch, Level lvl, Armor arcl, bool gender, string name) : PlayerCl(plcl), PlayerRase(plRase), strenght(s), dexterity(d), constitution(c), intelligence(i), wisdom(w), charisma(ch), level(lvl), male(gender), name(name){
+	//this->name = new char(strlen(name) + 1);
+	//strncpy(this->name, name, (strlen(name) + 1));
 	this->isUsingMeleeWeapon = 1;
 	this->modAtrFromRase();	
 	this->setBasicAttack();
@@ -42,6 +42,7 @@ Player::Player(playerClass plcl, rase plRase, Ability s, Ability d, Ability c, A
 		iconSprite.setTexture(icon);
 }
 };
+
 
 string Player::printName(){
 	return (this->name);
@@ -342,11 +343,9 @@ pair<int, int> Player::getPosition(){
 
 ////
 NPC::NPC(){
-	NPC(false, Ability(0), Ability(0), Ability(0), Ability(0), Ability(0), Ability(0), Level(0), Armor(), "noName");
+	NPC(false, Ability(0), Ability(0), Ability(0), Ability(0), Ability(0), Ability(0), Level(0), Armor());
 }
-NPC::NPC(bool archer, Ability s, Ability d, Ability c, Ability i, Ability w, Ability ch, Level lvl, Armor arcl, char* name) :strenght(s), dexterity(d), constitution(c), intelligence(i), wisdom(w), charisma(ch), level(lvl){
-	this->name = new char(strlen(name) + 1);
-	strncpy(this->name, name, (strlen(name) + 1));
+NPC::NPC(bool archer, Ability s, Ability d, Ability c, Ability i, Ability w, Ability ch, Level lvl, Armor arcl) :strenght(s), dexterity(d), constitution(c), intelligence(i), wisdom(w), charisma(ch), level(lvl){
 	this->isUsingMeleeWeapon = 1;
 	this->modAtrFromRase();
 	this->setBasicAttack();

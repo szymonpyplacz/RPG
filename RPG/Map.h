@@ -1,6 +1,7 @@
 #include "Terrain.h"
 #include <vector>
 #include <utility>
+#include "DetectMemoryLeaks.h"
 #pragma once
 
 class Map
@@ -10,6 +11,7 @@ public:
 	void addPosition(std::pair<int, int>);
 	void freePosition(std::pair<int, int>);
 	bool isEmpty(std::pair<int, int>);
+
 
 private:
 	std::vector<std::pair<int, int>> busyPosition;

@@ -39,39 +39,46 @@ void Game::runGame()
 		case GameState::MENU:
 			menu();
 			break;
-		case GameState::MENU2:
+		case GameState::MENU2:{
 			newPlayer();
 			break;
+		}
 		case GameState::MENU2_a:{
-			//khelgar(Gracz);
-			Player* Gracz = new Player(playerClass::fighter, rase::dwarf, Ability(15), Ability(12), Ability(14), Ability(10), Ability(10), Ability(10), Level(0), Armor(), true, "Khelgar");
-			Gracz->setMainWeapon(WeaponCollection::SmallAxe);
-			Gracz->setDistanceWeapon(WeaponCollection::Crossbow);
-			Gracz->setShield(WeaponCollection::LightShield); //logicial error, TH weapon with shield is impossible
-			Gracz->setArmour(WeaponCollection::MailShirt);
-			printPlayer(Gracz);
-			gamePlay(Gracz);
-		}
-			break;
+									Player* Gracz = new Player(playerClass::fighter, rase::dwarf, Ability(15), Ability(12), Ability(14), Ability(10), Ability(10), Ability(10), Level(0), Armor(), true, "Khelgar");
+									Gracz->setMainWeapon(WeaponCollection::SmallAxe);
+									Gracz->setDistanceWeapon(WeaponCollection::Crossbow);
+									Gracz->setShield(WeaponCollection::LightShield); //logicial error, TH weapon with shield is impossible
+									Gracz->setArmour(WeaponCollection::MailShirt);
+									printPlayer(Gracz);
+									if (state == GameState::GAME)
+									gamePlay(Gracz);
+									break; }
 		case GameState::MENU2_b:{
-			Player* Gracz =  new Player(playerClass::wizard, rase::human, Ability(8), Ability(12), Ability(10), Ability(16), Ability(14), Ability(10), Level(0), Armor(), true, "Rodger");
-			Gracz->setMainWeapon(WeaponCollection::Fist); //trolololo i tak nie mo¿e
-			Gracz->setDistanceWeapon(WeaponCollection::Slingshot);
-			Gracz->setArmour(WeaponCollection::LeatherArmor);//trololo i tak nie mo¿e
-			Gracz->setShield(WeaponCollection::LightShield);
-			printPlayer(Gracz);
-			gamePlay(Gracz);
-		}
-			break;
+									Player* Gracz = new Player(playerClass::wizard, rase::human, Ability(8), Ability(12), Ability(10), Ability(16), Ability(14), Ability(10), Level(0), Armor(), true, "Rodger");
+									Gracz->setMainWeapon(WeaponCollection::Fist); //trolololo i tak nie mo¿e
+									Gracz->setDistanceWeapon(WeaponCollection::Slingshot);
+									Gracz->setArmour(WeaponCollection::LeatherArmor);//trololo i tak nie mo¿e
+									Gracz->setShield(WeaponCollection::LightShield);
+									printPlayer(Gracz);
+									if (state == GameState::GAME)
+									gamePlay(Gracz);
+									break;}
 		case GameState::MENU2_c:{
-			Player* Gracz = new Player(playerClass::hunter, rase::elf, Ability(15), Ability(14), Ability(12), Ability(10), Ability(10), Ability(10), Level(0), Armor(), false, "Tharwen");
-			Gracz->setMainWeapon(WeaponCollection::Longsword);
-			Gracz->setDistanceWeapon(WeaponCollection::Longbow);
-			Gracz->setArmour(WeaponCollection::LeatherArmor);
-			printPlayer(Gracz);
-			gamePlay(Gracz);
-		}
+									Player* Gracz = new Player(playerClass::hunter, rase::elf, Ability(15), Ability(14), Ability(12), Ability(10), Ability(10), Ability(10), Level(0), Armor(), false, "Tharwen");
+									Gracz->setMainWeapon(WeaponCollection::Longsword);
+									Gracz->setDistanceWeapon(WeaponCollection::Longbow);
+									Gracz->setArmour(WeaponCollection::LeatherArmor);
+									printPlayer(Gracz);
+									if (state == GameState::GAME)
+									gamePlay(Gracz);
+									break; }
+		case GameState::WIN:{
+			winGame();
 			break;
+		}
+		case GameState::LOSE:{
+			loseGame();
+			break; }
 		}
 	}
 }
@@ -192,7 +199,6 @@ void::Game::printPlayer(Player* Gracz) {
 	buttonImg.emplace_back(Gracz->getArmour().printSprite(), pair<int, int>(470, 460));
 	Color gold(252, 255, 166);
 
-
 	string s = Gracz->printStr();
 	string d = Gracz->printDex();
 	string c = Gracz->printCon();
@@ -204,9 +210,9 @@ void::Game::printPlayer(Player* Gracz) {
 	string name = Gracz->printName();
 	string hp = ("PW: " + to_string(Gracz->getHp().printHP()) + "/" + to_string(Gracz->getHp().printMaxHP()));
 	string ac = ("KP: " + to_string(Gracz->printAC()));
-	sf::String distance = Gracz->getSecondWeapon().printWeapon() + " poc. " + to_string(Gracz->getSecondWeapon().printMissles()) + L" zasiêg " + to_string(Gracz->getSecondWeapon().printRange()) + "\n1k" + to_string(Gracz->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getSecondWeapon().printCr()) + "/" + Gracz->getSecondWeapon().printCrRg();
-	if (Gracz->getSecondWeapon().printWeapon() == "Brak broni dystansowej")
-		distance = Gracz->getSecondWeapon().printWeapon();
+	sf::String distance = Gracz->getSecondWeapon().printName() + " poc. " + to_string(Gracz->getSecondWeapon().printMissles()) + L" zasiêg " + to_string(Gracz->getSecondWeapon().printRange()) + "\n1k" + to_string(Gracz->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getSecondWeapon().printCr()) + "/" + Gracz->getSecondWeapon().printCrRg();
+	if (Gracz->getSecondWeapon().printName() == "Brak broni dystansowej")
+		distance = Gracz->getSecondWeapon().printName();
 	sf::String shield = "+" + to_string(Gracz->getShield().getAC()) + " KP";
 	if (Gracz->getShield().getAC() == 0)
 		shield = "";
@@ -214,18 +220,16 @@ void::Game::printPlayer(Player* Gracz) {
 	if (Gracz->getArmour().getAC() == 0)
 		armour = "";
 
-	Gracz->setPosition(15, 3, mapa);
-
 	vector<printText> button;
 	button.emplace_back(name + "\n\n" + raseName + "\n" + className + "\n\nPoziom: " + to_string(Gracz->printLvl()) + "\n\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()), font, gold, 28, pair<int, int>(260, 50));
 	button.emplace_back(hp + "\n\n" + L"Premia do ataku: \n\nPrêdkoœæ \n\nWytrwa³oœæ: \n\nRefleks: \n\nWola: ", font, gold, 22, pair<int, int>(490, 50));
 	button.emplace_back(ac + "\n\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n\n" + to_string(Gracz->printSpeed()) + "\n\n" + to_string(Gracz->printSTFor()) + "\n\n" + to_string(Gracz->printSTRef()) + "\n\n" + to_string(Gracz->printSTWl()), font, gold, 22, pair<int, int>(720, 50));
 	button.emplace_back(L"Si³a: \n\nZrêcznoœæ: \n\nWytrzyma³oœæ: \n\nIntelekt: \n\nRozs¹dek: \n\nCharyzma: ", font, gold, 22, pair<int, int>(900, 50));
 	button.emplace_back(s + "\n\n" + d + "\n\n" + c + "\n\n" + i + "\n\n" + w + "\n\n" + ch, font, gold, 22, pair<int, int>(1130, 50));
-	button.emplace_back(Gracz->getMainWeapon().printWeapon() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, gold, 24, pair<int, int>(125, 370));
+	button.emplace_back(Gracz->getMainWeapon().printName() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, gold, 24, pair<int, int>(125, 370));
 	button.emplace_back(distance, font, gold, 24, pair<int, int>(125, 470));
-	button.emplace_back(Gracz->getShield().printShield() + "\n" + shield, font, gold, 22, pair<int, int>(550, 370));
-	button.emplace_back(Gracz->getArmour().printArmour() + "\n" + armour, font, gold, 22, pair<int, int>(550, 470));
+	button.emplace_back(Gracz->getShield().printName() + "\n" + shield, font, gold, 22, pair<int, int>(550, 370));
+	button.emplace_back(Gracz->getArmour().printName() + "\n" + armour, font, gold, 22, pair<int, int>(550, 470));
 	button.emplace_back(L"Powrót", font, gold, 28, pair<int, int>(200, 600), GameState::MENU2);
 	button.emplace_back(L"Dalej", font, gold, 28, pair<int, int>(800, 600), GameState::GAME);
 
@@ -273,7 +277,7 @@ void::Game::printPlayer(Player* Gracz) {
 
 void::Game::addNPC(vector<NPC*>& listaGraczy, pair<int, int> location, bool isArcher){
 	if (isArcher){
-		NPC* enemy = new NPC(true, Ability(10), Ability(12), Ability(10), Ability(10), Ability(10), Ability(10), Level(0), Armor(), "NPC1");
+		NPC* enemy = new NPC(true, Ability(10), Ability(12), Ability(10), Ability(10), Ability(10), Ability(10), Level(0), Armor());
 		enemy->setMainWeapon(WeaponCollection::Dagger);
 		enemy->setDistanceWeapon(WeaponCollection::Bow);
 		enemy->setArmour(WeaponCollection::LeatherArmor);
@@ -281,7 +285,7 @@ void::Game::addNPC(vector<NPC*>& listaGraczy, pair<int, int> location, bool isAr
 		listaGraczy.emplace_back(enemy);
 	}
 	else{
-		NPC* enemy = new NPC(false, Ability(12), Ability(10), Ability(10), Ability(10), Ability(10), Ability(10), Level(0), Armor(),  "NPC2");
+		NPC* enemy = new NPC(false, Ability(12), Ability(10), Ability(10), Ability(10), Ability(10), Ability(10), Level(0), Armor());
 		enemy->setMainWeapon(WeaponCollection::Dagger);
 		enemy->setArmour(WeaponCollection::Gambeson);
 		enemy->setPosition(location.first, location.second, mapa);
@@ -429,8 +433,6 @@ Sprite& Game::addPhoto(Sprite& sprite, Texture& textura, std::string filename){
 	return sprite;
 }
 
-
-
 void Game::attackLeft(Player* gracz, vector<NPC*>& list, Text& info, Text& level, Text& ruch){
 	info.setString(atack(gracz, list, whoIs(make_pair(gracz->getPosition().first - 1, gracz->getPosition().second)), window));
 	ruch.setString(L"Pozosta³o " + to_string(gracz->printLeftMove()));
@@ -473,8 +475,22 @@ void Game::attackDown(Player* gracz, vector<NPC*>& list, Text& info, Text& level
 	level.setString("Poziom: " + to_string(gracz->printLvl()) + "\nPD: " + to_string(gracz->printExp()) + "/" + to_string(gracz->printExpToLv()));
 }
 
+void Game::addNPCsFromFile(vector<NPC*>& listaGraczy, string filename){
+	std::ifstream nowyPlik;
+	nowyPlik.open(filename);
+	string read;
+	while (!nowyPlik.eof()){
+		std::getline(nowyPlik, read);
+		int first, second, isArcher;
+		std::istringstream sent(read);
+		sent >> isArcher;
+		sent >> first;
+		sent >> second;
+		addNPC(NPCPlayers, make_pair(first, second), isArcher);
+	}
+}
 
-void Game::setMap(RenderWindow& okno, Map& mapa, bool created, int left, int right, int top, int down, vector<printSprite>& obrazy, Grass trawa, Hill gory){
+void Game::setMap(Player* gracz, RenderWindow& okno, Map& mapa, bool created, int left, int right, int top, int down, vector<printSprite>& obrazy){
 	for (int i = 0; i < 24; i++){
 		for (int j = 0; j < 24; j++){
 			if (i > left && i < right && j > top && j < down){
@@ -487,12 +503,15 @@ void Game::setMap(RenderWindow& okno, Map& mapa, bool created, int left, int rig
 			}
 		}
 	}
-	if (!created)
-	addNPC(NPCPlayers, make_pair(12, 8), 0);
+	if (!created){
+		gracz->setPosition(15, 3, mapa);
+		addNPCsFromFile(NPCPlayers, "enemy.txt");
+		/*addNPC(NPCPlayers, make_pair(12, 8), 0);*/
+	}
 }
 
-void Game::endPlayerTurn(RenderWindow& window, Player* gracz, Grass trawka, Hill gory, vector<NPC*>& list, bool endTurn, vector<printSprite>& obrazy, Text& ruch, Sprite& hpBar, string& hp, Text& printHpLine){
-	setMap(window, mapa, 1, 2, 20, 2, 20, obrazy, trawka, gory);
+void Game::endPlayerTurn(RenderWindow& window, Player* gracz, vector<NPC*>& list, bool endTurn, vector<printSprite>& obrazy, Text& ruch, Sprite& hpBar, string& hp, Text& printHpLine){
+	//setMap(gracz, window, mapa, 1, 2, 20, 2, 20, obrazy);
 	gracz->setCrossedMove();
 	for (auto& players : list){
 		players->printIcon().setPosition(30 * players->getPosition().first, 30 * players->getPosition().second);
@@ -508,18 +527,28 @@ void Game::endPlayerTurn(RenderWindow& window, Player* gracz, Grass trawka, Hill
 	endTurn = false;
 }
 
-void::Game::gamePlay(Player* Gracz) {
-//	addNPC(NPCPlayers, make_pair(12, 8), 0);
-//	addNPC(NPCPlayers, make_pair(12, 10), 0);
-//	addNPC(NPCPlayers, make_pair(5, 5), 0);
+void Game::setMapFormFile(Player* gracz, RenderWindow& okno, Map& mapa, bool created, vector<printSprite>& obrazy, string filename){
+	std::ifstream nowyPlik;
+	nowyPlik.open(filename);
+	string read;
+	std::getline(nowyPlik, read);
+	int left, rigth, top, down;
+	std::istringstream sent(read);
+	sent >> left;
+	sent >> rigth;
+	sent >> top;
+	sent >> down;
+	setMap(gracz, okno, mapa, 0, left, rigth, top, down, obrazy);
+}
+
+void Game::gamePlay(Player* Gracz) {
 
 	bg.setTexture(background4);
 	Color green(103, 190, 75);
 	vector<printSprite> buttonImg;
 	vector<printText> button;
-	Grass trawka;
-	Hill gory;
-	setMap(window, mapa, 0, 2, 20, 2, 20, buttonImg, trawka, gory);
+	/*setMap(Gracz, window, mapa, 0, 2, 20, 2, 20, buttonImg);*/
+	setMapFormFile(Gracz, window, mapa, 0, buttonImg, "map.txt");
 
 	Gracz->printAvatar().setScale(0.65, 0.65);
 	buttonImg.emplace_back(Gracz->printAvatar(), pair<int, int>(770, 70));
@@ -535,9 +564,9 @@ void::Game::gamePlay(Player* Gracz) {
 	string name = Gracz->printName();
 	string hp = (to_string(Gracz->getHp().printHP()) + "/" + to_string(Gracz->getHp().printMaxHP()));
 	string ac = (to_string(Gracz->printAC()));
-	sf::String distance = Gracz->getSecondWeapon().printWeapon() + " " + to_string(Gracz->getSecondWeapon().printMissles()) + " poc. " + to_string(Gracz->getSecondWeapon().printRange()) + "m\n1k" + to_string(Gracz->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getSecondWeapon().printCr()) + "/" + Gracz->getSecondWeapon().printCrRg();
-	if (Gracz->getSecondWeapon().printWeapon() == "Brak broni dystansowej")
-		distance = Gracz->getSecondWeapon().printWeapon();
+	sf::String distance = Gracz->getSecondWeapon().printName() + " " + to_string(Gracz->getSecondWeapon().printMissles()) + " poc. " + to_string(Gracz->getSecondWeapon().printRange()) + "m\n1k" + to_string(Gracz->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getSecondWeapon().printCr()) + "/" + Gracz->getSecondWeapon().printCrRg();
+	if (Gracz->getSecondWeapon().printName() == "Brak broni dystansowej")
+		distance = Gracz->getSecondWeapon().printName();
 	sf::String shield = "+" + to_string(Gracz->getShield().getAC()) + " KP";
 	if (Gracz->getShield().getAC() == 0)
 		shield = "";
@@ -566,19 +595,18 @@ void::Game::gamePlay(Player* Gracz) {
 
 	Sprite weapon(Gracz->getMainWeapon().printSprite());
 	weapon.setPosition(780, 270);
-	Text weapTx(Gracz->getMainWeapon().printWeapon() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, 24);
+	Text weapTx(Gracz->getMainWeapon().printName() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, 24);
 	weapTx.setPosition(855, 280);
 	weapTx.setColor(green);
-
 	Sprite sh(Gracz->getShield().printSprite());
 	sh.setPosition(780, 360);
-	Text shieldTx(Gracz->getShield().printShield() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, 24);
+	Text shieldTx(Gracz->getShield().printName() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, 24);
 	shieldTx.setPosition(855, 360);
 	shieldTx.setColor(green);
 
 	Sprite secWeap(Gracz->getSecondWeapon().printSprite());
 	secWeap.setPosition(780, 270);
-	Text secWeapTx(Gracz->getSecondWeapon().printWeapon() + " " + to_string(Gracz->getSecondWeapon().printMissles()) + " poc. " + to_string(Gracz->getSecondWeapon().printRange()) + "m\n1k" + to_string(Gracz->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getSecondWeapon().printCr()) + "/" + Gracz->getSecondWeapon().printCrRg(), font, 24);
+	Text secWeapTx(Gracz->getSecondWeapon().printName() + " " + to_string(Gracz->getSecondWeapon().printMissles()) + " poc. " + to_string(Gracz->getSecondWeapon().printRange()) + "m\n1k" + to_string(Gracz->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getSecondWeapon().printCr()) + "/" + Gracz->getSecondWeapon().printCrRg(), font, 24);
 	secWeapTx.setPosition(855, 280);
 	secWeapTx.setColor(green);
 
@@ -620,9 +648,7 @@ void::Game::gamePlay(Player* Gracz) {
 	while (state == GameState::GAME)
 	{
 		if (endTurn){
-			endPlayerTurn(window, Gracz, trawka, gory, NPCPlayers, endTurn, buttonImg, ruch, hpBar, hp, printHpLine);
-			//info.setString(""); -> jakbym chcia³ skasowaæ linijkê 
-			//koniec zestawu
+			endPlayerTurn(window, Gracz, NPCPlayers, endTurn, buttonImg, ruch, hpBar, hp, printHpLine);
 			endTurn = false;
 		}
 
@@ -646,7 +672,7 @@ void::Game::gamePlay(Player* Gracz) {
 				hoverSprite = &button;
 			}
 		}
-		while (window.pollEvent(event))
+		while (window.pollEvent(event) && state == GameState::GAME)
 		{
 			if (event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
 			{
@@ -723,23 +749,26 @@ void::Game::gamePlay(Player* Gracz) {
 			}
 			window.draw(Gracz->printIcon());
 			if (Gracz->getHp().printHP() <= 0){
-				Sprite deathSprite;
-				Texture death;
-				death.loadFromFile("death.png");
-				deathSprite.setTexture(death);
-				window.draw(deathSprite);
+				state = GameState::LOSE;
+				for (auto& players : NPCPlayers){
+					delete players;
+				}
+				delete Gracz;
+				delete NPCposition;
 			}
 			if (NPCPlayers.size() == 0){
-				Sprite deathSprite;
-				Texture death;
-				death.loadFromFile("death.png");
-				deathSprite.setTexture(death);
-				window.draw(deathSprite);
+				state = GameState::WIN;
+				delete Gracz;
+				for (auto& players : NPCPlayers){
+					delete players;
+				}
+				delete NPCposition;
 			}
 			window.draw(hpBar);
 			window.draw(printHpLine);
 			window.draw(level);
 			window.draw(info);
+			window.draw(ruch);
 			if (Gracz->isMeleeWeapon()){
 				window.draw(weapon);
 				window.draw(weapTx);
@@ -750,8 +779,95 @@ void::Game::gamePlay(Player* Gracz) {
 				window.draw(secWeap);
 				window.draw(secWeapTx);
 			}
-			window.draw(ruch);
 			window.display();
 		}
+	}
+}
+
+void Game::winGame() {
+		bg.setTexture(background2);
+		vector<printText> button;
+		button.emplace_back(L"Wygra³eœ", font, Color::Black, 48, pair<int, int>(300, 20));
+		button.emplace_back(L"WyjdŸ z gry", font, Color::Black, 36, pair<int, int>(700, 500), GameState::END);
+
+		printText* hoverPrintText = nullptr;
+		while (state == GameState::WIN)
+		{
+			Vector2f mouse(Mouse::getPosition(window));
+			Event event;
+			hoverPrintText = nullptr;
+
+			for (auto& button : button)
+			if ((button.GetText().getGlobalBounds().contains(mouse)) && (button.GetState() != GameState::UNKNOWN))
+			{
+				button.GetText().setStyle(Text::Underlined);
+				hoverPrintText = &button;
+			}
+			else
+			{
+				button.GetText().setStyle(Text::Regular);
+			}
+
+			while (window.pollEvent(event))
+			{
+				if (event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left && hoverPrintText)
+				{
+					if (hoverPrintText->GetState() != GameState::UNKNOWN)
+						state = hoverPrintText->GetState();
+					break;
+				}
+			}
+			window.clear();
+			window.draw(bg);
+			for (auto &button : button)
+			{
+				button.GetText().setColor(button.setColor());
+				window.draw(button.GetText());
+			}
+			window.display();
+		}
+}
+
+void Game::loseGame() {
+	bg.setTexture(background2);
+	vector<printText> button;
+	button.emplace_back(L"Przegra³eœ", font, Color::Black, 48, pair<int, int>(300, 20));
+	button.emplace_back(L"WyjdŸ z gry", font, Color::Black, 36, pair<int, int>(700, 500), GameState::END);
+
+	printText* hoverPrintText = nullptr;
+	while (state == GameState::LOSE)
+	{
+		Vector2f mouse(Mouse::getPosition(window));
+		Event event;
+		hoverPrintText = nullptr;
+
+		for (auto& button : button)
+		if ((button.GetText().getGlobalBounds().contains(mouse)) && (button.GetState() != GameState::UNKNOWN))
+		{
+			button.GetText().setStyle(Text::Underlined);
+			hoverPrintText = &button;
+		}
+		else
+		{
+			button.GetText().setStyle(Text::Regular);
+		}
+
+		while (window.pollEvent(event))
+		{
+			if (event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left && hoverPrintText)
+			{
+				if (hoverPrintText->GetState() != GameState::UNKNOWN)
+					state = hoverPrintText->GetState();
+				break;
+			}
+		}
+		window.clear();
+		window.draw(bg);
+		for (auto &button : button)
+		{
+			button.GetText().setColor(button.setColor());
+			window.draw(button.GetText());
+		}
+		window.display();
 	}
 }

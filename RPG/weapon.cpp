@@ -49,7 +49,7 @@ Weapon::Weapon(){
 	
 }
 
-sf::String Weapon::printWeapon(){
+sf::String Weapon::printName(){
 	return(name);
 }
 
@@ -118,7 +118,7 @@ DistanceWeapon::DistanceWeapon(int dmg, bool soldier,   int crit, int crRange, i
 	}
 }
 
-sf::String DistanceWeapon::printWeapon(){
+sf::String DistanceWeapon::printName(){
 	return(this->name);
 }
 
@@ -175,7 +175,7 @@ int Shield::getAC(){
 	return this->ac;
 }
 
-sf::String Shield::printShield(){
+sf::String Shield::printName(){
 	return this->name;
 }
 
@@ -223,7 +223,7 @@ int Armour::getAC(){
 	return this->ac;
 }
 
-sf::String Armour::printArmour(){
+sf::String Armour::printName(){
 	return this->name;
 }
 

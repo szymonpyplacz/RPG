@@ -5,18 +5,30 @@
 #include <iostream>
 #include <cstring>
 #include "Dice.h"
+#include "DetectMemoryLeaks.h"
 
 enum class listOfWeapons{ Fist, Dagger, ShortSword, SmallAxe, Longsword, Spear, TwoHandedSword, TwoHandedAxe };
 enum class listOfDistanceWeapons{Bow, Crossbow, Longbow, Slingshot};
 enum class listOfShields{ LightShield, HeavyShield };
 enum class listOfArmour {Gambeson, LeatherArmor, MailShirt, Chainmail, PlateArmor};
 
-class Weapon
+class Equipment{
+public:
+	virtual sf::Sprite printSprite() = 0;
+	virtual sf::String printName() = 0;
+	virtual ~Equipment(){};
+private:
+	sf::Sprite pictureSprite;
+	sf::Texture picture;
+	sf::String name;
+};
+
+class Weapon : public Equipment
 {
 public:
 	Weapon();
 	Weapon(int dmg, bool soldier, bool twoHanded, bool light, int critic, int criticRange, listOfWeapons numb);
-	sf::String printWeapon();
+	sf::String printName();
 	int printWeaponDmg();
 	int printCr();
 	bool isTwoHanded();
@@ -42,7 +54,7 @@ private:
 class DistanceWeapon : public Weapon
 {
 public:
-	sf::String printWeapon();
+	sf::String printName();
 	int printWeaponDmg();
 	int printCr();
 	std::string printCrRg();
@@ -66,12 +78,12 @@ private:
 	listOfDistanceWeapons WeaponList;
 };
 
-class Shield
+class Shield : public Equipment
 {
 public:
 	Shield();
 	Shield(int ac, listOfShields numb);
-	sf::String printShield();
+	sf::String printName();
 	sf::Sprite printSprite();
 	int getAC();
 private:
@@ -82,12 +94,12 @@ private:
 	listOfShields ShieldList;
 };
 
-class Armour
+class Armour : public Equipment
 {
 public:
 	Armour();
 	Armour(int ac, int speed, int maxDex, bool heavy, listOfArmour numb);
-	sf::String printArmour();
+	sf::String printName();
 	sf::Sprite printSprite();
 	int getAC();
 	bool isHeavy();
