@@ -14,8 +14,6 @@
 #include <sstream>
 
 
-
-
 using namespace std;
 using namespace sf;
 

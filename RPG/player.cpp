@@ -373,9 +373,6 @@ NPC::NPC(bool archer, Ability s, Ability d, Ability c, Ability i, Ability w, Abi
 	
 };
 
-string NPC::printName(){
-	return (this->name);
-}
 
 
 int NPC::printAC(){

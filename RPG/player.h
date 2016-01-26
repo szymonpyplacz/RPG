@@ -166,7 +166,6 @@ private:
 	pair<int, int> position;
 	playerClass PlayerCl;
 	rase PlayerRase;
-	char* name;
 	Hp hp;
 	Ability strenght;
 	Ability dexterity;
