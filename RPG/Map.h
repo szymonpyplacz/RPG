@@ -1,8 +1,10 @@
+#pragma once
+#include "DetectMemoryLeaks.h"
 #include "Terrain.h"
 #include <vector>
 #include <utility>
-#include "DetectMemoryLeaks.h"
-#pragma once
+
+
 
 class Map
 {

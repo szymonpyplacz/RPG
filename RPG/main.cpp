@@ -9,7 +9,8 @@ using namespace sf;
 
 int main(){
 	FreeConsole();
-	Game game;
+	{	Game game;
 	game.runGame();
+	}
 	_CrtDumpMemoryLeaks();
 }

@@ -1,11 +1,12 @@
 #pragma once
+#include "DetectMemoryLeaks.h"
 #include <SFML\Graphics.hpp>
 #include <cstring>
 #include <Windows.h>
 #include <iostream>
 #include <cstring>
 #include "Dice.h"
-#include "DetectMemoryLeaks.h"
+
 
 enum class listOfWeapons{ Fist, Dagger, ShortSword, SmallAxe, Longsword, Spear, TwoHandedSword, TwoHandedAxe };
 enum class listOfDistanceWeapons{Bow, Crossbow, Longbow, Slingshot};

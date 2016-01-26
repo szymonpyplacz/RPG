@@ -1,10 +1,11 @@
 #pragma once
+#include "DetectMemoryLeaks.h"
 #include <SFML\Graphics.hpp>
 #include <cstring>
 #include <Windows.h>
 #include <iostream>
 #include <cstring>
-#include "DetectMemoryLeaks.h"
+
 
 class Terrain
 {

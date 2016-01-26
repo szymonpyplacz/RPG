@@ -1,4 +1,5 @@
 #pragma once
+#include "DetectMemoryLeaks.h"
 #include <SFML\Graphics.hpp>
 #include <Windows.h>
 #include <string>
@@ -12,7 +13,7 @@
 #include "Weapon.h"
 #include "WeaponCollection.h"
 #include "Map.h"
-#include "DetectMemoryLeaks.h"
+
 
 using namespace std;
 using namespace sf;

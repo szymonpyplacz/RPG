@@ -1,6 +1,5 @@
 #pragma once
 #include "DetectMemoryLeaks.h"
-#include "DetectMemoryLeaks.h"
 #include <SFML\Graphics.hpp>
 #include <SFML\Audio.hpp>
 #include <Windows.h>

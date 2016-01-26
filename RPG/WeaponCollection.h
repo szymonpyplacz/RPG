@@ -1,4 +1,5 @@
 #pragma once
+#include "DetectMemoryLeaks.h"
 #include <SFML\Graphics.hpp>
 #include <cstring>
 #include <Windows.h>
@@ -6,7 +7,7 @@
 #include <cstring>
 #include "Weapon.h"
 #include "Dice.h"
-#include "DetectMemoryLeaks.h"
+
 
 //int dmg, bool soldier, bool twoHanded, bool light, int crit, int crRange, 
 

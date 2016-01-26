@@ -1,9 +1,10 @@
 #pragma once
+#include "DetectMemoryLeaks.h"
 #include <SFML\Graphics.hpp>
 #include <Windows.h>
 #include <string>
 #include <random>
-#include "DetectMemoryLeaks.h"
+
 
 #ifndef _DICE_H
 #define _DICE_H
