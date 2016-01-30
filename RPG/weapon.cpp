@@ -169,6 +169,7 @@ Shield::Shield(){
 	name = L"Brak tarczy";
 	picture.loadFromFile("empty.png");
 	pictureSprite.setTexture(picture);
+	this->ac = 0;
 }
 
 int Shield::getAC(){
@@ -189,6 +190,7 @@ Armour::Armour(){
 	picture.loadFromFile("empty.png");
 	pictureSprite.setTexture(picture);
 	this->maxDex = 20;
+	this->ac = 0;
 }
 
 Armour::Armour(int ac, int speed, int maxDex, bool heavy, listOfArmour number):ac(ac), speed(speed), maxDex(maxDex), heavy(heavy){

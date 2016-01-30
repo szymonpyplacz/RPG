@@ -5,26 +5,34 @@
 
 //24 punkty do budowy postaci
 
+void Game::loadBackground(){
+	if ((!background.loadFromFile("bg3.jpg")) || (!background2.loadFromFile("bg2.jpg")) || (!background3.loadFromFile("bg.gif")) || (!background4.loadFromFile("bg4.png")))
+		throw 1;
+	if (!font.loadFromFile("font_one.ttf"))	{
+		throw 2;
+	}
+}
+
+
 Game::Game(void) : window(VideoMode(1280, 720, 32), "", Style::None)
 {
 	window.setPosition(Vector2i(300, 100));
 	window.setKeyRepeatEnabled(true);
-	state = GameState::END;
 
-
-	if ((!background.loadFromFile("bg3.jpg")) || (!background2.loadFromFile("bg2.jpg")) || (!background3.loadFromFile("bg.gif")) || (!background4.loadFromFile("bg4.png")))
-		return;
-
-	state = GameState::MENU;
-
-	if (!font.loadFromFile("font_one.ttf"))	{
-		MessageBox(NULL, "Font not found", "ERROR", NULL);
-		return;
+	try { loadBackground(); }
+	catch (int code){
+		if (code == 1){
+			MessageBox(NULL, "Photos not found", "ERROR", NULL);
+			state = GameState::END;
+		}
+		else if (code == 2){
+			MessageBox(NULL, "Fonts not found", "ERROR", NULL);
+			state = GameState::END;
+		}
+		else state = GameState::MENU;
 	}
-	state = GameState::MENU;
 };
-
-
+		
 void Game::runGame()
 {
 	while (state != GameState::END)
@@ -136,7 +144,7 @@ void Game::newPlayer(){
 	vector<printText> button;
 	button.emplace_back(L"Wybierz któregoœ z bohaterów", font, Color::Black, 48, pair<int, int>(120, 20));
 	button.emplace_back(L"Khelgar, krasnolud wojownik", font, Color::Black, 32, pair<int, int>(120, 200), GameState::MENU2_a);
-	button.emplace_back(L"Rodger, mag cz³owiek", font, Color::Black, 32, pair<int, int>(120, 260), GameState::MENU2_b);
+	//button.emplace_back(L"Rodger, mag cz³owiek", font, Color::Black, 32, pair<int, int>(120, 260), GameState::MENU2_b);
 	button.emplace_back(L"Thárwen, elfka tropiciel", font, Color::Black, 32, pair<int, int>(120, 320), GameState::MENU2_c);
 	button.emplace_back(L"Powrót", font, Color::Black, 32, pair<int, int>(120, 600), GameState::MENU);
 
@@ -199,6 +207,17 @@ void::Game::printPlayer(Player* Gracz) {
 	buttonImg.emplace_back(Gracz->getArmour().printSprite(), pair<int, int>(470, 460));
 	Color gold(252, 255, 166);
 
+	string s = Gracz->printStr();
+	string d = Gracz->printDex();
+	string c = Gracz->printCon();
+	string i = Gracz->printInt();
+	string w = Gracz->printWis();
+	string ch = Gracz->printCha();
+	string className = Gracz->printClassName();
+	string raseName = Gracz->printRaseName();
+	string name = Gracz->printName();
+	string hp = ("PW: " + to_string(Gracz->getHp().printHP()) + "/" + to_string(Gracz->getHp().printMaxHP()));
+	string ac = ("KP: " + to_string(Gracz->printAC()));
 	sf::String distance = Gracz->getSecondWeapon().printName() + " poc. " + to_string(Gracz->getSecondWeapon().printMissles()) + L" zasiêg " + to_string(Gracz->getSecondWeapon().printRange()) + "\n1k" + to_string(Gracz->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getSecondWeapon().printCr()) + "/" + Gracz->getSecondWeapon().printCrRg();
 	if (Gracz->getSecondWeapon().printName() == "Brak broni dystansowej")
 		distance = Gracz->getSecondWeapon().printName();
@@ -210,11 +229,11 @@ void::Game::printPlayer(Player* Gracz) {
 		armour = "";
 
 	vector<printText> button;
-	button.emplace_back(Gracz->printName() + "\n\n" + Gracz->printRaseName() + "\n" + Gracz->printClassName() + "\n\nPoziom: " + to_string(Gracz->printLvl()) + "\n\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()), font, gold, 28, pair<int, int>(260, 50));
-	button.emplace_back("PW: " + to_string(Gracz->getHp().printHP()) + "/" + to_string(Gracz->getHp().printMaxHP()) + "\n\n" + L"Premia do ataku: \n\nPrêdkoœæ \n\nWytrwa³oœæ: \n\nRefleks: \n\nWola: ", font, gold, 22, pair<int, int>(490, 50));
-	button.emplace_back("KP: " + to_string(Gracz->printAC()) + "\n\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n\n" + to_string(Gracz->printSpeed()) + "\n\n" + to_string(Gracz->printSTFor()) + "\n\n" + to_string(Gracz->printSTRef()) + "\n\n" + to_string(Gracz->printSTWl()), font, gold, 22, pair<int, int>(720, 50));
+	button.emplace_back(name + "\n\n" + raseName + "\n" + className + "\n\nPoziom: " + to_string(Gracz->printLvl()) + "\n\nPD: " + to_string(Gracz->printExp()) + "/" + to_string(Gracz->printExpToLv()), font, gold, 28, pair<int, int>(260, 50));
+	button.emplace_back(hp + "\n\n" + L"Premia do ataku: \n\nPrêdkoœæ \n\nWytrwa³oœæ: \n\nRefleks: \n\nWola: ", font, gold, 22, pair<int, int>(490, 50));
+	button.emplace_back(ac + "\n\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n\n" + to_string(Gracz->printSpeed()) + "\n\n" + to_string(Gracz->printSTFor()) + "\n\n" + to_string(Gracz->printSTRef()) + "\n\n" + to_string(Gracz->printSTWl()), font, gold, 22, pair<int, int>(720, 50));
 	button.emplace_back(L"Si³a: \n\nZrêcznoœæ: \n\nWytrzyma³oœæ: \n\nIntelekt: \n\nRozs¹dek: \n\nCharyzma: ", font, gold, 22, pair<int, int>(900, 50));
-	button.emplace_back(Gracz->printStr() + "\n\n" + Gracz->printDex() + "\n\n" + Gracz->printCon() + "\n\n" + Gracz->printInt() + "\n\n" + Gracz->printWis() + "\n\n" + Gracz->printCha(), font, gold, 22, pair<int, int>(1130, 50));
+	button.emplace_back(s + "\n\n" + d + "\n\n" + c + "\n\n" + i + "\n\n" + w + "\n\n" + ch, font, gold, 22, pair<int, int>(1130, 50));
 	button.emplace_back(Gracz->getMainWeapon().printName() + "\n1k" + to_string(Gracz->getMainWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getMainWeapon().printCr()) + "/" + Gracz->getMainWeapon().printCrRg(), font, gold, 24, pair<int, int>(125, 370));
 	button.emplace_back(distance, font, gold, 24, pair<int, int>(125, 470));
 	button.emplace_back(Gracz->getShield().printName() + "\n" + shield, font, gold, 22, pair<int, int>(550, 370));
@@ -541,6 +560,16 @@ void Game::gamePlay(Player* Gracz) {
 
 	Gracz->printAvatar().setScale(0.65, 0.65);
 	buttonImg.emplace_back(Gracz->printAvatar(), pair<int, int>(770, 70));
+
+	string s = Gracz->printStr();
+	string d = Gracz->printDex();
+	string c = Gracz->printCon();
+	string i = Gracz->printInt();
+	string w = Gracz->printWis();
+	string ch = Gracz->printCha();
+	string className = Gracz->printClassName();
+	string raseName = Gracz->printRaseName();
+	string name = Gracz->printName();
 	string hp = (to_string(Gracz->getHp().printHP()) + "/" + to_string(Gracz->getHp().printMaxHP()));
 	string ac = (to_string(Gracz->printAC()));
 	sf::String distance = Gracz->getSecondWeapon().printName() + " " + to_string(Gracz->getSecondWeapon().printMissles()) + " poc. " + to_string(Gracz->getSecondWeapon().printRange()) + "m\n1k" + to_string(Gracz->getSecondWeapon().printWeaponDmg()) + ", kryt. x" + to_string(Gracz->getSecondWeapon().printCr()) + "/" + Gracz->getSecondWeapon().printCrRg();
@@ -557,7 +586,7 @@ void Game::gamePlay(Player* Gracz) {
 	level.setPosition(940, 180);
 	level.setColor(green);
 
-	button.emplace_back(Gracz->printName(), font, green, 28, pair<int, int>(780, 40));
+	button.emplace_back(name, font, green, 28, pair<int, int>(780, 40));
 	button.emplace_back("PW:\nKP:\nAtak: \nPr", font, green, 22, pair<int, int>(940, 80));
 
 	Text printHpLine(hp + "\n" + ac + "\n" + to_string(Gracz->printBasicAttack()) + "/" + to_string(Gracz->printDistanceAttack()) + "\n" + to_string(Gracz->printSpeed()), font, 22);
@@ -568,7 +597,7 @@ void Game::gamePlay(Player* Gracz) {
 	hpBar.setPosition(940, 40);
 
 	button.emplace_back(L"S: \nZr: \nWtr: \nInt: \nRz: \nCh: \n\nWytr: \nRef: \nWola:", font, green, 22, pair<int, int>(1120, 50));
-	button.emplace_back(Gracz->printStr() + "\n" + Gracz->printDex() + "\n" + Gracz->printCon() + "\n" + Gracz->printInt() + "\n" + Gracz->printWis() + "\n" + Gracz->printCha() + "\n\n   " + to_string(Gracz->printSTFor()) + "\n   " + to_string(Gracz->printSTRef()) + "\n   " + to_string(Gracz->printSTWl()), font, green, 22, pair<int, int>(1180, 50));
+	button.emplace_back(s + "\n" + d + "\n" + c + "\n" + i + "\n" + w + "\n" + ch + "\n\n   " + to_string(Gracz->printSTFor()) + "\n   " + to_string(Gracz->printSTRef()) + "\n   " + to_string(Gracz->printSTWl()), font, green, 22, pair<int, int>(1180, 50));
 	button.emplace_back(L"Zmieñ broñ", font, green, 22, pair<int, int>(1120, 360), Gracz, Orders::ChangeWeapon);
 	button.emplace_back(L"Wyjœcie", font, green, 28, pair<int, int>(1120, 650), GameState::END);
 

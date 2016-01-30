@@ -23,6 +23,7 @@ class Game
 {
 public:
 	Game(void);
+	void loadBackground();
 	void runGame();
 	void menu();
 	void newPlayer();
